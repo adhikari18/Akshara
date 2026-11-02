@@ -292,13 +292,30 @@ export class TracingEvaluator {
     const withinHeadlineX =
       point.x >= shirorekha.startX - 15 && point.x <= shirorekha.endX + 15;
 
-    // Check if the current stroke's next target waypoint is actually near the headline
+    // Upper-crown strokes (such as Dirgha Ikar arch hook, Ekar/Aikar flags, or Shirbindu)
+    // operate at or above the Shirorekha headline by design.
+    const isUpperCrownStroke = currentStroke.waypoints.every(
+      (wp) => wp.y <= shirorekha.y + 4
+    );
+    if (isUpperCrownStroke) {
+      return null;
+    }
+
+    // Check if the current stroke's next target waypoint or just-unlocked waypoint is near the headline
     const nextWp =
       currentStroke.waypoints[Math.max(0, this.unlockedWaypointIndex + 1)] ??
       currentStroke.waypoints[0];
+    const prevWp =
+      this.unlockedWaypointIndex >= 0
+        ? currentStroke.waypoints[this.unlockedWaypointIndex]
+        : null;
     const targetNearHeadline = Math.abs(nextWp.y - shirorekha.y) <= 22;
+    const departingHeadlineWaypoint =
+      prevWp !== null &&
+      Math.abs(prevWp.y - shirorekha.y) <= 22 &&
+      Math.abs(point.x - prevWp.x) <= 35;
 
-    if (nearHeadlineY && withinHeadlineX && !targetNearHeadline) {
+    if (nearHeadlineY && withinHeadlineX && !targetNearHeadline && !departingHeadlineWaypoint) {
       return 'शिरोरेखा (माथिको डिको) अन्त्यमा मात्र तान्नुहोस्! पहिले अक्षरको शरीर र ठाडो धर्को पूरा गर्नुहोस्। (Draw the letter body & stem first — the Shirorekha top bar comes strictly last!)';
     }
 

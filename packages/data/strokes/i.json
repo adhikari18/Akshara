@@ -1,0 +1,84 @@
+{
+  "id": "i",
+  "character": "इ",
+  "unicode": "U+0907",
+  "category": "swor",
+  "varga": "तालव्य स्वर (Palatal Short Vowel)",
+  "phonetics": {
+    "romanized": "i",
+    "ipa": "/i/",
+    "nepaliName": "इ — इन्द्रेणी इ",
+    "audioPrompt": "इ — इन्द्रेणी इ",
+    "articulationTip": "Short high front palatal vowel: raise the front of your tongue toward the hard palate, like the 'i' in 'sit' or crisp 'ee' in 'feet'."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 65,
+    "endX": 235,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "i-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Top Neck & S-Curve Body (माथिल्लो घाँटी र नागबेली घुम्ती)",
+      "nepaliInstruction": "शिरोरेखाबाट सानो ठाडो घाँटी झारेर बायाँ र दायाँ नागबेली घुम्ती कोर्नुहोस्।",
+      "englishInstruction": "Drop a short vertical neck from the headline and trace the left-then-right S-curve body.",
+      "svgPath": "M 150 75 L 150 98 C 92 98, 88 142, 150 146 C 212 150, 210 202, 135 202",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 150, "y": 75, "label": "Top Neck Start" },
+        { "index": 1, "x": 106, "y": 118, "label": "Upper Left Belly" },
+        { "index": 2, "x": 150, "y": 146, "label": "Center Inflection" },
+        { "index": 3, "x": 195, "y": 175, "label": "Lower Right Belly" },
+        { "index": 4, "x": 135, "y": 202, "label": "Lower Base" }
+      ]
+    },
+    {
+      "id": "i-stroke-2",
+      "order": 2,
+      "type": "loop",
+      "label": "Bottom Knot & Descending Tail (तल्लो गाँठो र पुच्छर)",
+      "nepaliInstruction": "तल्लो भागमा सानो गोलो गाँठो पारेर दायाँतिर तल पुच्छर झार्नुहोस्।",
+      "englishInstruction": "Curl counter-clockwise into the small bottom knot and sweep the tail down to the right.",
+      "svgPath": "M 135 202 C 98 202, 96 174, 128 178 C 152 182, 168 214, 188 242",
+      "directionHint": "counter-clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 135, "y": 202, "label": "Knot Entry" },
+        { "index": 1, "x": 108, "y": 184, "label": "Loop Crest" },
+        { "index": 2, "x": 148, "y": 196, "label": "Knot Crossing" },
+        { "index": 3, "x": 188, "y": 242, "label": "Tail Tip" }
+      ]
+    },
+    {
+      "id": "i-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म माथिको शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 65 75 L 235 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 65, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 150, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 235, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "इन्द्रेणी", "romanized": "indreni", "meaning": "Rainbow", "emoji": "🌈" },
+    { "word": "इमली", "romanized": "imali", "meaning": "Tamarind", "emoji": "🫘" },
+    { "word": "इनार", "romanized": "inaar", "meaning": "Water Well", "emoji": "🪣" }
+  ]
+}

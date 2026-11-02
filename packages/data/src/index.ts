@@ -10,6 +10,11 @@ import strokeGa from '../strokes/ga.json' with { type: 'json' };
 import strokeGha from '../strokes/gha.json' with { type: 'json' };
 import strokeA from '../strokes/a.json' with { type: 'json' };
 import strokeAa from '../strokes/aa.json' with { type: 'json' };
+import strokeI from '../strokes/i.json' with { type: 'json' };
+import strokeIi from '../strokes/ii.json' with { type: 'json' };
+import strokeU from '../strokes/u.json' with { type: 'json' };
+import strokeUu from '../strokes/uu.json' with { type: 'json' };
+import strokeRi from '../strokes/ri.json' with { type: 'json' };
 
 export type StrokeTopologyType = 'loop' | 'curve' | 'diagonal' | 'stem' | 'shirorekha';
 
@@ -157,6 +162,11 @@ export const STROKE_DATASETS: Record<string, LetterStrokeDataset> = {
   gha: strokeGha as LetterStrokeDataset,
   a: strokeA as LetterStrokeDataset,
   aa: strokeAa as LetterStrokeDataset,
+  i: strokeI as LetterStrokeDataset,
+  ii: strokeIi as LetterStrokeDataset,
+  u: strokeU as LetterStrokeDataset,
+  uu: strokeUu as LetterStrokeDataset,
+  ri: strokeRi as LetterStrokeDataset,
 };
 
 export const STROKE_LIST: LetterStrokeDataset[] = [
@@ -166,6 +176,11 @@ export const STROKE_LIST: LetterStrokeDataset[] = [
   STROKE_DATASETS.gha,
   STROKE_DATASETS.a,
   STROKE_DATASETS.aa,
+  STROKE_DATASETS.i,
+  STROKE_DATASETS.ii,
+  STROKE_DATASETS.u,
+  STROKE_DATASETS.uu,
+  STROKE_DATASETS.ri,
 ];
 
 export interface DatasetValidationResult {

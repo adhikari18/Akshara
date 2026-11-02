@@ -1,0 +1,100 @@
+{
+  "id": "ii",
+  "character": "ई",
+  "unicode": "U+0908",
+  "category": "swor",
+  "varga": "तालव्य स्वर (Palatal Long Vowel)",
+  "phonetics": {
+    "romanized": "ii",
+    "ipa": "/iː/",
+    "nepaliName": "ई — ईंटा ई",
+    "audioPrompt": "ई — ईंटा ई",
+    "articulationTip": "Long high front palatal vowel: hold a sustained 'ee' sound (/iː/ as in 'see' or 'tree')."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 65,
+    "endX": 235,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "ii-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Top Neck & S-Curve Body (माथिल्लो घाँटी र नागबेली घुम्ती)",
+      "nepaliInstruction": "शिरोरेखाबाट सानो घाँटी झारेर 'इ' को नागबेली शरीर कोर्नुहोस्।",
+      "englishInstruction": "Drop the short vertical neck and trace the left-then-right S-curve body.",
+      "svgPath": "M 150 75 L 150 98 C 92 98, 88 142, 150 146 C 212 150, 210 202, 135 202",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 150, "y": 75, "label": "Top Neck Start" },
+        { "index": 1, "x": 106, "y": 118, "label": "Upper Left Belly" },
+        { "index": 2, "x": 150, "y": 146, "label": "Center Inflection" },
+        { "index": 3, "x": 195, "y": 175, "label": "Lower Right Belly" },
+        { "index": 4, "x": 135, "y": 202, "label": "Lower Base" }
+      ]
+    },
+    {
+      "id": "ii-stroke-2",
+      "order": 2,
+      "type": "loop",
+      "label": "Bottom Knot & Descending Tail (तल्लो गाँठो र पुच्छर)",
+      "nepaliInstruction": "तल्लो भागमा गाँठो बनाएर दायाँतिर तल पुच्छर झार्नुहोस्।",
+      "englishInstruction": "Form the small counter-clockwise bottom knot and sweep the tail down-right.",
+      "svgPath": "M 135 202 C 98 202, 96 174, 128 178 C 152 182, 168 214, 188 242",
+      "directionHint": "counter-clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 135, "y": 202, "label": "Knot Entry" },
+        { "index": 1, "x": 108, "y": 184, "label": "Loop Crest" },
+        { "index": 2, "x": 148, "y": 196, "label": "Knot Crossing" },
+        { "index": 3, "x": 188, "y": 242, "label": "Tail Tip" }
+      ]
+    },
+    {
+      "id": "ii-stroke-3",
+      "order": 3,
+      "type": "curve",
+      "label": "Top Dirgha Ikar Hook (माथिको दीर्घ ईकार टुप्पी)",
+      "nepaliInstruction": "शिरोरेखामाथि दायाँतिर झुकेको दीर्घ ईकारको टुप्पी बनाउनुहोस्।",
+      "englishInstruction": "Trace the upper rising arch hook above the headline from center to right.",
+      "svgPath": "M 150 75 C 145 32, 195 24, 212 48",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 150, "y": 75, "label": "Hook Base" },
+        { "index": 1, "x": 168, "y": 36, "label": "Upper Arch Crest" },
+        { "index": 2, "x": 212, "y": 48, "label": "Hook Tip" }
+      ]
+    },
+    {
+      "id": "ii-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Crown the vowel with the horizontal Shirorekha bar from left to right.",
+      "svgPath": "M 65 75 L 235 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 65, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 150, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 235, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "ईंटा", "romanized": "iinta", "meaning": "Brick", "emoji": "🧱" },
+    { "word": "ईश्वर", "romanized": "ishwar", "meaning": "God / Divine", "emoji": "🙏" },
+    { "word": "ईख", "romanized": "iikh", "meaning": "Sugarcane", "emoji": "🎋" }
+  ]
+}

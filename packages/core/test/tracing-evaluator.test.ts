@@ -108,5 +108,42 @@ describe('TracingEvaluator & Vector Geometry Engine', () => {
     expect(step1.topologicalViolation).not.toBeNull();
     expect(step1.topologicalViolation).toContain('शिरोरेखा');
   });
+
+  it('traces simple palatal, labial, and retroflex Swor Varna (इ, ई, उ, ऊ, ऋ) across interpolated pointer trajectories', () => {
+    const simpleVowels = ['i', 'ii', 'u', 'uu', 'ri'] as const;
+
+    for (const id of simpleVowels) {
+      const dataset = STROKE_DATASETS[id];
+      expect(dataset).toBeDefined();
+      expect(dataset.category).toBe('swor');
+
+      const evaluator = new TracingEvaluator(dataset, {
+        mode: 'standard',
+        smoothingAlpha: 1.0,
+      });
+
+      for (const stroke of dataset.strokes) {
+        for (let i = 0; i < stroke.waypoints.length - 1; i++) {
+          const a = stroke.waypoints[i];
+          const b = stroke.waypoints[i + 1];
+          const steps = 6;
+          for (let s = 0; s <= steps; s++) {
+            const t = s / steps;
+            const step = evaluator.evaluatePointerSample({
+              x: a.x + (b.x - a.x) * t,
+              y: a.y + (b.y - a.y) * t,
+            });
+            expect(step.topologicalViolation).toBeNull();
+          }
+        }
+      }
+
+      const progress = evaluator.getProgress();
+      expect(progress.isLetterComplete).toBe(true);
+      expect(progress.completedStrokeIds).toHaveLength(dataset.strokes.length);
+      expect(progress.overallCompletionRatio).toBe(1);
+      expect(progress.stars).toBe(3);
+    }
+  });
 });
 

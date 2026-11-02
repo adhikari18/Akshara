@@ -1,0 +1,82 @@
+{
+  "id": "u",
+  "character": "उ",
+  "unicode": "U+0909",
+  "category": "swor",
+  "varga": "ओष्ठ्य स्वर (Labial Short Vowel)",
+  "phonetics": {
+    "romanized": "u",
+    "ipa": "/u/",
+    "nepaliName": "उ — उल्लू उ",
+    "audioPrompt": "उ — उल्लू उ",
+    "articulationTip": "Short rounded labial vowel: round your lips gently like the 'u' in 'put' or 'book'."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 70,
+    "endX": 225,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "u-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Upper Right-Facing Curve (माथिल्लो घुम्ती)",
+      "nepaliInstruction": "माथिल्लो भागमा दायाँतिर फर्किएको पहिलो घुम्ती कोर्नुहोस्।",
+      "englishInstruction": "Trace the upper clockwise curve from left to right and back to the middle vertex.",
+      "svgPath": "M 105 92 C 175 78, 185 132, 125 148",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 105, "y": 92, "label": "Top Curve Start" },
+        { "index": 1, "x": 166, "y": 108, "label": "Upper Belly" },
+        { "index": 2, "x": 125, "y": 148, "label": "Middle Vertex" }
+      ]
+    },
+    {
+      "id": "u-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Lower Bowl & Left Upward Sweep (तल्लो घुम्ती र बायाँ टुप्पो)",
+      "nepaliInstruction": "बीचको टुप्पोबाट तल्लो घुम्ती घुमाएर बायाँतिर माथि उठाउनुहोस्।",
+      "englishInstruction": "From the middle vertex, sweep around the lower bowl and rise upward on the left.",
+      "svgPath": "M 125 148 C 198 158, 192 235, 115 228 C 82 225, 68 198, 75 172",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 125, "y": 148, "label": "Middle Vertex" },
+        { "index": 1, "x": 182, "y": 188, "label": "Lower Right Belly" },
+        { "index": 2, "x": 122, "y": 228, "label": "Bottom Bowl" },
+        { "index": 3, "x": 75, "y": 172, "label": "Left Rising Tip" }
+      ]
+    },
+    {
+      "id": "u-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar at the top.",
+      "svgPath": "M 70 75 L 225 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 70, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 148, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 225, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "उल्लू", "romanized": "ullu", "meaning": "Owl", "emoji": "🦉" },
+    { "word": "उज्यालो", "romanized": "ujyalo", "meaning": "Bright Light", "emoji": "💡" },
+    { "word": "उकाली", "romanized": "ukaali", "meaning": "Uphill Trail", "emoji": "⛰️" }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "id": "uu",
+  "character": "ऊ",
+  "unicode": "U+090A",
+  "category": "swor",
+  "varga": "ओष्ठ्य स्वर (Labial Long Vowel)",
+  "phonetics": {
+    "romanized": "uu",
+    "ipa": "/uː/",
+    "nepaliName": "ऊ — ऊन ऊ",
+    "audioPrompt": "ऊ — ऊन ऊ",
+    "articulationTip": "Long rounded labial vowel: purse your lips and hold a full 'oo' sound (/uː/ as in 'moon' or 'boot')."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 65,
+    "endX": 240,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "uu-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Double Front Curves (अगाडिको दुई घुम्ती)",
+      "nepaliInstruction": "पहिले 'उ' जस्तै माथिल्लो र तल्लो दुईवटा घुम्ती बनाउनुहोस्।",
+      "englishInstruction": "Trace the upper and lower right-facing curves like the letter 'u'.",
+      "svgPath": "M 95 92 C 162 78, 172 132, 115 148 C 182 158, 176 232, 102 226 C 72 222, 62 198, 68 174",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 95, "y": 92, "label": "Top Curve Start" },
+        { "index": 1, "x": 154, "y": 108, "label": "Upper Belly" },
+        { "index": 2, "x": 115, "y": 148, "label": "Center Vertex" },
+        { "index": 3, "x": 166, "y": 190, "label": "Lower Belly" },
+        { "index": 4, "x": 68, "y": 174, "label": "Left Bowl Tip" }
+      ]
+    },
+    {
+      "id": "uu-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Right Sweeping Ukar Tail (दायाँ झुन्डिएको पुच्छर)",
+      "nepaliInstruction": "बीचको भागबाट दायाँपट्टि तल झर्ने घुमाउरो पुच्छर तान्नुहोस्।",
+      "englishInstruction": "Branch out from the middle curve and sweep the long Ukar tail down to the right.",
+      "svgPath": "M 145 152 C 195 142, 232 168, 222 222",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 145, "y": 152, "label": "Tail Origin" },
+        { "index": 1, "x": 206, "y": 158, "label": "Right Arch" },
+        { "index": 2, "x": 222, "y": 222, "label": "Tail Tip" }
+      ]
+    },
+    {
+      "id": "uu-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Complete the vowel with the top horizontal Shirorekha bar.",
+      "svgPath": "M 65 75 L 240 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 65, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 152, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 240, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "ऊन", "romanized": "uun", "meaning": "Wool", "emoji": "🧶" },
+    { "word": "ऊँट", "romanized": "uunt", "meaning": "Camel", "emoji": "🐪" },
+    { "word": "ऊर्जा", "romanized": "uurja", "meaning": "Energy", "emoji": "⚡" }
+  ]
+}
