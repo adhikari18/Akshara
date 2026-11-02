@@ -1,0 +1,83 @@
+{
+  "id": "gha",
+  "character": "घ",
+  "unicode": "U+0918",
+  "category": "vyanjan",
+  "varga": "कण्ठ्य (Kanthya / Velar)",
+  "phonetics": {
+    "romanized": "gha",
+    "ipa": "/ɡʱʌ/",
+    "nepaliName": "घर घ",
+    "audioPrompt": "घ — घर घ",
+    "articulationTip": "Voiced aspirated velar stop: combine a voiced 'g' with a deep breathy murmur from the chest, as in 'घर' (ghar - house)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 55,
+    "endX": 245,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "gha-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Double Left Bowls (दुईवटा बायाँ घुम्ती)",
+      "nepaliInstruction": "माथिल्लो र तल्लो गरी दुईवटा बायाँ घुम्ती जोड्दै दायाँ धर्कोसम्म लैजानुहोस्।",
+      "englishInstruction": "Trace the upper bowl and lower bowl curves sweeping into the right stem.",
+      "svgPath": "M 135 75 C 80 85, 78 135, 130 142 C 78 152, 82 210, 140 205 C 170 202, 190 185, 205 168",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 135, "y": 75, "label": "Top Bowl Start" },
+        { "index": 1, "x": 92, "y": 112, "label": "Upper Bowl Belly" },
+        { "index": 2, "x": 130, "y": 142, "label": "Mid Waist Indentation" },
+        { "index": 3, "x": 95, "y": 182, "label": "Lower Bowl Belly" },
+        { "index": 4, "x": 205, "y": 168, "label": "Stem Join" }
+      ]
+    },
+    {
+      "id": "gha-stroke-2",
+      "order": 2,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 205 75 L 205 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 205, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 205, "y": 155, "label": "Stem Mid" },
+        { "index": 2, "x": 205, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "gha-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा माथिको शिरोरेखा बायाँदेखि दायाँसम्म तान्नुहोस्।",
+      "englishInstruction": "Crown the letter with the horizontal Shirorekha bar from left to right.",
+      "svgPath": "M 55 75 L 245 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 55, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 150, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 245, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "घर", "romanized": "ghar", "meaning": "House", "emoji": "🏠" },
+    { "word": "घडी", "romanized": "ghadi", "meaning": "Clock / Watch", "emoji": "⌚" },
+    { "word": "घाम", "romanized": "ghaam", "meaning": "Sunshine", "emoji": "☀️" }
+  ]
+}

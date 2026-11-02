@@ -1,0 +1,102 @@
+{
+  "id": "ka",
+  "character": "क",
+  "unicode": "U+0915",
+  "category": "vyanjan",
+  "varga": "कण्ठ्य (Kanthya / Velar)",
+  "phonetics": {
+    "romanized": "ka",
+    "ipa": "/kʌ/",
+    "nepaliName": "कपुरी क",
+    "audioPrompt": "क — कपुरी क",
+    "articulationTip": "Unaspirated voiceless velar stop: pronounce like the 'k' in 'skate' with minimal breath puff, followed by the short Nepali 'a' (/ʌ/ as in 'cup')."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 55,
+    "endX": 245,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "ka-stroke-1",
+      "order": 1,
+      "type": "loop",
+      "label": "Left Bowl Loop (वायाँ गोलो घेरा)",
+      "nepaliInstruction": "बीचको बिन्दुबाट सुरु गरी बायाँतिर गोलो घेरा बनाउनुहोस्।",
+      "englishInstruction": "Start at the center stem point and trace the counter-clockwise left loop back to the center.",
+      "svgPath": "M 150 125 C 105 105, 72 125, 75 155 C 78 185, 112 195, 150 165",
+      "directionHint": "counter-clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 150, "y": 125, "label": "Loop Start" },
+        { "index": 1, "x": 102, "y": 118, "label": "Upper Left Arch" },
+        { "index": 2, "x": 75, "y": 155, "label": "Leftmost Belly" },
+        { "index": 3, "x": 108, "y": 186, "label": "Lower Loop Curve" },
+        { "index": 4, "x": 150, "y": 165, "label": "Loop Closure" }
+      ]
+    },
+    {
+      "id": "ka-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Right Curved Hook (दायाँ अंकुश)",
+      "nepaliInstruction": "बीचबाट दायाँतिर घुमाउरो पुच्छर तलतिर तान्नुहोस्।",
+      "englishInstruction": "Branch out from the center to form the right curved hook sweeping down.",
+      "svgPath": "M 150 145 C 182 122, 222 132, 225 168 C 227 195, 210 210, 195 215",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 150, "y": 145, "label": "Hook Origin" },
+        { "index": 1, "x": 196, "y": 132, "label": "Right Arch Crest" },
+        { "index": 2, "x": 225, "y": 168, "label": "Right Outer Curve" },
+        { "index": 3, "x": 195, "y": 215, "label": "Hook Tip" }
+      ]
+    },
+    {
+      "id": "ka-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Central Vertical Stem (ठाडो धर्को / खडी पाई)",
+      "nepaliInstruction": "माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the vertical Khadi Pai stem straight down from the headline to the baseline.",
+      "svgPath": "M 150 75 L 150 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 150, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 150, "y": 130, "label": "Upper Spine" },
+        { "index": 2, "x": 150, "y": 185, "label": "Lower Spine" },
+        { "index": 3, "x": 150, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "ka-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा / माथिको डिको)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म माथिको डिको (शिरोरेखा) तान्नुहोस्।",
+      "englishInstruction": "Finally, crown the letter by drawing the horizontal Shirorekha bar from left to right.",
+      "svgPath": "M 55 75 L 245 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 55, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 118, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 182, "y": 75, "label": "Right Headline" },
+        { "index": 3, "x": 245, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "कलम", "romanized": "kalam", "meaning": "Pen", "emoji": "🖊️" },
+    { "word": "कमल", "romanized": "kamal", "meaning": "Lotus", "emoji": "🪷" },
+    { "word": "कछुवा", "romanized": "kachhuwa", "meaning": "Turtle", "emoji": "🐢" }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@akshara/data",
+  "version": "0.1.0",
+  "description": "Declarative JSON schemas, Devanagari Swor/Vyanjan datasets, parametric stroke waypoint vectors, and SOV sentence corpora for Akshara (Khari).",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schema/letter.schema.json": "./schema/letter.schema.json",
+    "./vowels.json": "./vowels.json",
+    "./consonants.json": "./consonants.json",
+    "./words.json": "./words.json",
+    "./sentences.json": "./sentences.json",
+    "./strokes/*": "./strokes/*"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}

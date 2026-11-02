@@ -1,0 +1,177 @@
+[
+  {
+    "id": "sov-1",
+    "nepaliSentence": "राम घर जान्छ",
+    "romanized": "Raam ghar jaanchha",
+    "englishTranslation": "Ram goes home.",
+    "englishOrder": "Subject (Ram) → Verb (goes) → Object/Goal (home)",
+    "nepaliOrder": "कर्ता (राम) + कर्म/स्थान (घर) + क्रिया (जान्छ)",
+    "emoji": "🚶‍♂️🏠",
+    "tokens": [
+      {
+        "id": "sov-1-s",
+        "text": "राम",
+        "romanized": "Raam",
+        "gloss": "Ram",
+        "role": "subject",
+        "nepaliRole": "कर्ता (Subject)"
+      },
+      {
+        "id": "sov-1-o",
+        "text": "घर",
+        "romanized": "ghar",
+        "gloss": "home",
+        "role": "object",
+        "nepaliRole": "कर्म (Object)"
+      },
+      {
+        "id": "sov-1-v",
+        "text": "जान्छ",
+        "romanized": "jaanchha",
+        "gloss": "goes",
+        "role": "verb",
+        "nepaliRole": "क्रिया (Verb)"
+      }
+    ]
+  },
+  {
+    "id": "sov-2",
+    "nepaliSentence": "सीता किताब पढ्छिन्",
+    "romanized": "Sita kitaab padhchhin",
+    "englishTranslation": "Sita reads a book.",
+    "englishOrder": "Subject (Sita) → Verb (reads) → Object (a book)",
+    "nepaliOrder": "कर्ता (सीता) + कर्म (किताब) + क्रिया (पढ्छिन्)",
+    "emoji": "👧📖",
+    "tokens": [
+      {
+        "id": "sov-2-s",
+        "text": "सीता",
+        "romanized": "Sita",
+        "gloss": "Sita",
+        "role": "subject",
+        "nepaliRole": "कर्ता (Subject)"
+      },
+      {
+        "id": "sov-2-o",
+        "text": "किताब",
+        "romanized": "kitaab",
+        "gloss": "book",
+        "role": "object",
+        "nepaliRole": "कर्म (Object)"
+      },
+      {
+        "id": "sov-2-v",
+        "text": "पढ्छिन्",
+        "romanized": "padhchhin",
+        "gloss": "reads",
+        "role": "verb",
+        "nepaliRole": "क्रिया (Verb)"
+      }
+    ]
+  },
+  {
+    "id": "sov-3",
+    "nepaliSentence": "आमा भात पकाउनुहुन्छ",
+    "romanized": "Aama bhaat pakaaunuhunchha",
+    "englishTranslation": "Mother cooks rice.",
+    "englishOrder": "Subject (Mother) → Verb (cooks) → Object (rice)",
+    "nepaliOrder": "कर्ता (आमा) + कर्म (भात) + क्रिया (पकाउनुहुन्छ)",
+    "emoji": "👩🍚",
+    "tokens": [
+      {
+        "id": "sov-3-s",
+        "text": "आमा",
+        "romanized": "Aama",
+        "gloss": "Mother",
+        "role": "subject",
+        "nepaliRole": "कर्ता (Subject)"
+      },
+      {
+        "id": "sov-3-o",
+        "text": "भात",
+        "romanized": "bhaat",
+        "gloss": "cooked rice",
+        "role": "object",
+        "nepaliRole": "कर्म (Object)"
+      },
+      {
+        "id": "sov-3-v",
+        "text": "पकाउनुहुन्छ",
+        "romanized": "pakaaunuhunchha",
+        "gloss": "cooks (honorific)",
+        "role": "verb",
+        "nepaliRole": "क्रिया (Verb)"
+      }
+    ]
+  },
+  {
+    "id": "sov-4",
+    "nepaliSentence": "चरा आकाशमा उड्छ",
+    "romanized": "Chara aakaashma udchha",
+    "englishTranslation": "The bird flies in the sky.",
+    "englishOrder": "Subject (The bird) → Verb (flies) → Locative (in the sky)",
+    "nepaliOrder": "कर्ता (चरा) + अधिकरण (आकाशमा) + क्रिया (उड्छ)",
+    "emoji": "🐦🌤️",
+    "tokens": [
+      {
+        "id": "sov-4-s",
+        "text": "चरा",
+        "romanized": "Chara",
+        "gloss": "The bird",
+        "role": "subject",
+        "nepaliRole": "कर्ता (Subject)"
+      },
+      {
+        "id": "sov-4-o",
+        "text": "आकाशमा",
+        "romanized": "aakaashma",
+        "gloss": "in the sky",
+        "role": "object",
+        "nepaliRole": "कर्म/अधिकरण (Locative Object)"
+      },
+      {
+        "id": "sov-4-v",
+        "text": "उड्छ",
+        "romanized": "udchha",
+        "gloss": "flies",
+        "role": "verb",
+        "nepaliRole": "क्रिया (Verb)"
+      }
+    ]
+  },
+  {
+    "id": "sov-5",
+    "nepaliSentence": "भाइ कलम समात्छ",
+    "romanized": "Bhaai kalam samaatchha",
+    "englishTranslation": "Little brother holds a pen.",
+    "englishOrder": "Subject (Brother) → Verb (holds) → Object (a pen)",
+    "nepaliOrder": "कर्ता (भाइ) + कर्म (कलम) + क्रिया (समात्छ)",
+    "emoji": "👦🖊️",
+    "tokens": [
+      {
+        "id": "sov-5-s",
+        "text": "भाइ",
+        "romanized": "Bhaai",
+        "gloss": "Younger brother",
+        "role": "subject",
+        "nepaliRole": "कर्ता (Subject)"
+      },
+      {
+        "id": "sov-5-o",
+        "text": "कलम",
+        "romanized": "kalam",
+        "gloss": "pen",
+        "role": "object",
+        "nepaliRole": "कर्म (Object)"
+      },
+      {
+        "id": "sov-5-v",
+        "text": "समात्छ",
+        "romanized": "samaatchha",
+        "gloss": "holds",
+        "role": "verb",
+        "nepaliRole": "क्रिया (Verb)"
+      }
+    ]
+  }
+]

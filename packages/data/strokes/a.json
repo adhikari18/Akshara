@@ -1,0 +1,99 @@
+{
+  "id": "a",
+  "character": "अ",
+  "unicode": "U+0905",
+  "category": "swor",
+  "varga": "कण्ठ्य स्वर (Guttural Vowel)",
+  "phonetics": {
+    "romanized": "a",
+    "ipa": "/ʌ/",
+    "nepaliName": "अ — अनार अ",
+    "audioPrompt": "अ — अनार अ",
+    "articulationTip": "Mid-central inherent Nepali vowel: pronounce like the 'u' in 'cup' or 'a' in 'about'."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 145,
+    "endX": 245,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "a-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Double Front Curves (अगाडिको दुई घुम्ती)",
+      "nepaliInstruction": "माथिल्लो र तल्लो घुम्ती बनाएर ३ जस्तो आकार कोर्नुहोस्।",
+      "englishInstruction": "Trace the upper and lower right-facing curves (shaped like a numeral 3).",
+      "svgPath": "M 75 95 C 135 80, 145 130, 95 145 C 155 155, 150 225, 75 215",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 75, "y": 95, "label": "Top Curve Start" },
+        { "index": 1, "x": 128, "y": 110, "label": "Upper Belly" },
+        { "index": 2, "x": 95, "y": 145, "label": "Center Vertex" },
+        { "index": 3, "x": 138, "y": 188, "label": "Lower Belly" },
+        { "index": 4, "x": 75, "y": 215, "label": "Bottom Tail" }
+      ]
+    },
+    {
+      "id": "a-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Middle Connector Bridge (बीचको जोड्ने धर्को)",
+      "nepaliInstruction": "बीचको टुप्पोबाट दायाँतिर जोड्ने तेर्सो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the short horizontal bridge from the middle vertex to the right stem.",
+      "svgPath": "M 115 148 L 195 148",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 115, "y": 148, "label": "Bridge Left" },
+        { "index": 1, "x": 155, "y": 148, "label": "Bridge Mid" },
+        { "index": 2, "x": 195, "y": 148, "label": "Bridge Right" }
+      ]
+    },
+    {
+      "id": "a-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem from the headline to the baseline.",
+      "svgPath": "M 195 75 L 195 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 195, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 195, "y": 155, "label": "Stem Mid" },
+        { "index": 2, "x": 195, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "a-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा ठाडो धर्कोमाथि शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar over the stem.",
+      "svgPath": "M 145 75 L 245 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 145, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 195, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 245, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "अनार", "romanized": "anaar", "meaning": "Pomegranate", "emoji": "🍎" },
+    { "word": "अदुवा", "romanized": "aduwa", "meaning": "Ginger", "emoji": "🫚" },
+    { "word": "अक्षर", "romanized": "akshara", "meaning": "Letter / Syllable", "emoji": "✍️" }
+  ]
+}

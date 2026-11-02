@@ -1,0 +1,82 @@
+{
+  "id": "ga",
+  "character": "ग",
+  "unicode": "U+0917",
+  "category": "vyanjan",
+  "varga": "कण्ठ्य (Kanthya / Velar)",
+  "phonetics": {
+    "romanized": "ga",
+    "ipa": "/ɡʌ/",
+    "nepaliName": "गाई ग",
+    "audioPrompt": "ग — गाई ग",
+    "articulationTip": "Voiced unaspirated velar stop: vibrate your vocal cords like the 'g' in 'go'."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 60,
+    "endX": 240,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "ga-stroke-1",
+      "order": 1,
+      "type": "loop",
+      "label": "Left Hanging Loop (बायाँ झुन्डिएको गोलो धर्को)",
+      "nepaliInstruction": "माथिबाट तल झरेर बायाँतिर सानो गोलो गाँठो बनाउनुहोस्।",
+      "englishInstruction": "Drop down from the headline and curl counter-clockwise into the left terminal loop.",
+      "svgPath": "M 120 75 L 120 170 C 120 205, 80 205, 80 175 C 80 150, 120 155, 130 165",
+      "directionHint": "counter-clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 120, "y": 75, "label": "Left Hanging Start" },
+        { "index": 1, "x": 120, "y": 145, "label": "Left Shaft" },
+        { "index": 2, "x": 95, "y": 192, "label": "Bottom Loop" },
+        { "index": 3, "x": 125, "y": 162, "label": "Loop Knot" }
+      ]
+    },
+    {
+      "id": "ga-stroke-2",
+      "order": 2,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the full-height right vertical Khadi Pai stem from top to bottom.",
+      "svgPath": "M 195 75 L 195 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 195, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 195, "y": 155, "label": "Stem Middle" },
+        { "index": 2, "x": 195, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "ga-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Complete the character with the top horizontal Shirorekha bar.",
+      "svgPath": "M 60 75 L 240 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 60, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 150, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 240, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "गमला", "romanized": "gamala", "meaning": "Flowerpot", "emoji": "🪴" },
+    { "word": "गाई", "romanized": "gaai", "meaning": "Cow", "emoji": "🐄" },
+    { "word": "गीत", "romanized": "geet", "meaning": "Song", "emoji": "🎵" }
+  ]
+}

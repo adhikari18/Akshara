@@ -1,0 +1,98 @@
+[
+  {
+    "id": "ghar",
+    "word": "घर",
+    "romanized": "ghar",
+    "meaning": "House",
+    "emoji": "🏠",
+    "syllableCount": 2,
+    "difficulty": "beginner",
+    "aksharas": ["घ", "र"],
+    "distractors": ["क", "म", "प"],
+    "phoneticBreakdown": "घ (gha) + र (ra) = घर (ghar)"
+  },
+  {
+    "id": "bas",
+    "word": "बस",
+    "romanized": "bas",
+    "meaning": "Bus",
+    "emoji": "🚌",
+    "syllableCount": 2,
+    "difficulty": "beginner",
+    "aksharas": ["ब", "स"],
+    "distractors": ["न", "ल", "च"],
+    "phoneticBreakdown": "ब (ba) + स (sa) = बस (bas)"
+  },
+  {
+    "id": "chara",
+    "word": "चरा",
+    "romanized": "chara",
+    "meaning": "Bird",
+    "emoji": "🐦",
+    "syllableCount": 2,
+    "difficulty": "beginner",
+    "aksharas": ["च", "रा"],
+    "distractors": ["का", "ग", "म"],
+    "phoneticBreakdown": "च (cha) + रा (raa) = चरा (chara)"
+  },
+  {
+    "id": "kalam",
+    "word": "कलम",
+    "romanized": "kalam",
+    "meaning": "Pen",
+    "emoji": "🖊️",
+    "syllableCount": 3,
+    "difficulty": "beginner",
+    "aksharas": ["क", "ल", "म"],
+    "distractors": ["न", "र", "स"],
+    "phoneticBreakdown": "क (ka) + ल (la) + म (ma) = कलम (kalam)"
+  },
+  {
+    "id": "kamal",
+    "word": "कमल",
+    "romanized": "kamal",
+    "meaning": "Lotus Flower",
+    "emoji": "🪷",
+    "syllableCount": 3,
+    "difficulty": "beginner",
+    "aksharas": ["क", "म", "ल"],
+    "distractors": ["प", "त", "र"],
+    "phoneticBreakdown": "क (ka) + म (ma) + ल (la) = कमल (kamal)"
+  },
+  {
+    "id": "pani",
+    "word": "पानी",
+    "romanized": "paani",
+    "meaning": "Water",
+    "emoji": "💧",
+    "syllableCount": 2,
+    "difficulty": "intermediate",
+    "aksharas": ["पा", "नी"],
+    "distractors": ["मा", "का", "ली"],
+    "phoneticBreakdown": "पा (paa) + नी (nii) = पानी (paani)"
+  },
+  {
+    "id": "aama",
+    "word": "आमा",
+    "romanized": "aama",
+    "meaning": "Mother",
+    "emoji": "👩",
+    "syllableCount": 2,
+    "difficulty": "beginner",
+    "aksharas": ["आ", "मा"],
+    "distractors": ["का", "ना", "पा"],
+    "phoneticBreakdown": "आ (aa) + मा (maa) = आमा (aama)"
+  },
+  {
+    "id": "kitab",
+    "word": "किताब",
+    "romanized": "kitaab",
+    "meaning": "Book",
+    "emoji": "📖",
+    "syllableCount": 3,
+    "difficulty": "intermediate",
+    "aksharas": ["कि", "ता", "ब"],
+    "distractors": ["क", "मा", "ल"],
+    "phoneticBreakdown": "कि (ki) + ता (taa) + ब (ba) = किताब (kitaab)"
+  }
+]

@@ -1,0 +1,100 @@
+{
+  "id": "kha",
+  "character": "ख",
+  "unicode": "U+0916",
+  "category": "vyanjan",
+  "varga": "कण्ठ्य (Kanthya / Velar)",
+  "phonetics": {
+    "romanized": "kha",
+    "ipa": "/kʰʌ/",
+    "nepaliName": "खरायो ख",
+    "audioPrompt": "ख — खरायो ख",
+    "articulationTip": "Aspirated voiceless velar stop: pronounce like 'k' in 'keep' with a strong puff of air from the back of the throat."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 55,
+    "endX": 245,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "kha-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Left Hook & Sweep (बायाँ घुम्ती र पुच्छर)",
+      "nepaliInstruction": "माथि बायाँबाट सुरु गरी तलतिर घुमाउरो धर्को बनाउनुहोस्।",
+      "englishInstruction": "Trace the upper-left curve down and sweep across toward the right stem.",
+      "svgPath": "M 85 85 C 125 95, 125 140, 82 155 C 95 195, 145 215, 210 195",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 85, "y": 85, "label": "Upper Curve Start" },
+        { "index": 1, "x": 115, "y": 120, "label": "Upper Bend" },
+        { "index": 2, "x": 82, "y": 155, "label": "Left Waist" },
+        { "index": 3, "x": 140, "y": 205, "label": "Bottom Cradle" },
+        { "index": 4, "x": 210, "y": 195, "label": "Stem Join" }
+      ]
+    },
+    {
+      "id": "kha-stroke-2",
+      "order": 2,
+      "type": "loop",
+      "label": "Inner Bowl Loop (भित्री गोलो घेरा)",
+      "nepaliInstruction": "ठाडो धर्कोको बायाँपट्टि सानो गोलो घेरा बनाउनुहोस्।",
+      "englishInstruction": "Draw the inner circular bowl attached to the right vertical stem.",
+      "svgPath": "M 210 130 C 160 115, 145 150, 165 175 C 180 190, 200 180, 210 165",
+      "directionHint": "counter-clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 210, "y": 130, "label": "Inner Loop Start" },
+        { "index": 1, "x": 162, "y": 135, "label": "Inner Loop Left" },
+        { "index": 2, "x": 172, "y": 178, "label": "Inner Loop Bottom" },
+        { "index": 3, "x": 210, "y": 165, "label": "Inner Loop Close" }
+      ]
+    },
+    {
+      "id": "kha-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem from top to bottom.",
+      "svgPath": "M 210 75 L 210 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 210, "y": 75, "label": "Right Stem Top" },
+        { "index": 1, "x": 210, "y": 135, "label": "Right Stem Mid" },
+        { "index": 2, "x": 210, "y": 240, "label": "Right Stem Foot" }
+      ]
+    },
+    {
+      "id": "kha-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 55 75 L 245 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 55, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 150, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 245, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "खरायो", "romanized": "kharayo", "meaning": "Rabbit", "emoji": "🐇" },
+    { "word": "खसी", "romanized": "khasi", "meaning": "Goat", "emoji": "🐐" },
+    { "word": "खोला", "romanized": "khola", "meaning": "River Stream", "emoji": "🏞️" }
+  ]
+}
