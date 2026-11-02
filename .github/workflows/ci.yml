@@ -38,3 +38,4 @@ jobs:
 
       - name: Build @akshara/web Next.js frontend
         run: npm run build --workspace=@akshara/web
+

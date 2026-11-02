@@ -18,3 +18,4 @@ To better grade freehand loops (`क`, `ख`, `घ`, `छ`) drawn at varying spe
 2. Implement `discreteFrechetDistance(curveP: Point2D[], curveQ: Point2D[]): number` using dynamic programming in $O(MN)$ time.
 3. Combine the Fréchet similarity score with sequential waypoint completion to compute a smoother `accuracyScore` (0–100%).
 4. Add unit tests in `packages/core/test/tracing-evaluator.test.ts` with synthetic high-jitter child pointer trajectories.
+

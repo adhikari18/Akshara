@@ -15,3 +15,4 @@ Once early learners master `MatraBuilder.tsx` (attaching vowel signs to single c
 1. Extend `packages/core/src/matra-engine.ts` with `fuseConjunctConsonants(c1: string, c2: string)` describing how `c1` loses its vertical *Khadi Pai* stem (`क ➔ क्`, `ग ➔ ग्`, `स ➔ स्`) or takes a *Rakar* (`्र`) / *Repha* (`र्`) form.
 2. Create an interactive visual component in `packages/web/src/components/` showing the half-letter transformation animation (`स + ् + थ = स्थ`).
 3. Add 10 common Nepali children's conjunct words (`स्कूल`, `प्रणाम`, `आमाको माया`, `बच्चा`, `पुस्तक`, `नमस्ते`) with audio breakdown.
+

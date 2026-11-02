@@ -19,3 +19,4 @@ assignees: ""
    - The horizontal headline bar (`type: "shirorekha"`) must be **strictly last**.
 3. Define at least 3 ordered waypoints `(x, y)` per stroke within the `300x300` coordinate space (`shirorekhaY: 75`, `baselineY: 240`).
 4. Run `npm run validate:data && npm test` to verify schema compliance and topological order.
+

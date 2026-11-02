@@ -138,3 +138,4 @@ export function speakNepaliPhonics(devanagariText: string, romanizedFallback?: s
     // Fallback chime already played above
   }
 }
+

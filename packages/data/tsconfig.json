@@ -6,3 +6,4 @@
   },
   "include": ["src/**/*", "*.json", "strokes/*.json", "schema/*.json"]
 }
+

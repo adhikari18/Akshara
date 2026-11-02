@@ -346,3 +346,4 @@ export function segmentDevanagariAksharas(word: string): string[] {
 
   return clusters;
 }
+

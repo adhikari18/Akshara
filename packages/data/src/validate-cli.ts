@@ -39,3 +39,4 @@ console.log(`✅ SOV sentence challenges: ${SENTENCES.length} sentences verified
 if (hasError) {
   process.exit(1);
 }
+
