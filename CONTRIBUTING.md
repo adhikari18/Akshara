@@ -1,6 +1,6 @@
 # Contributing to `Akshara` (अक्षर • खरी र पाटी)
 
-Thank you for helping build **Akshara (`Khari`)**—an open-source interactive engine teaching children and diaspora early learners how to read, pronounce, and write Nepali Devanagari script!
+Thank you for helping build **Akshara**—an open-source interactive engine teaching children and diaspora early learners how to read, pronounce, and write Nepali Devanagari script!
 
 We welcome contributions from **TypeScript/React engineers**, **computational linguists**, **educators**, **voice artists**, and **illustrators** (including non-coders!).
 
@@ -74,3 +74,4 @@ Check out our ready-to-pick-up issues in [`.github/ISSUE_TEMPLATE/`](./.github/I
 ## License
 
 By contributing to `Akshara`, you agree that your contributions will be licensed under the [MIT License](./LICENSE).
+

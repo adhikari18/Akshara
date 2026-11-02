@@ -2,12 +2,12 @@
   "name": "akshara",
   "version": "0.1.0",
   "private": true,
-  "description": "Khari (Akshara / अक्षर) — Interactive Nepali Devanagari literacy engine with parametric Pati-chalk stroke tracing, Shirorekha topological validation, Barakhari Matra fusion, and SOV sentence construction.",
+  "description": "Akshara (अक्षर) — Interactive Nepali Devanagari literacy engine with parametric Pati-Khari stroke tracing, Shirorekha topological validation, Barakhari Matra fusion, and SOV sentence construction.",
   "license": "MIT",
   "author": "Ashok Adhikari",
   "repository": {
     "type": "git",
-    "url": "https://github.com/adhikari18/Khari.git"
+    "url": "https://github.com/adhikari18/Akshara.git"
   },
   "workspaces": [
     "packages/*"
@@ -29,3 +29,4 @@
     "node": ">=20.0.0"
   }
 }
+

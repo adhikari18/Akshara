@@ -19,7 +19,7 @@ Yet today, millions of Nepali diaspora children and early learners lack modern, 
 2. **Abugida *Matra* & *Barakhari* Complexity:** Unlike Latin alphabets where vowels sit linearly beside consonants, Devanagari *Matras* (मात्रा) orbit 360° around a base consonant—attaching to the **left** (`ि` *Hraswa Ikar*), **right** (`ा, ी, ो, ौ, ः`), **top** (`े, ै, ं`), or **bottom** (`ु, ू, ृ, ्`).
 3. **English SVO vs. Nepali SOV Syntactic Transfer:** Heritage learners raised in English environments instinctively assemble words in **Subject–Verb–Object (SVO)** order (*"Ram goes home"*), whereas Nepali requires **Subject–Object–Verb (SOV)** order (*"राम घर जान्छ"* — `कर्ता + कर्म + क्रिया`).
 
-**`Akshara` (`Khari`)** bridges this gap with a headless TypeScript geometry and phonology core (`@akshara/core`), a canonical JSON Schema and stroke dataset (`@akshara/data`), and an interactive Next.js + HTML5 Canvas *Pati* learning studio (`@akshara/web`).
+**`Akshara`** bridges this gap with a headless TypeScript geometry and phonology core (`@akshara/core`), a canonical JSON Schema and stroke dataset (`@akshara/data`), and an interactive Next.js + HTML5 Canvas *Pati* learning studio (`@akshara/web`).
 
 ---
 
@@ -76,7 +76,7 @@ Yet today, millions of Nepali diaspora children and early learners lack modern, 
 ## Repository File Tree
 
 ```text
-Khari/
+Akshara/
 ├── .github/
 │   ├── workflows/
 │   │   ├── ci.yml                                        # Monorepo build, schema validation, typecheck & Vitest CI
@@ -135,7 +135,7 @@ Khari/
 │       ├── package.json
 │       └── tsconfig.json
 ├── CONTRIBUTING.md                                       # Developer & non-coder micro-contribution guide
-├── ROADMAP.md                                            # 210+ hour multi-milestone engineering roadmap
+├── ROADMAP.md                                            # 130+ hour multi-milestone engineering roadmap
 ├── LICENSE                                               # MIT License
 ├── package.json                                          # Root npm workspace configuration
 └── tsconfig.base.json                                    # Shared strict TypeScript configuration
@@ -152,8 +152,8 @@ Khari/
 ### 1. Clone, Install & Build
 
 ```bash
-git clone https://github.com/adhikari18/Khari.git
-cd Khari
+git clone https://github.com/adhikari18/Akshara.git
+cd Akshara
 npm install
 npm run build
 ```
@@ -224,7 +224,7 @@ Over 30 million people speak Nepali worldwide, including a rapidly growing globa
 - **Devanagari Grapheme Cluster Segmentation:** Standard JavaScript `string.split('')` breaks Devanagari syllables apart (`"किताब"` splits into 5 raw code units `['क', 'ि', 'त', 'ा', 'ब']`). We implemented a Unicode codepoint cluster parser (`segmentDevanagariAksharas`) that binds combining matras (`U+093E..U+094C`), modifiers (`ं, ँ, ः`), and *Virama* conjuncts (`C + ् + C`) into intact orthographic *aksharas* (`['कि', 'ता', 'ब']`).
 
 ### What's Next
-Our **[210+ Hour Engineering Roadmap](./ROADMAP.md)** expands `Akshara` with:
+Our **[130+ Hour Engineering Roadmap](./ROADMAP.md)** expands `Akshara` with:
 1. Full `300x300` vector stroke definitions for all 49 Nepali *Swor* and *Vyanjan* characters plus Nepali numerals (`०–९`).
 2. Discrete Fréchet Distance curve grading and 1€ filter stylus pressure support.
 3. Interactive *Samyukta Akshara* (conjunct consonant / *Halanta* `्`) ligature builder (`क्ष, त्र, ज्ञ, प्र, द्य`).
@@ -236,3 +236,4 @@ Our **[210+ Hour Engineering Roadmap](./ROADMAP.md)** expands `Akshara` with:
 ## License
 
 Released under the [MIT License](./LICENSE). Copyright (c) 2026 Ashok Adhikari.
+
