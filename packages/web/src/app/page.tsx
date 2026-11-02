@@ -12,6 +12,12 @@ type StudioTab = 'tracing' | 'matra' | 'sentences' | 'varnamala';
 
 export default function AksharaStudioPage() {
   const [activeTab, setActiveTab] = useState<StudioTab>('tracing');
+  const [tracingLetterId, setTracingLetterId] = useState<string>('ka');
+
+  const handleOpenInPati = (letterId: string) => {
+    setTracingLetterId(letterId);
+    setActiveTab('tracing');
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#090d16] via-[#0f172a] to-[#090d16]">
@@ -93,7 +99,7 @@ export default function AksharaStudioPage() {
 
       {/* Main Workspace */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
-        {activeTab === 'tracing' && <TracingCanvas />}
+        {activeTab === 'tracing' && <TracingCanvas initialLetterId={tracingLetterId} />}
         {activeTab === 'matra' && <MatraBuilder />}
         {activeTab === 'sentences' && <WordSentenceBuilder />}
 
@@ -107,43 +113,57 @@ export default function AksharaStudioPage() {
                     स्वर वर्ण • Swor Varna (13 Nepali Vowels: अ — अः)
                   </h2>
                   <p className="text-xs text-slate-400">
-                    Tap any vowel card to hear its pronunciation, inspect its Matra diacritic, and learn its sample word.
+                    Tap any vowel card to hear its pronunciation, inspect its Matra diacritic, or trace it directly on the Pati slate.
                   </p>
                 </div>
                 <span className="px-3 py-1 rounded-full text-xs font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">
-                  13 Swor Varna
+                  13/13 Vector Strokes Ready
                 </span>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
                 {VOWELS.map((v) => (
-                  <button
+                  <div
                     key={v.id}
-                    type="button"
-                    onClick={() =>
-                      speakNepaliPhonics(`${v.character} — ${v.sampleWord}`, v.romanized)
-                    }
                     className="p-3.5 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-amber-400/60 text-left transition group flex flex-col justify-between"
                   >
-                    <div className="flex items-start justify-between">
-                      <span className="text-3xl font-bold text-amber-200 group-hover:text-amber-300">
-                        {v.character}
-                      </span>
-                      <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-slate-800 text-sky-300">
-                        {v.matra ? `◌${v.matra}` : 'अ'}
-                      </span>
-                    </div>
-                    <div className="mt-2">
-                      <div className="text-xs font-semibold text-white">
-                        {v.romanized} <span className="text-slate-400 font-mono">{v.ipa}</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        speakNepaliPhonics(`${v.character} — ${v.sampleWord}`, v.romanized)
+                      }
+                      className="text-left w-full"
+                    >
+                      <div className="flex items-start justify-between">
+                        <span className="text-3xl font-bold text-amber-200 group-hover:text-amber-300">
+                          {v.character}
+                        </span>
+                        <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-slate-800 text-sky-300">
+                          {v.matra ? `◌${v.matra}` : 'अ'}
+                        </span>
                       </div>
-                      <div className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
-                        <span>{v.emoji}</span>
-                        <span className="text-amber-200/90 font-medium">{v.sampleWord}</span>
-                        <span>({v.sampleWordMeaning})</span>
+                      <div className="mt-2">
+                        <div className="text-xs font-semibold text-white">
+                          {v.romanized} <span className="text-slate-400 font-mono">{v.ipa}</span>
+                        </div>
+                        <div className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+                          <span>{v.emoji}</span>
+                          <span className="text-amber-200/90 font-medium">{v.sampleWord}</span>
+                          <span>({v.sampleWordMeaning})</span>
+                        </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
+                    {v.hasStrokeData && (
+                      <button
+                        type="button"
+                        onClick={() => handleOpenInPati(v.id)}
+                        className="mt-2.5 w-full py-1 px-2 rounded-lg text-[11px] font-medium bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 transition flex items-center justify-center gap-1"
+                      >
+                        <Feather className="w-3 h-3" />
+                        पाटीमा लेख्नुहोस् (Trace)
+                      </button>
+                    )}
+                  </div>
                 ))}
               </div>
             </section>

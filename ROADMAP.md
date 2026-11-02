@@ -8,7 +8,7 @@ This document outlines the multi-milestone engineering, computational linguistic
 
 Currently, `packages/data/strokes/` provides verified 3- to 5-step vector definitions for `क`, `ख`, `ग`, `घ`, `अ`, and `आ`. This milestone completes the canonical `300x300` vector stroke and waypoint corpus across the entire Nepali Varnamala:
 
-- [ ] **1.1 Complete 13 *Swor Varna* (स्वर वर्ण) Stroke Vectors (`इ` to `अः`) (~5 hrs):**
+- [x] **1.1 Complete 13 *Swor Varna* (स्वर वर्ण) Stroke Vectors (`इ` to `अः`) (~5 hrs):**
   - Author verified SVG cubic Bézier paths, directional hints, and ordered waypoint arrays for `इ, ई, उ, ऊ, ऋ, ए, ऐ, ओ, औ, अं, अः`, including top-hook *Ekar/Aikar* flags and *Shirbindu/Visarga* marks.
 - [ ] **1.2 *Talavya* (Palatal) & *Murdhanya* (Retroflex) Vyanjan Vectors (`च–ञ`, `ट–ण`) (~5 hrs):**
   - Encode stroke topologies for `च, छ, ज, झ, ञ` and `ट, ठ, ड, ढ, ण` enforcing loop-first, right-stem (*Khadi Pai*) second, and *Shirorekha* strictly last.

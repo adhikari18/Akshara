@@ -39,12 +39,42 @@ interface ChalkParticle {
   radius: number;
 }
 
-export function TracingCanvas() {
-  const [selectedLetterId, setSelectedLetterId] = useState<string>('ka');
+type DeckCategoryFilter = 'all' | 'swor' | 'vyanjan';
+
+interface TracingCanvasProps {
+  initialLetterId?: string;
+}
+
+export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {}) {
+  const [selectedLetterId, setSelectedLetterId] = useState<string>(initialLetterId);
+  const [categoryFilter, setCategoryFilter] = useState<DeckCategoryFilter>('all');
   const [toleranceMode, setToleranceMode] = useState<LearnerToleranceMode>('child');
   const [showGhostGuide, setShowGhostGuide] = useState<boolean>(true);
   const [showWaypoints, setShowWaypoints] = useState<boolean>(true);
   const [isAutoDemoPlaying, setIsAutoDemoPlaying] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (initialLetterId && STROKE_DATASETS[initialLetterId]) {
+      setSelectedLetterId(initialLetterId);
+    }
+  }, [initialLetterId]);
+
+  const filteredStrokeList = useMemo(
+    () =>
+      categoryFilter === 'all'
+        ? STROKE_LIST
+        : STROKE_LIST.filter((item) => item.category === categoryFilter),
+    [categoryFilter]
+  );
+
+  const sworCount = useMemo(
+    () => STROKE_LIST.filter((item) => item.category === 'swor').length,
+    []
+  );
+  const vyanjanCount = useMemo(
+    () => STROKE_LIST.filter((item) => item.category === 'vyanjan').length,
+    []
+  );
 
   const dataset: LetterStrokeDataset = useMemo(
     () => STROKE_DATASETS[selectedLetterId] ?? STROKE_DATASETS.ka,
@@ -422,15 +452,38 @@ export function TracingCanvas() {
             </div>
           </div>
 
-          <div className="grid grid-cols-6 gap-2">
-            {STROKE_LIST.map((item) => {
+          <div className="flex flex-wrap items-center gap-1.5 mb-3">
+            {(
+              [
+                { id: 'all', label: `सबै • All (${STROKE_LIST.length})` },
+                { id: 'swor', label: `स्वर वर्ण • Swor (${sworCount}/13)` },
+                { id: 'vyanjan', label: `व्यञ्जन वर्ण • Vyanjan (${vyanjanCount})` },
+              ] as Array<{ id: DeckCategoryFilter; label: string }>
+            ).map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setCategoryFilter(tab.id)}
+                className={`px-3 py-1 rounded-lg text-xs font-medium border transition ${
+                  categoryFilter === tab.id
+                    ? 'bg-amber-500/20 border-amber-400/70 text-amber-200'
+                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-5 sm:grid-cols-6 gap-2 max-h-52 overflow-y-auto pr-1">
+            {filteredStrokeList.map((item) => {
               const active = item.id === selectedLetterId;
               return (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => setSelectedLetterId(item.id)}
-                  className={`flex flex-col items-center justify-center py-2.5 px-2 rounded-xl border transition ${
+                  className={`flex flex-col items-center justify-center py-2 px-1.5 rounded-xl border transition ${
                     active
                       ? 'bg-amber-500/20 border-amber-400 text-amber-200 shadow-md'
                       : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
@@ -438,7 +491,7 @@ export function TracingCanvas() {
                 >
                   <span className="text-2xl font-bold">{item.character}</span>
                   <span className="text-[11px] text-slate-400 mt-0.5">
-                    {item.phonetics.romanized} ({item.strokes.length} strokes)
+                    {item.phonetics.romanized} ({item.strokes.length})
                   </span>
                 </button>
               );
