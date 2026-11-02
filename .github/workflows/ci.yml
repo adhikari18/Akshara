@@ -1,0 +1,40 @@
+name: Akshara Monorepo CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-and-test:
+    name: Build, Typecheck, Schema Validate & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install workspace dependencies
+        run: npm ci
+
+      - name: Build @akshara/data and @akshara/core
+        run: npm run build --workspace=@akshara/data && npm run build --workspace=@akshara/core
+
+      - name: Validate Devanagari JSON schemas & Shirorekha topological invariants
+        run: npm run validate:data
+
+      - name: Typecheck all workspaces
+        run: npm run typecheck
+
+      - name: Run Vitest unit test suite
+        run: npm test
+
+      - name: Build @akshara/web Next.js frontend
+        run: npm run build --workspace=@akshara/web
