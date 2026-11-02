@@ -183,9 +183,29 @@ export function validateStrokeTopology(strokes: StrokeDefinition[]): {
   }
 
   let maxPrioritySeen = 0;
+  let lastStemX = -Infinity;
+  const shirorekhaStroke = strokes[strokes.length - 1];
+  const headlineY =
+    shirorekhaStroke?.type === 'shirorekha' && shirorekhaStroke.waypoints.length > 0
+      ? shirorekhaStroke.waypoints[0].y
+      : 75;
+
   strokes.forEach((stroke, index) => {
-    const priority = TOPOLOGY_PRIORITY[stroke.type];
+    let priority = TOPOLOGY_PRIORITY[stroke.type];
     const isLast = index === strokes.length - 1;
+
+    if (stroke.type === 'stem') {
+      lastStemX = Math.max(lastStemX, ...stroke.waypoints.map((w) => w.x));
+    } else if (
+      maxPrioritySeen === 2 &&
+      (stroke.type === 'loop' || stroke.type === 'curve' || stroke.type === 'diagonal')
+    ) {
+      const isUpperCrownMark = stroke.waypoints.every((wp) => wp.y <= headlineY + 4);
+      const isRightPostStemMark = stroke.waypoints.every((wp) => wp.x > lastStemX);
+      if (isUpperCrownMark || isRightPostStemMark) {
+        priority = 2;
+      }
+    }
 
     if (priority < maxPrioritySeen) {
       violations.push(

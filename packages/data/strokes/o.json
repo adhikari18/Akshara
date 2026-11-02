@@ -1,0 +1,131 @@
+{
+  "id": "o",
+  "character": "ओ",
+  "unicode": "U+0913",
+  "category": "swor",
+  "varga": "कण्ठोष्ठ्य स्वर (Labio-Velar Vowel)",
+  "phonetics": {
+    "romanized": "o",
+    "ipa": "/oː/",
+    "nepaliName": "ओ — ओखर ओ",
+    "audioPrompt": "ओ — ओखर ओ",
+    "articulationTip": "Pure rounded mid-back vowel: round your lips into a steady 'oh' (/oː/ as in 'go')."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 135,
+    "endX": 260,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "o-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Double Front Curves (अगाडिको दुई घुम्ती)",
+      "nepaliInstruction": "पहिले 'अ' को अगाडिको दुईवटा घुम्ती बनाउनुहोस्।",
+      "englishInstruction": "Trace the upper and lower right-facing curves on the left.",
+      "svgPath": "M 55 95 C 115 80, 125 130, 75 145 C 135 155, 130 225, 55 215",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 55, "y": 95, "label": "Top Curve Start" },
+        { "index": 1, "x": 108, "y": 110, "label": "Upper Belly" },
+        { "index": 2, "x": 75, "y": 145, "label": "Center Vertex" },
+        { "index": 3, "x": 118, "y": 188, "label": "Lower Belly" },
+        { "index": 4, "x": 55, "y": 215, "label": "Bottom Tail" }
+      ]
+    },
+    {
+      "id": "o-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Middle Connector Bridge (बीचको जोड्ने धर्को)",
+      "nepaliInstruction": "बीचको टुप्पोबाट पहिलो ठाडो धर्कोसम्म तेर्सो धर्को तान्नुहोस्।",
+      "englishInstruction": "Connect the middle vertex horizontally to the first vertical stem.",
+      "svgPath": "M 95 148 L 175 148",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 95, "y": 148, "label": "Bridge Left" },
+        { "index": 1, "x": 135, "y": 148, "label": "Bridge Mid" },
+        { "index": 2, "x": 175, "y": 148, "label": "Bridge Right" }
+      ]
+    },
+    {
+      "id": "o-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "First Vertical Stem (पहिलो ठाडो धर्को)",
+      "nepaliInstruction": "पहिलो ठाडो धर्को माथिदेखि तलसम्म तान्नुहोस्।",
+      "englishInstruction": "Draw the inner vertical stem from the headline to the baseline.",
+      "svgPath": "M 175 75 L 175 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 175, "y": 75, "label": "Stem 1 Top" },
+        { "index": 1, "x": 175, "y": 155, "label": "Stem 1 Mid" },
+        { "index": 2, "x": 175, "y": 240, "label": "Stem 1 Foot" }
+      ]
+    },
+    {
+      "id": "o-stroke-4",
+      "order": 4,
+      "type": "stem",
+      "label": "Second Aakar Vertical Stem (दोस्रो ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि दोस्रो ठाडो धर्को माथिदेखि तलसम्म तान्नुहोस्।",
+      "englishInstruction": "Draw the outer Aakar vertical stem from top to bottom.",
+      "svgPath": "M 225 75 L 225 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 225, "y": 75, "label": "Stem 2 Top" },
+        { "index": 1, "x": 225, "y": 155, "label": "Stem 2 Mid" },
+        { "index": 2, "x": 225, "y": 240, "label": "Stem 2 Foot" }
+      ]
+    },
+    {
+      "id": "o-stroke-5",
+      "order": 5,
+      "type": "diagonal",
+      "label": "Top Okar Crown Flag (माथिको ओकार टुप्पी)",
+      "nepaliInstruction": "दोस्रो ठाडो धर्कोमाथि जोडिने गरी माथिल्लो ओकारको टुप्पी तान्नुहोस्।",
+      "englishInstruction": "Draw the upper Okar diagonal flag descending onto the top of the second stem.",
+      "svgPath": "M 172 34 C 195 38, 212 54, 225 75",
+      "directionHint": "diagonal-down-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 172, "y": 34, "label": "Okar Flag Crest" },
+        { "index": 1, "x": 202, "y": 48, "label": "Okar Flag Mid" },
+        { "index": 2, "x": 225, "y": 75, "label": "Stem 2 Anchor" }
+      ]
+    },
+    {
+      "id": "o-stroke-6",
+      "order": 6,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा दुवै ठाडो धर्कोमाथि शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha bar crowning both vertical stems.",
+      "svgPath": "M 135 75 L 260 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 135, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 200, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 260, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "ओखर", "romanized": "okhar", "meaning": "Walnut", "emoji": "🌰" },
+    { "word": "ओठ", "romanized": "oth", "meaning": "Lip", "emoji": "👄" },
+    { "word": "ओढार", "romanized": "odhaar", "meaning": "Mountain Cave", "emoji": "🪨" }
+  ]
+}

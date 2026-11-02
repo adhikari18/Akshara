@@ -1,0 +1,98 @@
+{
+  "id": "ai",
+  "character": "ऐ",
+  "unicode": "U+0910",
+  "category": "swor",
+  "varga": "कण्ठतालव्य स्वर (Palato-Guttural Diphthong)",
+  "phonetics": {
+    "romanized": "ai",
+    "ipa": "/ʌi/",
+    "nepaliName": "ऐ — दुईकाने ऐ",
+    "audioPrompt": "ऐ — दुईकाने ऐ",
+    "articulationTip": "Nepali diphthong /ʌi/: glide smoothly from mid-central 'a' (/ʌ/ as in 'cup') into 'i' (/i/), as in 'ऐना' (ainaa - mirror)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 60,
+    "endX": 235,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "ai-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Left Shaft & Diagonal Leg (बायाँ ठाडो र छड्के खुट्टा)",
+      "nepaliInstruction": "पहिले 'ए' को बायाँ ठाडो र तलको छड्के खुट्टा कोर्नुहोस्।",
+      "englishInstruction": "Trace the left vertical shaft down to the knee and sweep diagonally down-right.",
+      "svgPath": "M 95 75 L 95 148 C 95 162, 132 198, 172 236",
+      "directionHint": "diagonal-down-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 95, "y": 75, "label": "Left Shaft Top" },
+        { "index": 1, "x": 95, "y": 148, "label": "Left Knee" },
+        { "index": 2, "x": 134, "y": 192, "label": "Diagonal Leg Mid" },
+        { "index": 3, "x": 172, "y": 236, "label": "Bottom Leg Tip" }
+      ]
+    },
+    {
+      "id": "ai-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Right Inward-Curving Arm (दायाँ भित्र मोड्ने धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिबाट तल झरेर भित्रतिर घुमाउनुहोस्।",
+      "englishInstruction": "Drop down from the right headline and curve inward toward the left shaft.",
+      "svgPath": "M 198 75 L 198 132 C 198 156, 162 162, 135 154",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 198, "y": 75, "label": "Right Arm Top" },
+        { "index": 1, "x": 198, "y": 132, "label": "Right Elbow" },
+        { "index": 2, "x": 135, "y": 154, "label": "Inner Chin Tip" }
+      ]
+    },
+    {
+      "id": "ai-stroke-3",
+      "order": 3,
+      "type": "diagonal",
+      "label": "Top Ekar Crown Flag (माथिको एकार टुप्पी)",
+      "nepaliInstruction": "शिरोरेखामाथि बायाँबाट दायाँतिर झर्ने एकारको टुप्पी तान्नुहोस्।",
+      "englishInstruction": "Draw the top diagonal Ekar flag sweeping down to anchor at the right arm.",
+      "svgPath": "M 142 34 C 165 38, 182 54, 198 75",
+      "directionHint": "diagonal-down-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 142, "y": 34, "label": "Flag Crest" },
+        { "index": 1, "x": 174, "y": 48, "label": "Flag Arch" },
+        { "index": 2, "x": 198, "y": 75, "label": "Headline Anchor" }
+      ]
+    },
+    {
+      "id": "ai-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 60 75 L 235 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 60, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 148, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 235, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "ऐना", "romanized": "ainaa", "meaning": "Mirror", "emoji": "🪞" },
+    { "word": "ऐँसेलु", "romanized": "ainselu", "meaning": "Himalayan Berry", "emoji": "🫐" },
+    { "word": "ऐतिहासिक", "romanized": "aitihasik", "meaning": "Historical", "emoji": "🏛️" }
+  ]
+}

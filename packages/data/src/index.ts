@@ -15,6 +15,10 @@ import strokeIi from '../strokes/ii.json' with { type: 'json' };
 import strokeU from '../strokes/u.json' with { type: 'json' };
 import strokeUu from '../strokes/uu.json' with { type: 'json' };
 import strokeRi from '../strokes/ri.json' with { type: 'json' };
+import strokeE from '../strokes/e.json' with { type: 'json' };
+import strokeAi from '../strokes/ai.json' with { type: 'json' };
+import strokeO from '../strokes/o.json' with { type: 'json' };
+import strokeAu from '../strokes/au.json' with { type: 'json' };
 
 export type StrokeTopologyType = 'loop' | 'curve' | 'diagonal' | 'stem' | 'shirorekha';
 
@@ -167,6 +171,10 @@ export const STROKE_DATASETS: Record<string, LetterStrokeDataset> = {
   u: strokeU as LetterStrokeDataset,
   uu: strokeUu as LetterStrokeDataset,
   ri: strokeRi as LetterStrokeDataset,
+  e: strokeE as LetterStrokeDataset,
+  ai: strokeAi as LetterStrokeDataset,
+  o: strokeO as LetterStrokeDataset,
+  au: strokeAu as LetterStrokeDataset,
 };
 
 export const STROKE_LIST: LetterStrokeDataset[] = [
@@ -181,6 +189,10 @@ export const STROKE_LIST: LetterStrokeDataset[] = [
   STROKE_DATASETS.u,
   STROKE_DATASETS.uu,
   STROKE_DATASETS.ri,
+  STROKE_DATASETS.e,
+  STROKE_DATASETS.ai,
+  STROKE_DATASETS.o,
+  STROKE_DATASETS.au,
 ];
 
 export interface DatasetValidationResult {
@@ -212,6 +224,7 @@ export function validateLetterDataset(dataset: LetterStrokeDataset): DatasetVali
   }
 
   let seenStem = false;
+  let lastStemX = -Infinity;
   dataset.strokes.forEach((stroke, idx) => {
     const expectedOrder = idx + 1;
     if (stroke.order !== expectedOrder) {
@@ -242,11 +255,18 @@ export function validateLetterDataset(dataset: LetterStrokeDataset): DatasetVali
     }
     if (stroke.type === 'stem') {
       seenStem = true;
+      lastStemX = Math.max(lastStemX, ...stroke.waypoints.map((w) => w.x));
     }
     if ((stroke.type === 'loop' || stroke.type === 'curve' || stroke.type === 'diagonal') && seenStem) {
-      errors.push(
-        `Topological violation in '${dataset.id}': Body stroke '${stroke.id}' (${stroke.type}) appears after vertical stem.`
+      const isUpperCrownMark = stroke.waypoints.every(
+        (wp) => wp.y <= dataset.viewBox.shirorekhaY + 4
       );
+      const isRightPostStemMark = stroke.waypoints.every((wp) => wp.x > lastStemX);
+      if (!isUpperCrownMark && !isRightPostStemMark) {
+        errors.push(
+          `Topological violation in '${dataset.id}': Body stroke '${stroke.id}' (${stroke.type}) appears after vertical stem.`
+        );
+      }
     }
   });
 

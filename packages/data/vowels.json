@@ -141,7 +141,7 @@
     "sampleWordRomanized": "ek",
     "sampleWordMeaning": "One",
     "emoji": "1️⃣",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ai",
@@ -159,7 +159,7 @@
     "sampleWordRomanized": "ainaa",
     "sampleWordMeaning": "Mirror",
     "emoji": "🪞",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "o",
@@ -177,7 +177,7 @@
     "sampleWordRomanized": "okhar",
     "sampleWordMeaning": "Walnut",
     "emoji": "🌰",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "au",
@@ -195,7 +195,7 @@
     "sampleWordRomanized": "aushadhi",
     "sampleWordMeaning": "Medicine",
     "emoji": "🌿",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "am",
