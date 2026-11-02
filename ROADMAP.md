@@ -30,7 +30,7 @@ Currently, `packages/data/strokes/` provides verified 3- to 5-step vector defini
 - [ ] **2.3 Broken-*Shirorekha* Topological Exception Solver (`थ, ध, भ, श, अ, आ`) (~4 hrs):**
   - In classical Devanagari typography, characters with an upper-left open loop (`थ`, `ध`, `भ`, `श`, `छ`) leave a gap in the *Shirorekha* above the loop so the glyph does not visually collapse into another letter (e.g., `ध` vs. `घ`, `भ` vs. `म`). Extend `shirorekha` schema metadata to support split/partial headline spans.
 - [ ] **2.4 Velocity-Adaptive 1€ Filter & Stylus Pressure Curves (~4 hrs):**
-  - Upgrade the Exponential Moving Average (EMA) smoother to a velocity-adaptive **1€ Filter** (Casiez et al.) and incorporate `PointerEvent.pressure` and `tiltX/tiltY` to modulate *Khari* chalk stroke width dynamically.
+  - Upgrade the Exponential Moving Average (EMA) smoother to a velocity-adaptive **1€ Filter** (Casiez et al.) and incorporate `PointerEvent.pressure` and `tiltX/tiltY` to modulate chalk stroke width dynamically.
 - [ ] **2.5 Automated SVG-to-Waypoint Compiler CLI (`@akshara/cli`) (~5 hrs):**
   - Build a CLI utility that parses raw SVG `<path d="...">` glyphs using cubic Bézier arc-length quadrature and automatically samples equidistant waypoints and bounding boxes to accelerate dataset authoring.
 

@@ -1,4 +1,4 @@
-# Contributing to `Akshara` (अक्षर • खरी र पाटी)
+# Contributing to `Akshara` (अक्षर)
 
 Thank you for helping build **Akshara**—an open-source interactive engine teaching children and diaspora early learners how to read, pronounce, and write Nepali Devanagari script!
 

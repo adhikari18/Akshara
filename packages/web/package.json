@@ -2,7 +2,7 @@
   "name": "@akshara/web",
   "version": "0.1.0",
   "private": true,
-  "description": "Interactive Next.js + Tailwind CSS Devanagari literacy studio with Pati-Khari vector stroke tracing, Matra drag-and-drop fusion, and SOV sentence unscrambler.",
+  "description": "Interactive Next.js + Tailwind CSS Devanagari literacy studio with Pati slate vector stroke tracing, Matra drag-and-drop fusion, and SOV sentence unscrambler.",
   "license": "MIT",
   "scripts": {
     "dev": "next dev --port 3000",

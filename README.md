@@ -1,6 +1,6 @@
-# Akshara (अक्षर • खरी र पाटी) ✍️🇳🇵
+# Akshara (अक्षर) ✍️🇳🇵
 
-**Interactive open-source Nepali Devanagari literacy engine teaching children and diaspora early learners how to read, pronounce, and write through parametric *Pati–Khari* stroke tracing, *Barakhari* *Matra* fusion, and Subject-Object-Verb (SOV) sentence construction.**
+**Interactive open-source Nepali Devanagari literacy engine teaching children and diaspora early learners how to read, pronounce, and write through parametric *Pati* slate stroke tracing, *Barakhari* *Matra* fusion, and Subject-Object-Verb (SOV) sentence construction.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](./LICENSE)
 [![CI Status](https://img.shields.io/badge/CI-Passing-emerald.svg)](./.github/workflows/ci.yml)
@@ -10,9 +10,9 @@
 
 ---
 
-## Overview & Cultural Heritage (`पाटी र खरी`)
+## Overview & Cultural Heritage (`अक्षर र पाटी`)
 
-For generations across Nepal, children learned their first **अक्षर** (*Akshara* — indestructible syllable) during *Saraswati Puja* (*Shree Panchami*) by tracing white limestone chalk (**खरी** / *Khari*) across a dark seasoned wooden slate (**पाटी** / *Pati*).
+For generations across Nepal, children learned their first **अक्षर** (*Akshara* — indestructible syllable) during *Saraswati Puja* (*Shree Panchami*) by tracing chalk across a dark seasoned wooden slate (**पाटी** / *Pati*).
 
 Yet today, millions of Nepali diaspora children and early learners lack modern, open-source digital tools tailored to the unique topological and phonetic mechanics of **Nepali Devanagari**:
 1. **No Open-Source Vector Stroke Dataset for Nepali Devanagari:** Existing apps treat Devanagari like static flashcards or allow children to scribble over a bitmap mask in any order—teaching backwards habits like drawing the top horizontal bar (*Shirorekha* / शिरोरेखा) first.
@@ -27,7 +27,7 @@ Yet today, millions of Nepali diaspora children and early learners lack modern, 
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                        AKSHARA (अक्षर • खरी र पाटी)                          │
+│                              AKSHARA (अक्षर)                                  │
 │                  Nepali Devanagari Literacy Monorepo Engine                  │
 └──────────────────────────────────────┬───────────────────────────────────────┘
                                        │
@@ -53,7 +53,7 @@ Yet today, millions of Nepali diaspora children and early learners lack modern, 
 ├─────────────────────────┬──────────────────────────┬─────────────────────────┤
 │   TracingCanvas.tsx     │     MatraBuilder.tsx     │ WordSentenceBuilder.tsx │
 │ • Dark Wooden Pati Slate│ • Drag & Drop Matras     │ • 2/3-Akshara Word Tiles│
-│ • Khari Chalk Particles │   (ा ि ी ु ू ृ े ै ो ौ)  │ • SOV Unscrambler       │
+│ • Chalk Dust Particles  │   (ा ि ी ु ू ृ े ै ो ौ)  │ • SOV Unscrambler       │
 │ • Glowing Waypoints &   │ • 360° Attachment Compass│   (राम + घर + जान्छ)     │
 │   Adaptive Tolerance    │ • 13-Card Barakhari Strip│ • Web Speech + Formant  │
 │ • Premature Shirorekha  │ • Live Unicode Formula   │   Pentatonic Audio      │
@@ -67,7 +67,7 @@ Yet today, millions of Nepali diaspora children and early learners lack modern, 
 
 | Track | Engine Component | Core Pedagogical & Algorithmic Mechanics |
 | :--- | :--- | :--- |
-| **1. Writing Engine** *(Tactile Vector Tracing)* | [`tracing-evaluator.ts`](./packages/core/src/tracing-evaluator.ts) & [`TracingCanvas.tsx`](./packages/web/src/components/TracingCanvas.tsx) | • **Devanagari Topological Order:** Enforces loop/curve body components first (`loop`, `curve`), vertical stems second (`stem` / *Khadi Pai*), and the horizontal headline bar (`shirorekha` / शिरोरेखा) **strictly last**.<br>• **Child Motor-Jitter Tolerance:** Combines an Exponential Moving Average (EMA) low-pass pointer filter with adaptive tolerance radii (`1.45x` in Child Mode) so 4-to-7-year-old learners can complete strokes without frustration.<br>• **Pati & Khari Aesthetic:** Seasoned dark slate canvas with limestone chalk strokes, dust particles, glowing numbered waypoints, and auto-trace replay. |
+| **1. Writing Engine** *(Tactile Vector Tracing)* | [`tracing-evaluator.ts`](./packages/core/src/tracing-evaluator.ts) & [`TracingCanvas.tsx`](./packages/web/src/components/TracingCanvas.tsx) | • **Devanagari Topological Order:** Enforces loop/curve body components first (`loop`, `curve`), vertical stems second (`stem` / *Khadi Pai*), and the horizontal headline bar (`shirorekha` / शिरोरेखा) **strictly last**.<br>• **Child Motor-Jitter Tolerance:** Combines an Exponential Moving Average (EMA) low-pass pointer filter with adaptive tolerance radii (`1.45x` in Child Mode) so 4-to-7-year-old learners can complete strokes without frustration.<br>• **Traditional *Pati* Slate Aesthetic:** Seasoned dark wooden slate canvas with chalk strokes, dust particles, glowing numbered waypoints, and auto-trace replay. |
 | **2. Reading Engine** *(Phonics & Syllable Fusion)* | [`matra-engine.ts`](./packages/core/src/matra-engine.ts) & [`MatraBuilder.tsx`](./packages/web/src/components/MatraBuilder.tsx) | • **Dynamic *Matra* Drag-and-Drop:** Snap any vowel diacritic (`ा, ि, ी, ु, ू, ृ, े, ै, ो, ौ, ं, ः, ्`) onto any of the 36 *Vyanjan* consonants (`क ➔ का, कि, की...`).<br>• **360° Topological Compass:** Explicitly highlights whether a *Matra* stands to the **left** (`ि`), **right** (`ा, ी`), **top** (`े, ै, ं`), or **bottom** (`ु, ू, ृ`) of the consonant stem.<br>• **Instant Phonics Playback:** Speaks composite syllables via `ne-NP` Web Speech synthesis paired with Web Audio pentatonic chimes. |
 | **3. Word & Sentence Progression** *(Lexical & SOV Syntax)* | [`sentence-engine.ts`](./packages/core/src/sentence-engine.ts) & [`WordSentenceBuilder.tsx`](./packages/web/src/components/WordSentenceBuilder.tsx) | • **2- & 3-Letter Noun Tiles:** Assemble foundational words (`कलम`, `घर`, `बस`, `चरा`, `पानी`, `कमल`, `आमा`, `किताब`) from syllable blocks.<br>• **SOV Sentence Unscrambler:** Arrange scrambled word tokens into grammatical Nepali **Subject (`कर्ता`) + Object (`कर्म`) + Verb (`क्रिया`)** sentences (e.g., `"राम घर जान्छ"`), with automatic detection and coaching when a learner uses English SVO order. |
 
@@ -124,7 +124,7 @@ Akshara/
 │       │   │   ├── layout.tsx
 │       │   │   └── page.tsx                              # 4-stage progressive Devanagari learning studio
 │       │   ├── components/
-│       │   │   ├── TracingCanvas.tsx                     # Interactive HTML5 Canvas Pati-Khari vector tracing slate
+│       │   │   ├── TracingCanvas.tsx                     # Interactive HTML5 Canvas Pati slate vector tracing
 │       │   │   ├── MatraBuilder.tsx                      # Drag-and-drop Matra & 13-step Barakhari playground
 │       │   │   └── WordSentenceBuilder.tsx               # Word tile builder & SOV sentence unscrambler
 │       │   └── lib/
@@ -175,7 +175,7 @@ npm run dev
 ```
 
 Open **[http://localhost:3000](http://localhost:3000)** in your browser to explore all 4 stages:
-1. **१. पाटी लेखन (`Pati Tracing`):** Trace `क`, `ख`, `ग`, `घ`, `अ`, and `आ` with *Khari* chalk on the wooden *Pati* slate, toggle Child Jitter (`1.45x`) tolerance, or click **Auto-Trace Demo** to watch animated stroke order.
+1. **१. पाटी लेखन (`Pati Tracing`):** Trace `क`, `ख`, `ग`, `घ`, `अ`, and `आ` with chalk on the wooden *Pati* slate, toggle Child Jitter (`1.45x`) tolerance, or click **Auto-Trace Demo** to watch animated stroke order.
 2. **२. मात्रा र बाह्रखरी (`Matra Fusion`):** Drag any *Matra* diacritic onto any of the 36 *Vyanjan* consonants to inspect its 360° placement rule and hear the full 13-step *Barakhari*.
 3. **३. शब्द र वाक्य (`Words & SOV`):** Assemble 2- and 3-letter words (`कलम`, `घर`, `बस`, `चरा`) and unscramble Nepali **Subject–Object–Verb** sentences (`राम घर जान्छ`).
 4. **४. वर्णमाला (`Full Varnamala`):** Interactive audio reference chart for all 13 *Swor Varna* and 36 *Vyanjan Varna*.
@@ -197,7 +197,7 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`ROADMAP.md`](./ROADMAP.md) for 
 ## Platform & Hackathon Architecture Write-Up
 
 ### Project Title & Tagline
-**Akshara (`अक्षर • खरी र पाटी`)** — *An open-source parametric vector-tracing, Barakhari syllable-fusion, and SOV grammar engine reviving the traditional Nepali Pati-and-Khari slate for the digital generation.*
+**Akshara (`अक्षर`)** — *An open-source parametric vector-tracing, Barakhari syllable-fusion, and SOV grammar engine reviving the traditional Nepali Pati wooden slate for the digital generation.*
 
 ### Inspiration & The Gap
 Over 30 million people speak Nepali worldwide, including a rapidly growing global diaspora. Yet when parents try to teach their children how to read and write Nepali Devanagari, they face a stark digital divide:
@@ -207,7 +207,7 @@ Over 30 million people speak Nepali worldwide, including a rapidly growing globa
 
 ### What It Does
 `Akshara` guides learners through a 4-stage pedagogical progression:
-1. **Tactile *Pati–Khari* Vector Tracing:** Learners trace characters (`क, ख, ग, घ, अ, आ`) on a dark wooden *Pati* slate with realistic *Khari* chalk particles, guided by glowing sequential waypoints and instant topological feedback.
+1. **Tactile *Pati* Vector Tracing:** Learners trace characters (`क, ख, ग, घ, अ, आ`) on a dark wooden *Pati* slate with realistic chalk particles, guided by glowing sequential waypoints and instant topological feedback.
 2. **Dynamic *Matra* & *Barakhari* Fusion:** Learners drag vowel diacritics (`ा, ि, ी, ु, ू, ृ, े, ै, ो, ौ, ं, ः, ्`) onto any of the 36 *Vyanjan* consonants, viewing live Unicode codepoint assembly (`U+0915 + U+093F = कि`), a 360° placement compass (`LEFT`, `RIGHT`, `TOP`, `BOTTOM`), and an interactive 13-step *Barakhari* ribbon.
 3. **2- & 3-Letter Word Building Blocks:** Learners snap syllable tiles together to build concrete nouns (`कलम`, `घर`, `बस`, `चरा`, `पानी`, `कमल`, `आमा`, `किताब`).
 4. **SOV Sentence Unscrambler:** Learners arrange scrambled tokens into authentic Nepali **Subject (`कर्ता`) + Object (`कर्म`) + Verb (`क्रिया`)** sentences (`"राम घर जान्छ"`), receiving targeted syntactic coaching if they fall back into English SVO habits.

@@ -2,7 +2,7 @@
   "name": "akshara",
   "version": "0.1.0",
   "private": true,
-  "description": "Akshara (अक्षर) — Interactive Nepali Devanagari literacy engine with parametric Pati-Khari stroke tracing, Shirorekha topological validation, Barakhari Matra fusion, and SOV sentence construction.",
+  "description": "Akshara (अक्षर) — Interactive Nepali Devanagari literacy engine with parametric Pati slate stroke tracing, Shirorekha topological validation, Barakhari Matra fusion, and SOV sentence construction.",
   "license": "MIT",
   "author": "Ashok Adhikari",
   "repository": {

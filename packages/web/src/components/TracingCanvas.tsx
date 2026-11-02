@@ -151,7 +151,7 @@ export function TracingCanvas() {
       });
     }
 
-    // 4. Completed strokes rendered in rich Khari (खरी) limestone chalk
+    // 4. Completed strokes rendered in rich limestone chalk
     currentDataset.strokes.forEach((stroke, idx) => {
       if (idx >= currentProgress.completedStrokeIds.length) return;
       ctx.save();
@@ -166,7 +166,7 @@ export function TracingCanvas() {
       ctx.restore();
     });
 
-    // 5. Active user Khari chalk trail
+    // 5. Active user chalk trail
     if (activeTrailRef.current.length > 1) {
       ctx.save();
       ctx.beginPath();
@@ -446,14 +446,14 @@ export function TracingCanvas() {
           </div>
         </div>
 
-        {/* Traditional Wooden Pati Frame + Khari Slate Canvas */}
+        {/* Traditional Wooden Pati Frame + Slate Canvas */}
         <div className="relative rounded-3xl p-4 sm:p-5 bg-gradient-to-br from-amber-950 via-stone-900 to-amber-950 border-4 border-amber-900/80 shadow-2xl">
           {/* Top Slate Toolbar */}
           <div className="flex flex-wrap items-center justify-between gap-2 mb-3 px-1">
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
                 <Sparkles className="w-3.5 h-3.5" />
-                पाटी र खरी (Pati &amp; Khari Slate)
+                पाटी लेखन (Pati Wooden Slate)
               </span>
               <button
                 type="button"

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Akshara (अक्षर) • Khari & Pati Nepali Devanagari Literacy Engine',
+  title: 'Akshara (अक्षर) • Interactive Nepali Devanagari Literacy Engine',
   description:
     'Interactive open-source engine teaching Nepali Devanagari reading, pronunciation, and writing through parametric Pati-chalk stroke tracing, Barakhari Matra fusion, and SOV sentence construction.',
 };

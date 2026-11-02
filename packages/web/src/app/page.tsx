@@ -25,7 +25,7 @@ export default function AksharaStudioPage() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">
-                  Akshara <span className="text-amber-400 font-normal">(अक्षर • खरी र पाटी)</span>
+                  Akshara <span className="text-amber-400 font-normal">(अक्षर)</span>
                 </h1>
                 <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono uppercase rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
                   MIT Open Source
