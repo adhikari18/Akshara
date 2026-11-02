@@ -19,6 +19,8 @@ import strokeE from '../strokes/e.json' with { type: 'json' };
 import strokeAi from '../strokes/ai.json' with { type: 'json' };
 import strokeO from '../strokes/o.json' with { type: 'json' };
 import strokeAu from '../strokes/au.json' with { type: 'json' };
+import strokeAm from '../strokes/am.json' with { type: 'json' };
+import strokeAha from '../strokes/aha.json' with { type: 'json' };
 
 export type StrokeTopologyType = 'loop' | 'curve' | 'diagonal' | 'stem' | 'shirorekha';
 
@@ -175,6 +177,8 @@ export const STROKE_DATASETS: Record<string, LetterStrokeDataset> = {
   ai: strokeAi as LetterStrokeDataset,
   o: strokeO as LetterStrokeDataset,
   au: strokeAu as LetterStrokeDataset,
+  am: strokeAm as LetterStrokeDataset,
+  aha: strokeAha as LetterStrokeDataset,
 };
 
 export const STROKE_LIST: LetterStrokeDataset[] = [
@@ -193,6 +197,8 @@ export const STROKE_LIST: LetterStrokeDataset[] = [
   STROKE_DATASETS.ai,
   STROKE_DATASETS.o,
   STROKE_DATASETS.au,
+  STROKE_DATASETS.am,
+  STROKE_DATASETS.aha,
 ];
 
 export interface DatasetValidationResult {

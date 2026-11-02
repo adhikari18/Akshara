@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { STROKE_DATASETS, STROKE_LIST, validateLetterDataset } from '@akshara/data';
+import { STROKE_DATASETS, STROKE_LIST, VOWELS, validateLetterDataset } from '@akshara/data';
 import {
   TracingEvaluator,
   computeAdaptiveTolerance,
@@ -172,6 +172,36 @@ describe('TracingEvaluator & Vector Geometry Engine', () => {
             });
             expect(step.topologicalViolation).toBeNull();
           }
+        }
+      }
+
+      const progress = evaluator.getProgress();
+      expect(progress.isLetterComplete).toBe(true);
+      expect(progress.completedStrokeIds).toHaveLength(dataset.strokes.length);
+      expect(progress.overallCompletionRatio).toBe(1);
+      expect(progress.stars).toBe(3);
+    }
+  });
+
+  it('completes all 13 canonical Swor Varna (अ to अः) including Shirbindu (अं) and Visarga (अः)', () => {
+    expect(VOWELS).toHaveLength(13);
+
+    for (const vowel of VOWELS) {
+      expect(vowel.hasStrokeData).toBe(true);
+      const dataset = STROKE_DATASETS[vowel.id];
+      expect(dataset).toBeDefined();
+      expect(dataset.character).toBe(vowel.character);
+      expect(dataset.category).toBe('swor');
+
+      const evaluator = new TracingEvaluator(dataset, {
+        mode: 'standard',
+        smoothingAlpha: 1.0,
+      });
+
+      for (const stroke of dataset.strokes) {
+        for (const wp of stroke.waypoints) {
+          const step = evaluator.evaluatePointerSample({ x: wp.x, y: wp.y });
+          expect(step.topologicalViolation).toBeNull();
         }
       }
 

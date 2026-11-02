@@ -1,0 +1,131 @@
+{
+  "id": "aha",
+  "character": "अः",
+  "unicode": "U+0905 U+0903",
+  "category": "swor",
+  "varga": "अयोगवाह • विसर्ग (Ayogavaha / Aspirated Visarga)",
+  "phonetics": {
+    "romanized": "aha",
+    "ipa": "/ʌhʌ/",
+    "nepaliName": "अः — विसर्ग अः",
+    "audioPrompt": "अः — छः अः",
+    "articulationTip": "Voiceless breath release (Visarga): pronounce 'a' followed by a gentle breathy echo 'ha' (/ʌhʌ/), written with two vertical dots on the right."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 135,
+    "endX": 225,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "aha-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Double Front Curves (अगाडिको दुई घुम्ती)",
+      "nepaliInstruction": "पहिले 'अ' को अगाडिको दुईवटा घुम्ती बनाउनुहोस्।",
+      "englishInstruction": "Trace the upper and lower right-facing curves on the left.",
+      "svgPath": "M 60 95 C 120 80, 130 130, 80 145 C 140 155, 135 225, 60 215",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 60, "y": 95, "label": "Top Curve Start" },
+        { "index": 1, "x": 112, "y": 110, "label": "Upper Belly" },
+        { "index": 2, "x": 80, "y": 145, "label": "Center Vertex" },
+        { "index": 3, "x": 122, "y": 188, "label": "Lower Belly" },
+        { "index": 4, "x": 60, "y": 215, "label": "Bottom Tail" }
+      ]
+    },
+    {
+      "id": "aha-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Middle Connector Bridge (बीचको जोड्ने धर्को)",
+      "nepaliInstruction": "बीचको टुप्पोबाट ठाडो धर्कोसम्म तेर्सो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the short horizontal bridge from the middle vertex to the stem.",
+      "svgPath": "M 100 148 L 180 148",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 100, "y": 148, "label": "Bridge Left" },
+        { "index": 1, "x": 140, "y": 148, "label": "Bridge Mid" },
+        { "index": 2, "x": 180, "y": 148, "label": "Bridge Right" }
+      ]
+    },
+    {
+      "id": "aha-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "माथिदेखि तलसम्म ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the vertical Khadi Pai stem from the headline to the baseline.",
+      "svgPath": "M 180 75 L 180 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 180, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 180, "y": 155, "label": "Stem Mid" },
+        { "index": 2, "x": 180, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "aha-stroke-4",
+      "order": 4,
+      "type": "loop",
+      "label": "Upper Visarga Breath Ring (माथिल्लो विसर्ग थोप्लो)",
+      "nepaliInstruction": "ठाडो धर्कोको दायाँपट्टि माथिल्लो विसर्गको गोलो थोप्लो बनाउनुहोस्।",
+      "englishInstruction": "Trace the upper Visarga breath circle to the right of the vertical stem.",
+      "svgPath": "M 232 110 C 246 110, 246 134, 232 134 C 218 134, 218 110, 232 110",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 232, "y": 110, "label": "Upper Dot Top" },
+        { "index": 1, "x": 243, "y": 122, "label": "Upper Dot Right" },
+        { "index": 2, "x": 232, "y": 134, "label": "Upper Dot Bottom" }
+      ]
+    },
+    {
+      "id": "aha-stroke-5",
+      "order": 5,
+      "type": "loop",
+      "label": "Lower Visarga Breath Ring (तल्लो विसर्ग थोप्लो)",
+      "nepaliInstruction": "अब त्यसको तल दोस्रो विसर्गको गोलो थोप्लो बनाउनुहोस्।",
+      "englishInstruction": "Trace the lower Visarga breath circle directly beneath the upper dot.",
+      "svgPath": "M 232 180 C 246 180, 246 204, 232 204 C 218 204, 218 180, 232 180",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 232, "y": 180, "label": "Lower Dot Top" },
+        { "index": 1, "x": 243, "y": 192, "label": "Lower Dot Right" },
+        { "index": 2, "x": 232, "y": 204, "label": "Lower Dot Bottom" }
+      ]
+    },
+    {
+      "id": "aha-stroke-6",
+      "order": 6,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा ठाडो धर्कोमाथि शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar over the stem.",
+      "svgPath": "M 135 75 L 225 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 135, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 180, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 225, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "छः", "romanized": "chha", "meaning": "Six", "emoji": "6️⃣" },
+    { "word": "प्रायः", "romanized": "prayaha", "meaning": "Usually / Mostly", "emoji": "🔄" },
+    { "word": "पुनः", "romanized": "punaha", "meaning": "Again", "emoji": "🔁" }
+  ]
+}

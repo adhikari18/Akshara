@@ -213,7 +213,7 @@
     "sampleWordRomanized": "anguur",
     "sampleWordMeaning": "Grapes",
     "emoji": "🍇",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "aha",
@@ -231,7 +231,7 @@
     "sampleWordRomanized": "chha",
     "sampleWordMeaning": "Six",
     "emoji": "6️⃣",
-    "hasStrokeData": false
+    "hasStrokeData": true
   }
 ]
 

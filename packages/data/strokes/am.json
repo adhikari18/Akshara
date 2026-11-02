@@ -1,0 +1,116 @@
+{
+  "id": "am",
+  "character": "अं",
+  "unicode": "U+0905 U+0902",
+  "category": "swor",
+  "varga": "अयोगवाह • अनुस्वार (Ayogavaha / Nasal Anusvara)",
+  "phonetics": {
+    "romanized": "am",
+    "ipa": "/ʌm/",
+    "nepaliName": "अं — शिरबिन्दु अं",
+    "audioPrompt": "अं — अंगूर अं",
+    "articulationTip": "Nasalized inherent vowel: pronounce short 'a' (/ʌ/) followed by a resonant nasal hum (/m/ or /ŋ/) denoted by the top Shirbindu dot."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 145,
+    "endX": 245,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "am-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Double Front Curves (अगाडिको दुई घुम्ती)",
+      "nepaliInstruction": "पहिले 'अ' को अगाडिको दुईवटा घुम्ती बनाउनुहोस्।",
+      "englishInstruction": "Trace the upper and lower right-facing curves on the left.",
+      "svgPath": "M 75 95 C 135 80, 145 130, 95 145 C 155 155, 150 225, 75 215",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 75, "y": 95, "label": "Top Curve Start" },
+        { "index": 1, "x": 128, "y": 110, "label": "Upper Belly" },
+        { "index": 2, "x": 95, "y": 145, "label": "Center Vertex" },
+        { "index": 3, "x": 138, "y": 188, "label": "Lower Belly" },
+        { "index": 4, "x": 75, "y": 215, "label": "Bottom Tail" }
+      ]
+    },
+    {
+      "id": "am-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Middle Connector Bridge (बीचको जोड्ने धर्को)",
+      "nepaliInstruction": "बीचको टुप्पोबाट दायाँ ठाडो धर्कोसम्म जोड्ने तेर्सो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the short horizontal bridge from the middle vertex to the right stem.",
+      "svgPath": "M 115 148 L 195 148",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 115, "y": 148, "label": "Bridge Left" },
+        { "index": 1, "x": 155, "y": 148, "label": "Bridge Mid" },
+        { "index": 2, "x": 195, "y": 148, "label": "Bridge Right" }
+      ]
+    },
+    {
+      "id": "am-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem from the headline to the baseline.",
+      "svgPath": "M 195 75 L 195 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 195, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 195, "y": 155, "label": "Stem Mid" },
+        { "index": 2, "x": 195, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "am-stroke-4",
+      "order": 4,
+      "type": "loop",
+      "label": "Upper Shirbindu Nasal Dot (माथिको शिरबिन्दु / अनुस्वार)",
+      "nepaliInstruction": "ठाडो धर्कोको ठिक माथि गोलो शिरबिन्दु (ं) थोप्लो बनाउनुहोस्।",
+      "englishInstruction": "Trace the circular Shirbindu (Anusvara) nasal mark above the headline.",
+      "svgPath": "M 195 34 C 209 34, 209 54, 195 54 C 181 54, 181 34, 195 34",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 195, "y": 34, "label": "Shirbindu Top" },
+        { "index": 1, "x": 206, "y": 44, "label": "Shirbindu Right" },
+        { "index": 2, "x": 195, "y": 54, "label": "Shirbindu Bottom" },
+        { "index": 3, "x": 184, "y": 44, "label": "Shirbindu Left" }
+      ]
+    },
+    {
+      "id": "am-stroke-5",
+      "order": 5,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा ठाडो धर्कोमाथि शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar over the stem.",
+      "svgPath": "M 145 75 L 245 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 145, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 195, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 245, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "अंगूर", "romanized": "anguur", "meaning": "Grapes", "emoji": "🍇" },
+    { "word": "अंक", "romanized": "anka", "meaning": "Number / Digit", "emoji": "🔢" },
+    { "word": "अंडा", "romanized": "anda", "meaning": "Egg", "emoji": "🥚" }
+  ]
+}

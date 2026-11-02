@@ -1,4 +1,4 @@
-import { CONSONANTS, SENTENCES, STROKE_LIST, VOWELS, WORDS, validateLetterDataset } from './index.js';
+import { CONSONANTS, SENTENCES, STROKE_DATASETS, STROKE_LIST, VOWELS, WORDS, validateLetterDataset } from './index.js';
 
 let hasError = false;
 
@@ -8,7 +8,17 @@ if (VOWELS.length !== 13) {
   console.error(`❌ Expected 13 Swor Varna vowels, found ${VOWELS.length}`);
   hasError = true;
 } else {
-  console.log(`✅ Vowels (Swor Varna): ${VOWELS.length} canonical entries verified (अ to अः).`);
+  const missingVowelStrokes = VOWELS.filter((v) => !v.hasStrokeData || !STROKE_DATASETS[v.id]);
+  if (missingVowelStrokes.length > 0) {
+    console.error(
+      `❌ Missing stroke vectors for Swor Varna: ${missingVowelStrokes.map((v) => v.character).join(', ')}`
+    );
+    hasError = true;
+  } else {
+    console.log(
+      `✅ Vowels (Swor Varna): ${VOWELS.length}/13 canonical entries and stroke vectors verified (अ to अः).`
+    );
+  }
 }
 
 if (CONSONANTS.length !== 36) {
