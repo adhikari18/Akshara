@@ -162,7 +162,7 @@
     "sampleWordRomanized": "tapari",
     "sampleWordMeaning": "Leaf Plate",
     "emoji": "🍃",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ttha",
@@ -177,7 +177,7 @@
     "sampleWordRomanized": "theki",
     "sampleWordMeaning": "Wooden Vessel",
     "emoji": "🏺",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "dda",
@@ -192,7 +192,7 @@
     "sampleWordRomanized": "damaru",
     "sampleWordMeaning": "Hand Drum",
     "emoji": "🥁",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ddha",
@@ -207,7 +207,7 @@
     "sampleWordRomanized": "dhoka",
     "sampleWordMeaning": "Door",
     "emoji": "🚪",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "nna",
@@ -222,7 +222,7 @@
     "sampleWordRomanized": "baan",
     "sampleWordMeaning": "Arrow",
     "emoji": "🏹",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ta",

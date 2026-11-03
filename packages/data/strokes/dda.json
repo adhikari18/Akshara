@@ -1,0 +1,74 @@
+{
+  "id": "dda",
+  "character": "ड",
+  "unicode": "U+0921",
+  "category": "vyanjan",
+  "varga": "मूर्धन्य (Murdhanya / Retroflex)",
+  "phonetics": {
+    "romanized": "da",
+    "ipa": "/ɖʌ/",
+    "nepaliName": "डमरु ड",
+    "audioPrompt": "ड — डमरु ड",
+    "articulationTip": "Voiced retroflex stop: curl the tongue tip back and say a voiced 'd', as in 'डमरु' (damaru - hand drum)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 73,
+    "endX": 227,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "dda-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Neck, Hood & Lower Sweep (घाँटी, टोपी र तल्लो घुम्ती)",
+      "nepaliInstruction": "शिरोरेखाबाट छोटो ठाडो धर्को तानी बायाँतिर टोपीजस्तो घुमाउनुहोस्, अनि दायाँ हुँदै तल ठूलो घुम्ती बनाएर बायाँतिर टुङ्ग्याउनुहोस्।",
+      "englishInstruction": "Drop a short neck from the headline, curl left into the small hood, then swing right and around into the large lower bowl, finishing at the lower left.",
+      "svgPath": "M 176 75 L 176 122 C 145 122, 118 122, 113 145 C 110 162, 125 168, 140 166 L 180 160 C 198 172, 200 228, 152 230 C 120 232, 102 215, 92 197",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 176, "y": 75, "label": "Curve Start" },
+        { "index": 1, "x": 176, "y": 116.2, "label": "Upper Right Arc" },
+        { "index": 2, "x": 140.7, "y": 123.6, "label": "Upper Arc" },
+        { "index": 3, "x": 112.6, "y": 148.6, "label": "Left Arc" },
+        { "index": 4, "x": 143.6, "y": 165.5, "label": "Center Point" },
+        { "index": 5, "x": 183.3, "y": 162.9, "label": "Right Arc" },
+        { "index": 6, "x": 190, "y": 202, "label": "Lower Right Arc 1" },
+        { "index": 7, "x": 161.5, "y": 228.8, "label": "Lower Right Arc 2" },
+        { "index": 8, "x": 121.2, "y": 225, "label": "Lower Left Arc" },
+        { "index": 9, "x": 92, "y": 197, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "dda-stroke-2",
+      "order": 2,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 73 75 L 227 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 73, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 111.5, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 150, "y": 75, "label": "Center Headline" },
+        { "index": 3, "x": 188.5, "y": 75, "label": "Right Headline" },
+        { "index": 4, "x": 227, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "डमरु", "romanized": "damaru", "meaning": "Hand Drum", "emoji": "🥁" },
+    { "word": "डुङ्गा", "romanized": "dunga", "meaning": "Boat", "emoji": "🛶" },
+    { "word": "डाँडा", "romanized": "danda", "meaning": "Hill", "emoji": "⛰️" }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "id": "ttha",
+  "character": "ठ",
+  "unicode": "U+0920",
+  "category": "vyanjan",
+  "varga": "मूर्धन्य (Murdhanya / Retroflex)",
+  "phonetics": {
+    "romanized": "tha",
+    "ipa": "/ʈʰʌ/",
+    "nepaliName": "ठेकी ठ",
+    "audioPrompt": "ठ — ठेकी ठ",
+    "articulationTip": "Aspirated retroflex stop: curl the tongue back as for ट and release with a strong puff of breath, as in 'ठूलो' (thulo - big)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 65,
+    "endX": 235,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "ttha-stroke-1",
+      "order": 1,
+      "type": "loop",
+      "label": "Neck & Round Loop (घाँटी र गोलो घेरा)",
+      "nepaliInstruction": "शिरोरेखाबाट छोटो ठाडो धर्को तानी बायाँतिरबाट पूरा गोलो घेरा बनाउनुहोस्।",
+      "englishInstruction": "Drop a short neck from the headline, then draw the full round loop starting to the left.",
+      "svgPath": "M 158 75 L 158 148 C 115 152, 96 180, 96 195 C 96 218, 120 228, 152 228 C 185 228, 207 212, 207 192 C 207 168, 185 150, 158 148",
+      "directionHint": "counter-clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 158, "y": 75, "label": "Loop Start" },
+        { "index": 1, "x": 158, "y": 116.6, "label": "Upper Arc" },
+        { "index": 2, "x": 147.8, "y": 149.5, "label": "Center Point" },
+        { "index": 3, "x": 110.8, "y": 167.4, "label": "Lower Left Arc 1" },
+        { "index": 4, "x": 97.5, "y": 204.4, "label": "Lower Left Arc 2" },
+        { "index": 5, "x": 130.7, "y": 226.3, "label": "Lower Left Arc 3" },
+        { "index": 6, "x": 172.1, "y": 225.8, "label": "Lower Right Arc 1" },
+        { "index": 7, "x": 204.8, "y": 202.5, "label": "Lower Right Arc 2" },
+        { "index": 8, "x": 195.4, "y": 164.3, "label": "Right Arc" },
+        { "index": 9, "x": 158, "y": 148, "label": "Loop Closure" }
+      ]
+    },
+    {
+      "id": "ttha-stroke-2",
+      "order": 2,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 65 75 L 235 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 65, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 107.5, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 150, "y": 75, "label": "Center Headline" },
+        { "index": 3, "x": 192.5, "y": 75, "label": "Right Headline" },
+        { "index": 4, "x": 235, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "ठेकी", "romanized": "theki", "meaning": "Wooden Vessel", "emoji": "🏺" },
+    { "word": "ठूलो", "romanized": "thulo", "meaning": "Big", "emoji": "🐘" },
+    { "word": "ठाउँ", "romanized": "thaun", "meaning": "Place", "emoji": "📍" }
+  ]
+}
