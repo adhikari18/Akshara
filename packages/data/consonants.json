@@ -447,7 +447,7 @@
     "sampleWordRomanized": "shankha",
     "sampleWordMeaning": "Conch Shell",
     "emoji": "🐚",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ssha",
@@ -462,7 +462,7 @@
     "sampleWordRomanized": "shatkon",
     "sampleWordMeaning": "Hexagram",
     "emoji": "✡️",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "sa",
@@ -477,7 +477,7 @@
     "sampleWordRomanized": "surya",
     "sampleWordMeaning": "Sun",
     "emoji": "☀️",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ha",
@@ -492,7 +492,7 @@
     "sampleWordRomanized": "haatti",
     "sampleWordMeaning": "Elephant",
     "emoji": "🐘",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ksha",

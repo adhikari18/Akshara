@@ -1,0 +1,89 @@
+{
+  "id": "sha",
+  "character": "श",
+  "unicode": "U+0936",
+  "category": "vyanjan",
+  "varga": "ऊष्म (Ushma / Sibilant)",
+  "phonetics": {
+    "romanized": "sha",
+    "ipa": "/sʌ/",
+    "nepaliName": "मोटो श",
+    "audioPrompt": "श — मोटो श",
+    "articulationTip": "In everyday Nepali श, ष and स all sound like 's' in 'sun'; श appears in words like 'शंख' (shankha - conch)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 188,
+    "endX": 240,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "sha-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Top Loop & Diagonal Leg (माथिल्लो घेरा र छड्के खुट्टा)",
+      "nepaliInstruction": "भित्री टुप्पोबाट माथि घेरा बनाई बायाँतिर झर्नुहोस्, अनि दायाँतिर तल छड्के खुट्टा तान्नुहोस्।",
+      "englishInstruction": "From the inner tip, loop up over the top, cut down to the left corner, then draw the diagonal leg down to the right.",
+      "svgPath": "M 102 128 C 88 120, 82 100, 92 88 C 105 74, 145 76, 152 98 C 158 125, 115 140, 72 155 L 140 232",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 102, "y": 128, "label": "Curve Start" },
+        { "index": 1, "x": 88.9, "y": 93.1, "label": "Upper Left Arc" },
+        { "index": 2, "x": 124.4, "y": 79.5, "label": "Upper Arc" },
+        { "index": 3, "x": 152.6, "y": 103.5, "label": "Upper Right Arc 1" },
+        { "index": 4, "x": 127.2, "y": 132.8, "label": "Upper Right Arc 2" },
+        { "index": 5, "x": 89.9, "y": 148.7, "label": "Left Arc" },
+        { "index": 6, "x": 86.3, "y": 171.2, "label": "Lower Left Arc" },
+        { "index": 7, "x": 113.1, "y": 201.6, "label": "Lower Arc" },
+        { "index": 8, "x": 140, "y": 232, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "sha-stroke-2",
+      "order": 2,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 201 75 L 201 235",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 201, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 201, "y": 115, "label": "Upper Spine" },
+        { "index": 2, "x": 201, "y": 155, "label": "Middle Spine" },
+        { "index": 3, "x": 201, "y": 195, "label": "Lower Spine" },
+        { "index": 4, "x": 201, "y": 235, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "sha-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Short Shirorekha (छोटो शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा ठाडो धर्कोमाथि मात्र छोटो शिरोरेखा तान्नुहोस्; बायाँको घेरा शिरोरेखाभन्दा माथि खुला रहन्छ।",
+      "englishInstruction": "Finish with the short Shirorekha over the stem only; the loop on the left stays open above it.",
+      "svgPath": "M 188 75 L 240 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 188, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 214, "y": 75, "label": "Center Headline" },
+        { "index": 2, "x": 240, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "शंख", "romanized": "shankha", "meaning": "Conch Shell", "emoji": "🐚" },
+    { "word": "शहर", "romanized": "shahar", "meaning": "City", "emoji": "🏙️" },
+    { "word": "शेर", "romanized": "sher", "meaning": "Lion", "emoji": "🦁" }
+  ]
+}
