@@ -309,9 +309,95 @@ export function validateLetterDataset(dataset: LetterStrokeDataset): DatasetVali
     }
   });
 
+  errors.push(...validateShirorekhaGeometry(dataset));
+
   return {
     valid: errors.length === 0,
     errors,
   };
+}
+
+/** Minimum horizontal gap (coordinate units) between split Shirorekha segments. */
+export const MIN_SHIROREKHA_GAP = 8;
+/** Allowed slack (coordinate units) when matching waypoints to headline spans. */
+const SHIROREKHA_EPSILON = 2;
+
+/**
+ * Validates the Shirorekha headline geometry, including split/partial spans:
+ * 1. Each segment has startX < endX, segments are ordered left to right and
+ *    separated by a visible gap of at least MIN_SHIROREKHA_GAP units.
+ * 2. Segments exactly cover the declared startX / endX extent.
+ * 3. The Shirorekha stroke's svgPath has one subpath (M ...) per segment.
+ * 4. Every Shirorekha waypoint lies on the headline Y and within a segment,
+ *    and (for split headlines) every segment starts and ends on a waypoint.
+ */
+export function validateShirorekhaGeometry(dataset: LetterStrokeDataset): string[] {
+  const errors: string[] = [];
+  const { shirorekha } = dataset;
+  const id = dataset.id;
+
+  if (shirorekha.startX >= shirorekha.endX) {
+    errors.push(`Letter '${id}' shirorekha startX (${shirorekha.startX}) must be less than endX (${shirorekha.endX}).`);
+  }
+
+  const segments = getShirorekhaSegments(dataset);
+  if (shirorekha.segments) {
+    if (shirorekha.segments.length < 2) {
+      errors.push(`Letter '${id}' shirorekha.segments must contain at least 2 spans; omit it for a continuous bar.`);
+    }
+    segments.forEach((seg, i) => {
+      if (seg.startX >= seg.endX) {
+        errors.push(`Letter '${id}' shirorekha segment ${i} has startX (${seg.startX}) >= endX (${seg.endX}).`);
+      }
+      const prev = segments[i - 1];
+      if (prev && seg.startX - prev.endX < MIN_SHIROREKHA_GAP) {
+        errors.push(
+          `Letter '${id}' shirorekha segments ${i - 1} and ${i} must be ordered with a gap of at least ${MIN_SHIROREKHA_GAP} units (got ${seg.startX - prev.endX}).`
+        );
+      }
+    });
+    const first = segments[0];
+    const last = segments[segments.length - 1];
+    if (first && first.startX !== shirorekha.startX) {
+      errors.push(`Letter '${id}' first shirorekha segment must start at shirorekha.startX (${shirorekha.startX}).`);
+    }
+    if (last && last.endX !== shirorekha.endX) {
+      errors.push(`Letter '${id}' last shirorekha segment must end at shirorekha.endX (${shirorekha.endX}).`);
+    }
+  }
+
+  const stroke = dataset.strokes[dataset.strokes.length - 1];
+  if (!stroke || stroke.type !== 'shirorekha') {
+    return errors;
+  }
+
+  const subpaths = (stroke.svgPath.match(/[Mm]/g) ?? []).length;
+  if (subpaths !== segments.length) {
+    errors.push(
+      `Shirorekha stroke '${stroke.id}' has ${subpaths} subpath(s) but the headline defines ${segments.length} segment(s).`
+    );
+  }
+
+  const inSegment = (x: number) =>
+    segments.some((s) => x >= s.startX - SHIROREKHA_EPSILON && x <= s.endX + SHIROREKHA_EPSILON);
+  stroke.waypoints.forEach((wp) => {
+    if (Math.abs(wp.y - shirorekha.y) > SHIROREKHA_EPSILON) {
+      errors.push(`Shirorekha stroke '${stroke.id}' waypoint ${wp.index} (y=${wp.y}) is off the headline y=${shirorekha.y}.`);
+    }
+    if (!inSegment(wp.x)) {
+      errors.push(`Shirorekha stroke '${stroke.id}' waypoint ${wp.index} (x=${wp.x}) falls outside every headline segment.`);
+    }
+  });
+
+  if (segments.length > 1) {
+    const hasWaypointAt = (x: number) => stroke.waypoints.some((wp) => Math.abs(wp.x - x) <= SHIROREKHA_EPSILON);
+    segments.forEach((seg, i) => {
+      if (!hasWaypointAt(seg.startX) || !hasWaypointAt(seg.endX)) {
+        errors.push(`Shirorekha stroke '${stroke.id}' must place waypoints at both ends of segment ${i} (${seg.startX}–${seg.endX}).`);
+      }
+    });
+  }
+
+  return errors;
 }
 
