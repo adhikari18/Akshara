@@ -6,6 +6,7 @@ import { BookOpen, Feather, Layers, Puzzle, Volume2 } from 'lucide-react';
 import { TracingCanvas } from '@/components/TracingCanvas';
 import { MatraBuilder } from '@/components/MatraBuilder';
 import { WordSentenceBuilder } from '@/components/WordSentenceBuilder';
+import { VoiceSelector } from '@/components/VoiceSelector';
 import { speakNepaliPhonics } from '@/lib/audio';
 
 type StudioTab = 'tracing' | 'matra' | 'sentences' | 'varnamala';
@@ -43,57 +44,61 @@ export default function AksharaStudioPage() {
             </div>
           </div>
 
-          {/* 4-Stage Pedagogical Navigation Tabs */}
-          <nav className="flex flex-wrap items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
-            <button
-              type="button"
-              onClick={() => setActiveTab('tracing')}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
-                activeTab === 'tracing'
-                  ? 'bg-amber-500 text-slate-950 shadow'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <Feather className="w-3.5 h-3.5" />
-              1. पाटी लेखन (Pati Tracing)
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('matra')}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
-                activeTab === 'matra'
-                  ? 'bg-amber-500 text-slate-950 shadow'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5" />
-              2. मात्रा र बाह्रखरी (Matra Fusion)
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('sentences')}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
-                activeTab === 'sentences'
-                  ? 'bg-amber-500 text-slate-950 shadow'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <Puzzle className="w-3.5 h-3.5" />
-              3. शब्द र वाक्य (Words &amp; SOV)
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('varnamala')}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
-                activeTab === 'varnamala'
-                  ? 'bg-amber-500 text-slate-950 shadow'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5" />
-              4. वर्णमाला (Full Varnamala)
-            </button>
-          </nav>
+          {/* 4-Stage Pedagogical Navigation Tabs & Voice Selector */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            <nav className="flex flex-wrap items-center gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+              <button
+                type="button"
+                onClick={() => setActiveTab('tracing')}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
+                  activeTab === 'tracing'
+                    ? 'bg-amber-500 text-slate-950 shadow'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <Feather className="w-3.5 h-3.5" />
+                1. पाटी लेखन (Pati Tracing)
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('matra')}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
+                  activeTab === 'matra'
+                    ? 'bg-amber-500 text-slate-950 shadow'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5" />
+                2. मात्रा र बाह्रखरी (Matra Fusion)
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('sentences')}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
+                  activeTab === 'sentences'
+                    ? 'bg-amber-500 text-slate-950 shadow'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <Puzzle className="w-3.5 h-3.5" />
+                3. शब्द र वाक्य (Words &amp; SOV)
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('varnamala')}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition ${
+                  activeTab === 'varnamala'
+                    ? 'bg-amber-500 text-slate-950 shadow'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                4. वर्णमाला (Full Varnamala)
+              </button>
+            </nav>
+
+            <VoiceSelector />
+          </div>
         </div>
       </header>
 
