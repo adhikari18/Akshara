@@ -1,0 +1,23 @@
+{
+  "name": "@akshara/cli",
+  "version": "0.1.0",
+  "description": "Command-line SVG-to-waypoint compiler that accelerates authoring of Akshara Devanagari stroke datasets.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "akshara": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  }
+}
