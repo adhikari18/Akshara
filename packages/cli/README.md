@@ -25,8 +25,8 @@ The compiler fills in:
   (e.g. `"M 60 75 L 140 75 M 170 75 L 240 75"` for `ग`); each segment is sampled separately
   so its ends are waypoints and no waypoint falls in the gap
 
-The compiled result is checked with `validateLetterDataset` from `@akshara/data` and is not
-written if it fails. It rejects glyphs whose *Shirorekha* stroke is not last, and multiple
+The compiled result is checked against `letter.schema.json` (Ajv) and `validateLetterDataset`
+from `@akshara/data`, and is not written if either fails. It rejects glyphs whose *Shirorekha* stroke is not last, and multiple
 subpaths in any stroke other than the *Shirorekha*. Supported path commands:
 `M L H V C S Q T Z` (absolute and relative); arcs are not supported.
 

@@ -1,4 +1,5 @@
 import { CONSONANTS, SENTENCES, STROKE_DATASETS, STROKE_LIST, VOWELS, WORDS, validateLetterDataset } from './index.js';
+import { validateAgainstLetterSchema } from './schema-validator.js';
 
 let hasError = false;
 
@@ -29,7 +30,15 @@ if (CONSONANTS.length !== 36) {
 }
 
 for (const strokeSet of STROKE_LIST) {
-  const result = validateLetterDataset(strokeSet);
+  const schemaResult = validateAgainstLetterSchema(strokeSet);
+  const topologyResult = validateLetterDataset(strokeSet);
+  const result = {
+    valid: schemaResult.valid && topologyResult.valid,
+    errors: [
+      ...schemaResult.errors.map((e) => `[schema] ${e}`),
+      ...topologyResult.errors.map((e) => `[topology] ${e}`),
+    ],
+  };
   if (!result.valid) {
     hasError = true;
     console.error(`❌ Stroke dataset '${strokeSet.id}' (${strokeSet.character}) failed validation:`);
@@ -38,7 +47,7 @@ for (const strokeSet of STROKE_LIST) {
     }
   } else {
     console.log(
-      `✅ Stroke dataset '${strokeSet.id}' (${strokeSet.character}): ${strokeSet.strokes.length} strokes verified (Shirorekha strictly last).`
+      `✅ Stroke dataset '${strokeSet.id}' (${strokeSet.character}): ${strokeSet.strokes.length} strokes verified (JSON Schema + Shirorekha strictly last).`
     );
   }
 }
