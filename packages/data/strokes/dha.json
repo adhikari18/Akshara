@@ -1,0 +1,100 @@
+{
+  "id": "dha",
+  "character": "ध",
+  "unicode": "U+0927",
+  "category": "vyanjan",
+  "varga": "दन्त्य (Dantya / Dental)",
+  "phonetics": {
+    "romanized": "dha",
+    "ipa": "/d̪ʱʌ/",
+    "nepaliName": "धनुष ध",
+    "audioPrompt": "ध — धनुष ध",
+    "articulationTip": "Voiced breathy dental stop: say द with a breathy murmur from the chest, as in 'धान' (dhan - paddy)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 62,
+    "endX": 237,
+    "y": 75,
+    "segments": [
+      {
+        "startX": 62,
+        "endX": 127
+      },
+      {
+        "startX": 165,
+        "endX": 237
+      }
+    ]
+  },
+  "strokes": [
+    {
+      "id": "dha-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Upper Loop & Lower Bowl (माथिल्लो र तल्लो घुम्ती)",
+      "nepaliInstruction": "माथि बायाँबाट सानो घुम्ती बनाई बीचमा आउनुहोस्, अनि तल ठूलो घुम्ती बनाउँदै ठाडो धर्कोसम्म जोड्नुहोस्।",
+      "englishInstruction": "Curl the small upper loop from the top left to the middle, then sweep the large lower bowl into the stem.",
+      "svgPath": "M 122 78 C 98 85, 92 108, 102 122 C 110 133, 130 138, 150 140 C 112 142, 98 160, 100 178 C 102 196, 122 202, 145 200 C 165 198, 180 190, 192 180",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 122, "y": 78, "label": "Curve Start" },
+        { "index": 1, "x": 97.4, "y": 107.3, "label": "Upper Left Arc" },
+        { "index": 2, "x": 123.4, "y": 135, "label": "Left Arc" },
+        { "index": 3, "x": 136.1, "y": 141.6, "label": "Center Point" },
+        { "index": 4, "x": 102.5, "y": 162.6, "label": "Lower Left Arc 1" },
+        { "index": 5, "x": 115.1, "y": 196.7, "label": "Lower Left Arc 2" },
+        { "index": 6, "x": 155.6, "y": 198.3, "label": "Lower Right Arc" },
+        { "index": 7, "x": 192, "y": 180, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "dha-stroke-2",
+      "order": 2,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 195 75 L 195 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 195, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 195, "y": 116.3, "label": "Upper Spine" },
+        { "index": 2, "x": 195, "y": 157.5, "label": "Middle Spine" },
+        { "index": 3, "x": 195, "y": 198.8, "label": "Lower Spine" },
+        { "index": 4, "x": 195, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "dha-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Split Shirorekha (टुटेको शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा शिरोरेखा दुई टुक्रामा तान्नुहोस्: बायाँ घेरामाथि छोटो डिको, अनि खाली ठाउँ छोडेर ठाडो धर्कोमाथि।",
+      "englishInstruction": "Finish with the Shirorekha in two pieces: a short bar over the left loop, then leave a gap and draw the bar over the stem.",
+      "svgPath": "M 62 75 L 127 75 M 165 75 L 237 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 62, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 127, "y": 75, "label": "Segment 1 End (Gap)" },
+        { "index": 2, "x": 165, "y": 75, "label": "Segment 2 Start (After Gap)" },
+        { "index": 3, "x": 201, "y": 75, "label": "Segment 2 Headline" },
+        { "index": 4, "x": 237, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "धनुष", "romanized": "dhanush", "meaning": "Bow", "emoji": "🏹" },
+    { "word": "धान", "romanized": "dhan", "meaning": "Paddy", "emoji": "🌾" },
+    { "word": "धारा", "romanized": "dhara", "meaning": "Water Spout", "emoji": "⛲" }
+  ]
+}

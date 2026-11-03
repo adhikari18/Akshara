@@ -237,7 +237,7 @@
     "sampleWordRomanized": "tara",
     "sampleWordMeaning": "Star",
     "emoji": "⭐",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "tha",
@@ -252,7 +252,7 @@
     "sampleWordRomanized": "thaal",
     "sampleWordMeaning": "Plate",
     "emoji": "🍽️",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "da",
@@ -267,7 +267,7 @@
     "sampleWordRomanized": "diyo",
     "sampleWordMeaning": "Oil Lamp",
     "emoji": "🪔",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "dha",
@@ -282,7 +282,7 @@
     "sampleWordRomanized": "dhanush",
     "sampleWordMeaning": "Bow",
     "emoji": "🏹",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "na",
@@ -297,7 +297,7 @@
     "sampleWordRomanized": "nal",
     "sampleWordMeaning": "Water Tap",
     "emoji": "🚰",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "pa",

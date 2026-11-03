@@ -1,0 +1,87 @@
+{
+  "id": "da",
+  "character": "द",
+  "unicode": "U+0926",
+  "category": "vyanjan",
+  "varga": "दन्त्य (Dantya / Dental)",
+  "phonetics": {
+    "romanized": "da",
+    "ipa": "/d̪ʌ/",
+    "nepaliName": "दमाहा द",
+    "audioPrompt": "द — दमाहा द",
+    "articulationTip": "Voiced dental stop: tongue tip on the upper teeth, say a voiced 'd', as in 'दियो' (diyo - oil lamp)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 81,
+    "endX": 217,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "da-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Neck & Bowl (घाँटी र घुम्ती)",
+      "nepaliInstruction": "शिरोरेखाबाट छोटो ठाडो धर्को तानी बायाँ हुँदै तल घुमाउनुहोस् र दायाँतिर सानो टुप्पोमा टुङ्ग्याउनुहोस्।",
+      "englishInstruction": "Drop a short neck from the headline, slant left, curve around the bowl and finish at the small knob on the right.",
+      "svgPath": "M 173 75 L 173 120 L 125 140 C 103 150, 100 192, 135 200 C 160 205, 180 192, 182 175",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 173, "y": 75, "label": "Curve Start" },
+        { "index": 1, "x": 173, "y": 114.3, "label": "Upper Right Arc" },
+        { "index": 2, "x": 141.9, "y": 132.9, "label": "Center Point" },
+        { "index": 3, "x": 111.1, "y": 155.1, "label": "Lower Left Arc 1" },
+        { "index": 4, "x": 118.2, "y": 191.5, "label": "Lower Left Arc 2" },
+        { "index": 5, "x": 155.1, "y": 200.2, "label": "Lower Right Arc" },
+        { "index": 6, "x": 182, "y": 175, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "da-stroke-2",
+      "order": 2,
+      "type": "diagonal",
+      "label": "Diagonal Tail (छड्के पुच्छर)",
+      "nepaliInstruction": "टुप्पोबाट दायाँतिर तल छड्के पुच्छर तान्नुहोस्।",
+      "englishInstruction": "Draw the diagonal tail down and to the right from the knob.",
+      "svgPath": "M 170 188 L 205 236",
+      "directionHint": "diagonal-down-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 170, "y": 188, "label": "Diagonal Start" },
+        { "index": 1, "x": 187.5, "y": 212, "label": "Center Point" },
+        { "index": 2, "x": 205, "y": 236, "label": "Diagonal End" }
+      ]
+    },
+    {
+      "id": "da-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 81 75 L 217 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 81, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 115, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 149, "y": 75, "label": "Center Headline" },
+        { "index": 3, "x": 183, "y": 75, "label": "Right Headline" },
+        { "index": 4, "x": 217, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "दियो", "romanized": "diyo", "meaning": "Oil Lamp", "emoji": "🪔" },
+    { "word": "दूध", "romanized": "dudh", "meaning": "Milk", "emoji": "🥛" },
+    { "word": "दाँत", "romanized": "daant", "meaning": "Tooth", "emoji": "🦷" }
+  ]
+}

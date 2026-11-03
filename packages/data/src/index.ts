@@ -19,6 +19,11 @@ import strokeTtha from '../strokes/ttha.json' with { type: 'json' };
 import strokeDda from '../strokes/dda.json' with { type: 'json' };
 import strokeDdha from '../strokes/ddha.json' with { type: 'json' };
 import strokeNna from '../strokes/nna.json' with { type: 'json' };
+import strokeTa from '../strokes/ta.json' with { type: 'json' };
+import strokeTha from '../strokes/tha.json' with { type: 'json' };
+import strokeDa from '../strokes/da.json' with { type: 'json' };
+import strokeDha from '../strokes/dha.json' with { type: 'json' };
+import strokeNa from '../strokes/na.json' with { type: 'json' };
 import strokeA from '../strokes/a.json' with { type: 'json' };
 import strokeAa from '../strokes/aa.json' with { type: 'json' };
 import strokeI from '../strokes/i.json' with { type: 'json' };
@@ -205,6 +210,11 @@ export const STROKE_DATASETS: Record<string, LetterStrokeDataset> = {
   dda: strokeDda as LetterStrokeDataset,
   ddha: strokeDdha as LetterStrokeDataset,
   nna: strokeNna as LetterStrokeDataset,
+  ta: strokeTa as LetterStrokeDataset,
+  tha: strokeTha as LetterStrokeDataset,
+  da: strokeDa as LetterStrokeDataset,
+  dha: strokeDha as LetterStrokeDataset,
+  na: strokeNa as LetterStrokeDataset,
   a: strokeA as LetterStrokeDataset,
   aa: strokeAa as LetterStrokeDataset,
   i: strokeI as LetterStrokeDataset,
@@ -236,6 +246,11 @@ export const STROKE_LIST: LetterStrokeDataset[] = [
   STROKE_DATASETS.dda,
   STROKE_DATASETS.ddha,
   STROKE_DATASETS.nna,
+  STROKE_DATASETS.ta,
+  STROKE_DATASETS.tha,
+  STROKE_DATASETS.da,
+  STROKE_DATASETS.dha,
+  STROKE_DATASETS.na,
   STROKE_DATASETS.a,
   STROKE_DATASETS.aa,
   STROKE_DATASETS.i,
