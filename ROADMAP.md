@@ -1,4 +1,4 @@
-# `Akshara` (अक्षर) Engineering Roadmap (~167 Hours Planned)
+# `Akshara` (अक्षर) Engineering Roadmap (~171 Hours Planned)
 
 This document outlines the multi-milestone engineering, computational linguistics, and dataset roadmap for `Akshara` beyond the `v0.1.0` core release. Each milestone is decomposed into concrete, testable engineering work items (3–6 hours each) across vector geometry, Devanagari typography, Web Audio DSP, interactive pedagogy, and cross-platform deployment.
 
@@ -7,12 +7,12 @@ This document outlines the multi-milestone engineering, computational linguistic
 | Milestone | Focus | Est. Hours | Done | Progress |
 |---|---|---|---|---|
 | 1 | Devanagari Vector Stroke Dataset | ~35 | 30 | 86% |
-| 2 | Computational Geometry & Motor-Control Engine | ~21 | 0 | 0% |
+| 2 | Computational Geometry, Stroke-Order Guide & Motor-Control Engine | ~25 | 0 | 0% |
 | 3 | *Samyukta Akshara* & *Barakhari* Typography | ~21 | 0 | 0% |
 | 4 | Audio Corpus, Speech DSP & Pronunciation Grading | ~37 | 0 | 0% |
 | 5 | SOV Grammar, *Vibhakti* & Story Reader | ~29 | 0 | 0% |
 | 6 | Spaced Repetition, Offline PWA & Mobile App | ~24 | 0 | 0% |
-| **Total** | | **~167** | **30** | **~18%** |
+| **Total** | | **~171** | **30** | **~18%** |
 
 ---
 
@@ -37,7 +37,7 @@ This document outlines the multi-milestone engineering, computational linguistic
 
 ---
 
-## Milestone 2: Computational Geometry & Adaptive Motor-Control Engine (`packages/core/`) (~21 hrs)
+## Milestone 2: Computational Geometry, Stroke-Order Guide & Adaptive Motor-Control Engine (`packages/core/`, `packages/web/`) (~25 hrs)
 
 - [ ] **2.1 Discrete Fréchet Distance & Uniform Arc-Length Resampling (~5 hrs):**
   - Implement uniform arc-length polyline resampling (`resampleByArcLength`) and dynamic-programming Discrete Fréchet Distance (`discreteFrechetDistance`) in `packages/core/src/tracing-evaluator.ts` to grade continuous curve fidelity alongside waypoint unlocks.
@@ -47,7 +47,9 @@ This document outlines the multi-milestone engineering, computational linguistic
   - In classical Devanagari typography, characters with an upper-left open loop leave a gap in the *Shirorekha* above the loop so the glyph does not visually collapse into another letter (e.g., `ध` vs. `घ`, `भ` vs. `म`). Teach the evaluator and `TracingCanvas.tsx` ghost-guides to validate and render the split headline spans defined in 1.3.
 - [ ] **2.4 Velocity-Adaptive 1€ Filter & Stylus Pressure Curves (~4 hrs):**
   - Upgrade the Exponential Moving Average (EMA) smoother to a velocity-adaptive **1€ Filter** (Casiez et al.) and incorporate `PointerEvent.pressure` and `tiltX/tiltY` to modulate chalk stroke width dynamically.
-- [ ] **2.5 Baseline Playwright Canvas Regression Harness (~4 hrs):**
+- [ ] **2.5 Full-Letter Stroke-Order Guide, Directional Arrows & Curve-Accurate Demo Replay (~4 hrs):**
+  - Add a full-letter **"Stroke Order Guide"** mode to `TracingCanvas.tsx` displaying color-coded strokes, numbered start-point badges (`①, ②, ③…` / `१, २, ३…`), and tangent directional arrows along each SVG path. Upgrade **Auto-Trace Demo** to sample along true cubic Bézier curves (`svgPath`) with play/pause, step-by-stroke, and speed controls (`0.5× / 1× / 2×`) without resetting the learner's active `TracingEvaluator` progress, and surface bilingual stroke instructions (`nepaliInstruction` + `englishInstruction`) in the Stroke Order sidebar.
+- [ ] **2.6 Baseline Playwright Canvas Regression Harness (~4 hrs):**
   - Stand up Playwright in CI with synthetic pointer-gesture fixtures replaying recorded strokes on `TracingCanvas.tsx` and drag-and-drop on `MatraBuilder.tsx`, so every later milestone ships with regression coverage.
 
 ---
@@ -62,7 +64,7 @@ This document outlines the multi-milestone engineering, computational linguistic
     2. Consonant + following `र` ➔ bottom diagonal *Paden Rakar* (`प + ् + र = प्र`, `ट + ् + र = ट्र`).
     3. Irregular `र + ु = रु` and `र + ू = रू` belly attachment (instead of bottom foot attachment).
 - [ ] **3.3 Interactive *Samyukta Akshara* Ligature Fusion Playground (`SamyuktaBuilder.tsx`) (~6 hrs):**
-  - Build an interactive drag-and-drop conjunct studio where learners slice the vertical *Khadi Pai* stem off a consonant and weld it to a second consonant (`स + ् + क + ू + ल = स्कूल`, `न + म + स् + ते = नमस्ते`). Add Playwright coverage to the 2.5 harness.
+  - Build an interactive drag-and-drop conjunct studio where learners slice the vertical *Khadi Pai* stem off a consonant and weld it to a second consonant (`स + ् + क + ू + ल = स्कूल`, `न + म + स् + ते = नमस्ते`). Add Playwright coverage to the 2.6 harness.
 - [ ] **3.4 Tracing Vectors for Composite *Matra* Diacritics on the *Pati* Slate (~5 hrs):**
   - Allow learners to trace composite consonant+matra syllables directly on `TracingCanvas.tsx` (e.g., tracing `क` followed by the left-standing arch of `ि` to write `कि`, or bottom curls `ु / ू` for `कु / कू`).
 
@@ -117,4 +119,4 @@ This document outlines the multi-milestone engineering, computational linguistic
 - [ ] **6.4 Native Tracing Canvas Port (`react-native-svg` + `react-native-gesture-handler`) (~6 hrs):**
   - Port `TracingCanvas.tsx` to a native component with low-latency gesture capture, Apple Pencil / stylus pressure support, and parity with the web evaluator.
 - [ ] **6.5 Full End-to-End Regression Suite Expansion (~4 hrs):**
-  - Extend the 2.5 Playwright harness to cover `SamyuktaBuilder.tsx`, the story reader, PWA offline mode, and FSRS review flows.
+  - Extend the 2.6 Playwright harness to cover `SamyuktaBuilder.tsx`, the story reader, PWA offline mode, and FSRS review flows.
