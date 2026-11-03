@@ -1,9 +1,5 @@
-import type {
-  LetterStrokeDataset,
-  StrokeDefinition,
-  StrokeTopologyType,
-  WaypointDefinition,
-} from '@akshara/data';
+import { validateStrokeTopology } from '@akshara/data';
+import type { LetterStrokeDataset, StrokeDefinition, WaypointDefinition } from '@akshara/data';
 
 export interface Point2D {
   x: number;
@@ -68,14 +64,6 @@ const MODE_MULTIPLIERS: Record<LearnerToleranceMode, number> = {
   child: 1.45,
   standard: 1.0,
   strict: 0.75,
-};
-
-const TOPOLOGY_PRIORITY: Record<StrokeTopologyType, number> = {
-  loop: 1,
-  curve: 1,
-  diagonal: 1,
-  stem: 2,
-  shirorekha: 3,
 };
 
 /**
@@ -165,74 +153,9 @@ export function distanceToWaypointPolyline(p: Point2D, waypoints: WaypointDefini
   return minDistance;
 }
 
-/**
- * Enforces the Devanagari topological stroke order invariant:
- * 1. Loop / curve / diagonal body strokes must come first (priority 1).
- * 2. Vertical stems (Khadi Pai) come second (priority 2).
- * 3. Horizontal Shirorekha top bar must strictly be the final stroke (priority 3).
- */
-export function validateStrokeTopology(strokes: StrokeDefinition[]): {
-  valid: boolean;
-  violations: string[];
-} {
-  const violations: string[] = [];
-
-  if (strokes.length < 2) {
-    violations.push('A Devanagari character definition must contain at least 2 strokes.');
-    return { valid: false, violations };
-  }
-
-  let maxPrioritySeen = 0;
-  let lastStemX = -Infinity;
-  const shirorekhaStroke = strokes[strokes.length - 1];
-  const headlineY =
-    shirorekhaStroke?.type === 'shirorekha' && shirorekhaStroke.waypoints.length > 0
-      ? shirorekhaStroke.waypoints[0].y
-      : 75;
-
-  strokes.forEach((stroke, index) => {
-    let priority = TOPOLOGY_PRIORITY[stroke.type];
-    const isLast = index === strokes.length - 1;
-
-    if (stroke.type === 'stem') {
-      lastStemX = Math.max(lastStemX, ...stroke.waypoints.map((w) => w.x));
-    } else if (
-      maxPrioritySeen === 2 &&
-      (stroke.type === 'loop' || stroke.type === 'curve' || stroke.type === 'diagonal')
-    ) {
-      const isUpperCrownMark = stroke.waypoints.every((wp) => wp.y <= headlineY + 4);
-      const isRightPostStemMark = stroke.waypoints.every((wp) => wp.x > lastStemX);
-      if (isUpperCrownMark || isRightPostStemMark) {
-        priority = 2;
-      }
-    }
-
-    if (priority < maxPrioritySeen) {
-      violations.push(
-        `Stroke ${stroke.order} ('${stroke.id}', type '${stroke.type}') violates Devanagari topological order by appearing after a higher-priority stroke stage.`
-      );
-    }
-    if (stroke.type === 'shirorekha' && !isLast) {
-      violations.push(
-        `Stroke ${stroke.order} ('${stroke.id}') is a Shirorekha top bar but is not the final stroke.`
-      );
-    }
-    if (isLast && stroke.type !== 'shirorekha') {
-      violations.push(
-        `Final stroke ${stroke.order} ('${stroke.id}') has type '${stroke.type}'; the Shirorekha top bar must be strictly last.`
-      );
-    }
-
-    if (priority > maxPrioritySeen) {
-      maxPrioritySeen = priority;
-    }
-  });
-
-  return {
-    valid: violations.length === 0,
-    violations,
-  };
-}
+// Stroke-order validation lives in @akshara/data so dataset validation and the
+// evaluator share one implementation; re-exported here for API compatibility.
+export { validateStrokeTopology };
 
 /**
  * Headless stateful evaluator for interactive Devanagari stroke tracing.

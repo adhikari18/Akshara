@@ -234,6 +234,88 @@ export function hasSplitShirorekha(dataset: Pick<LetterStrokeDataset, 'shirorekh
   return (dataset.shirorekha.segments?.length ?? 0) > 1;
 }
 
+export const TOPOLOGY_PRIORITY: Record<StrokeTopologyType, number> = {
+  loop: 1,
+  curve: 1,
+  diagonal: 1,
+  stem: 2,
+  shirorekha: 3,
+};
+
+/**
+ * Enforces the Devanagari topological stroke order invariant:
+ * 1. Loop / curve / diagonal body strokes must come first (priority 1).
+ * 2. Vertical stems (Khadi Pai) come second (priority 2).
+ * 3. Horizontal Shirorekha top bar must strictly be the final stroke (priority 3).
+ *
+ * Body strokes drawn after a stem are allowed only as upper-crown marks (at or
+ * above the headline) or marks entirely to the right of the last stem.
+ * `headlineY` defaults to the Shirorekha stroke's first waypoint (or 75).
+ */
+export function validateStrokeTopology(strokes: StrokeDefinition[], headlineY?: number): {
+  valid: boolean;
+  violations: string[];
+} {
+  const violations: string[] = [];
+
+  if (strokes.length < 2) {
+    violations.push('A Devanagari character definition must contain at least 2 strokes.');
+    return { valid: false, violations };
+  }
+
+  let maxPrioritySeen = 0;
+  let lastStemX = -Infinity;
+  const shirorekhaStroke = strokes[strokes.length - 1];
+  const resolvedHeadlineY =
+    headlineY ??
+    (shirorekhaStroke?.type === 'shirorekha' && shirorekhaStroke.waypoints.length > 0
+      ? shirorekhaStroke.waypoints[0].y
+      : 75);
+
+  strokes.forEach((stroke, index) => {
+    let priority = TOPOLOGY_PRIORITY[stroke.type];
+    const isLast = index === strokes.length - 1;
+
+    if (stroke.type === 'stem') {
+      lastStemX = Math.max(lastStemX, ...stroke.waypoints.map((w) => w.x));
+    } else if (
+      maxPrioritySeen === 2 &&
+      (stroke.type === 'loop' || stroke.type === 'curve' || stroke.type === 'diagonal')
+    ) {
+      const isUpperCrownMark = stroke.waypoints.every((wp) => wp.y <= resolvedHeadlineY + 4);
+      const isRightPostStemMark = stroke.waypoints.every((wp) => wp.x > lastStemX);
+      if (isUpperCrownMark || isRightPostStemMark) {
+        priority = 2;
+      }
+    }
+
+    if (priority < maxPrioritySeen) {
+      violations.push(
+        `Stroke ${stroke.order} ('${stroke.id}', type '${stroke.type}') violates Devanagari topological order by appearing after a higher-priority stroke stage.`
+      );
+    }
+    if (stroke.type === 'shirorekha' && !isLast) {
+      violations.push(
+        `Stroke ${stroke.order} ('${stroke.id}') is a Shirorekha top bar but is not the final stroke.`
+      );
+    }
+    if (isLast && stroke.type !== 'shirorekha') {
+      violations.push(
+        `Final stroke ${stroke.order} ('${stroke.id}') has type '${stroke.type}'; the Shirorekha top bar must be strictly last.`
+      );
+    }
+
+    if (priority > maxPrioritySeen) {
+      maxPrioritySeen = priority;
+    }
+  });
+
+  return {
+    valid: violations.length === 0,
+    violations,
+  };
+}
+
 export interface DatasetValidationResult {
   valid: boolean;
   errors: string[];
@@ -258,12 +340,7 @@ export function validateLetterDataset(dataset: LetterStrokeDataset): DatasetVali
   if (!dataset.shirorekha.enforcedLast) {
     errors.push(`Letter '${dataset.id}' must enforce shirorekha.enforcedLast = true.`);
   }
-  if (dataset.strokes.length < 2) {
-    errors.push(`Letter '${dataset.id}' must define at least 2 strokes.`);
-  }
 
-  let seenStem = false;
-  let lastStemX = -Infinity;
   dataset.strokes.forEach((stroke, idx) => {
     const expectedOrder = idx + 1;
     if (stroke.order !== expectedOrder) {
@@ -280,35 +357,10 @@ export function validateLetterDataset(dataset: LetterStrokeDataset): DatasetVali
         errors.push(`Stroke '${stroke.id}' waypoint ${wpIdx} (${wp.x}, ${wp.y}) out of 300x300 bounds.`);
       }
     });
-
-    const isLastStroke = idx === dataset.strokes.length - 1;
-    if (stroke.type === 'shirorekha' && !isLastStroke) {
-      errors.push(
-        `Topological violation in '${dataset.id}': Shirorekha stroke '${stroke.id}' appears at step ${stroke.order} instead of the final stroke.`
-      );
-    }
-    if (isLastStroke && stroke.type !== 'shirorekha') {
-      errors.push(
-        `Topological violation in '${dataset.id}': Final stroke '${stroke.id}' has type '${stroke.type}' instead of 'shirorekha'.`
-      );
-    }
-    if (stroke.type === 'stem') {
-      seenStem = true;
-      lastStemX = Math.max(lastStemX, ...stroke.waypoints.map((w) => w.x));
-    }
-    if ((stroke.type === 'loop' || stroke.type === 'curve' || stroke.type === 'diagonal') && seenStem) {
-      const isUpperCrownMark = stroke.waypoints.every(
-        (wp) => wp.y <= dataset.viewBox.shirorekhaY + 4
-      );
-      const isRightPostStemMark = stroke.waypoints.every((wp) => wp.x > lastStemX);
-      if (!isUpperCrownMark && !isRightPostStemMark) {
-        errors.push(
-          `Topological violation in '${dataset.id}': Body stroke '${stroke.id}' (${stroke.type}) appears after vertical stem.`
-        );
-      }
-    }
   });
 
+  const topology = validateStrokeTopology(dataset.strokes, dataset.viewBox.shirorekhaY);
+  errors.push(...topology.violations.map((v) => `Topological violation in '${dataset.id}': ${v}`));
   errors.push(...validateShirorekhaGeometry(dataset));
 
   return {
