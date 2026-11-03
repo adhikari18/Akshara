@@ -1,0 +1,87 @@
+{
+  "id": "wa",
+  "character": "व",
+  "unicode": "U+0935",
+  "category": "vyanjan",
+  "varga": "अन्तस्थ (Antastha / Approximant)",
+  "phonetics": {
+    "romanized": "wa",
+    "ipa": "/wʌ/",
+    "nepaliName": "वकिल व",
+    "audioPrompt": "व — वकिल व",
+    "articulationTip": "In Nepali व is usually a 'w' sound with rounded lips (in some words it sounds like 'b'), as in 'वन' (wan - forest)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 75,
+    "endX": 227,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "wa-stroke-1",
+      "order": 1,
+      "type": "loop",
+      "label": "Round Bowl (गोलो घेरा)",
+      "nepaliInstruction": "माथिबाट बायाँतिर गोलो घुमाउँदै तलबाट ठाडो धर्कोसम्म जोड्नुहोस्; ब जस्तो भित्र छड्के धर्को हुँदैन।",
+      "englishInstruction": "Start at the top, curve left and around the bowl into the stem; unlike ब there is no inner diagonal.",
+      "svgPath": "M 152 125 C 115 120, 100 140, 100 158 C 100 180, 118 190, 140 190 C 158 190, 172 183, 183 172",
+      "directionHint": "counter-clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 152, "y": 125, "label": "Loop Start" },
+        { "index": 1, "x": 110.3, "y": 134.4, "label": "Upper Left Arc" },
+        { "index": 2, "x": 104.5, "y": 174.7, "label": "Lower Left Arc" },
+        { "index": 3, "x": 143.8, "y": 189.9, "label": "Lower Arc" },
+        { "index": 4, "x": 183, "y": 172, "label": "Loop Closure" }
+      ]
+    },
+    {
+      "id": "wa-stroke-2",
+      "order": 2,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 185 75 L 185 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 185, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 185, "y": 116.3, "label": "Upper Spine" },
+        { "index": 2, "x": 185, "y": 157.5, "label": "Middle Spine" },
+        { "index": 3, "x": 185, "y": 198.8, "label": "Lower Spine" },
+        { "index": 4, "x": 185, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "wa-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 75 75 L 227 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 75, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 113, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 151, "y": 75, "label": "Center Headline" },
+        { "index": 3, "x": 189, "y": 75, "label": "Right Headline" },
+        { "index": 4, "x": 227, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "वन", "romanized": "wan", "meaning": "Forest", "emoji": "🌲" },
+    { "word": "वकिल", "romanized": "wakil", "meaning": "Lawyer", "emoji": "⚖️" },
+    { "word": "वर्षा", "romanized": "warsha", "meaning": "Rain", "emoji": "🌧️" }
+  ]
+}

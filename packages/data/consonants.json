@@ -387,7 +387,7 @@
     "sampleWordRomanized": "yaak",
     "sampleWordMeaning": "Himalayan Yak",
     "emoji": "🐃",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ra",
@@ -402,7 +402,7 @@
     "sampleWordRomanized": "rath",
     "sampleWordMeaning": "Chariot",
     "emoji": "🛞",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "la",
@@ -417,7 +417,7 @@
     "sampleWordRomanized": "lasun",
     "sampleWordMeaning": "Garlic",
     "emoji": "🧄",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "wa",
@@ -432,7 +432,7 @@
     "sampleWordRomanized": "wan",
     "sampleWordMeaning": "Forest",
     "emoji": "🌲",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "sha",

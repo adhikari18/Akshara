@@ -1,0 +1,105 @@
+{
+  "id": "la",
+  "character": "ल",
+  "unicode": "U+0932",
+  "category": "vyanjan",
+  "varga": "अन्तस्थ (Antastha / Approximant)",
+  "phonetics": {
+    "romanized": "la",
+    "ipa": "/lʌ/",
+    "nepaliName": "लसुन ल",
+    "audioPrompt": "ल — लसुन ल",
+    "articulationTip": "Alveolar lateral: a clear 'l' with the tongue tip on the ridge behind the upper teeth, as in 'लसुन' (lasun - garlic)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 55,
+    "endX": 245,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "la-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Inner Stub & Left Loop (भित्री धर्को र बायाँ घुम्ती)",
+      "nepaliInstruction": "बीचको छोटो धर्कोबाट माथि उठी बायाँतिर ठूलो घुम्ती बनाउँदै तल पुच्छरमा टुङ्ग्याउनुहोस्।",
+      "englishInstruction": "Start at the bottom of the inner stub, rise up, arc over to the left and sweep down into the tail.",
+      "svgPath": "M 145 188 L 145 145 C 145 128, 125 125, 110 128 C 88 133, 80 160, 82 180 C 85 205, 98 222, 118 233",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 145, "y": 188, "label": "Curve Start" },
+        { "index": 1, "x": 145, "y": 144.2, "label": "Upper Right Arc" },
+        { "index": 2, "x": 110.3, "y": 127.9, "label": "Upper Arc" },
+        { "index": 3, "x": 83.3, "y": 159.4, "label": "Upper Left Arc" },
+        { "index": 4, "x": 88.1, "y": 202.1, "label": "Lower Left Arc" },
+        { "index": 5, "x": 118, "y": 233, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "la-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Right Arch (दायाँ मेहराब)",
+      "nepaliInstruction": "भित्री धर्कोको टुप्पोबाट दायाँतिर मेहराब बनाउँदै ठाडो धर्कोसम्म जोड्नुहोस्।",
+      "englishInstruction": "From the top of the stub, draw the small arch over to the stem.",
+      "svgPath": "M 145 150 C 150 130, 165 127, 175 127 C 190 127, 200 133, 205 142",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 145, "y": 150, "label": "Curve Start" },
+        { "index": 1, "x": 172, "y": 127.1, "label": "Upper Arc" },
+        { "index": 2, "x": 205, "y": 142, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "la-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 206 75 L 206 237",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 206, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 206, "y": 115.5, "label": "Upper Spine" },
+        { "index": 2, "x": 206, "y": 156, "label": "Middle Spine" },
+        { "index": 3, "x": 206, "y": 196.5, "label": "Lower Spine" },
+        { "index": 4, "x": 206, "y": 237, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "la-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 55 75 L 245 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 55, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 93, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 131, "y": 75, "label": "Center Headline 1" },
+        { "index": 3, "x": 169, "y": 75, "label": "Center Headline 2" },
+        { "index": 4, "x": 207, "y": 75, "label": "Right Headline" },
+        { "index": 5, "x": 245, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "लसुन", "romanized": "lasun", "meaning": "Garlic", "emoji": "🧄" },
+    { "word": "लौरो", "romanized": "lauro", "meaning": "Walking Stick", "emoji": "🦯" },
+    { "word": "लुगा", "romanized": "luga", "meaning": "Clothes", "emoji": "👕" }
+  ]
+}
