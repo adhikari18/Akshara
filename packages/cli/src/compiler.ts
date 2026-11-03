@@ -239,7 +239,7 @@ export function compileGlyph(spec: GlyphSpec, options: CompileOptions = {}): Rec
       nepaliInstruction: s.nepaliInstruction ?? '',
       englishInstruction: s.englishInstruction ?? '',
       svgPath: s.svgPath,
-      directionHint: s.directionHint ?? inferDirectionHint(s.type, pts),
+      directionHint: s.directionHint ?? inferDirectionHint(s.type, sampleEquidistant(segments, 64)),
       toleranceRadius: s.toleranceRadius ?? options.toleranceRadius ?? (s.type === 'stem' || s.type === 'shirorekha' ? 26 : 28),
       waypoints: pts.map((p, idx) => ({ index: idx, x: round(p.x), y: round(p.y), label: labels[idx]! })),
     };

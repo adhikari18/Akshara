@@ -149,3 +149,15 @@ describe('describeWaypoints', () => {
     ] })).toThrow(/waypointLabels has 1 entries/);
   });
 });
+
+describe('direction inference for small loops', () => {
+  it('uses dense geometry, not the sparse waypoints, to detect winding', () => {
+    const base = { id: 'dot', character: 'ङ', unicode: 'U+0919', category: 'vyanjan' as const };
+    const dot = (d: string) =>
+      (compileGlyph({ ...base, strokes: [{ type: 'loop', svgPath: d }, { type: 'shirorekha', svgPath: 'M 60 75 L 240 75' }] }) as any)
+        .strokes[0].directionHint;
+    // Top -> right -> bottom -> left is clockwise on screen; only 3 waypoints are sampled.
+    expect(dot('M 210 138 C 224 138, 224 158, 210 158 C 196 158, 196 138, 210 138')).toBe('clockwise-loop');
+    expect(dot('M 210 138 C 196 138, 196 158, 210 158 C 224 158, 224 138, 210 138')).toBe('counter-clockwise-loop');
+  });
+});
