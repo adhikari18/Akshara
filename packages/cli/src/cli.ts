@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync, writeFileSync } from 'node:fs';
+import { validateLetterDataset, type LetterStrokeDataset } from '@akshara/data';
 import { compileGlyph, type GlyphSpec } from './compiler.js';
 import { pathBoundingBox, pathLength, sampleEquidistant } from './geometry.js';
 import { parseSvgPath } from './svg-path.js';
@@ -35,7 +36,12 @@ export function run(argv: string[]): number {
       const spacing = spacingRaw === undefined ? undefined : Number(spacingRaw);
       if (spacing !== undefined && !(spacing > 0)) throw new Error('--spacing must be a positive number.');
       const spec = JSON.parse(readFileSync(input, 'utf8')) as GlyphSpec;
-      const json = JSON.stringify(compileGlyph(spec, { spacing }), null, 2) + '\n';
+      const compiled = compileGlyph(spec, { spacing });
+      const { valid, errors } = validateLetterDataset(compiled as unknown as LetterStrokeDataset);
+      if (!valid) {
+        throw new Error(`Compiled '${spec.id}' failed dataset validation:\n   - ${errors.join('\n   - ')}`);
+      }
+      const json = JSON.stringify(compiled, null, 2) + '\n';
       const out = flag(rest, '-o');
       if (out) {
         writeFileSync(out, json);

@@ -1,15 +1,10 @@
+import type { DirectionHint, StrokeTopologyType } from '@akshara/data';
 import { pathBoundingBox, pathLength, sampleEquidistant } from './geometry.js';
 import { parseSvgPath, splitSubpaths, type Point, type Segment } from './svg-path.js';
 
-export type StrokeType = 'loop' | 'curve' | 'diagonal' | 'stem' | 'shirorekha';
-export type DirectionHint =
-  | 'counter-clockwise-loop'
-  | 'clockwise-loop'
-  | 'top-to-bottom'
-  | 'left-to-right'
-  | 'down-and-right-curve'
-  | 'diagonal-down-right'
-  | 'diagonal-down-left';
+// Re-use the canonical dataset types so the compiler cannot drift from @akshara/data.
+export type StrokeType = StrokeTopologyType;
+export type { DirectionHint };
 
 /** Authoring input for one stroke: only the SVG path and type are mandatory. */
 export interface StrokeSpec {
