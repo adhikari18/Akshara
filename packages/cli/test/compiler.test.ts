@@ -83,3 +83,33 @@ describe('compiler guards', () => {
     expect(waypointCountFor(165, 45)).toBe(5);
   });
 });
+
+describe('split Shirorekha compilation', () => {
+  const ga = JSON.parse(readFileSync(fileURLToPath(new URL('../../data/strokes/ga.json', import.meta.url)), 'utf8'));
+  const spec: GlyphSpec = {
+    id: ga.id,
+    character: ga.character,
+    unicode: ga.unicode,
+    category: ga.category,
+    strokes: ga.strokes.map((s: any) => ({ type: s.type, svgPath: s.svgPath })),
+  };
+  const out = compileGlyph(spec) as any;
+
+  it('derives headline segments from a multi-subpath Shirorekha', () => {
+    expect(out.shirorekha).toEqual(ga.shirorekha);
+  });
+
+  it('places waypoints on both ends of each segment and none in the gap', () => {
+    const xs = out.strokes.at(-1).waypoints.map((w: any) => w.x);
+    for (const seg of ga.shirorekha.segments) {
+      expect(xs).toContain(seg.startX);
+      expect(xs).toContain(seg.endX);
+    }
+    expect(xs.some((x: number) => x > 140 && x < 170)).toBe(false);
+  });
+
+  it('rejects multiple subpaths in non-headline strokes', () => {
+    const bad: GlyphSpec = { ...spec, strokes: [{ type: 'stem', svgPath: 'M 0 0 L 0 10 M 5 0 L 5 10' }, spec.strokes.at(-1)!] };
+    expect(() => compileGlyph(bad)).toThrow(/only a split Shirorekha/);
+  });
+});

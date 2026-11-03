@@ -1,5 +1,5 @@
 import { pathBoundingBox, pathLength, sampleEquidistant } from './geometry.js';
-import { parseSvgPath, type Point } from './svg-path.js';
+import { parseSvgPath, splitSubpaths, type Point, type Segment } from './svg-path.js';
 
 export type StrokeType = 'loop' | 'curve' | 'diagonal' | 'stem' | 'shirorekha';
 export type DirectionHint =
@@ -32,7 +32,13 @@ export interface GlyphSpec {
   category: 'swor' | 'vyanjan' | 'samyukta';
   strokes: StrokeSpec[];
   viewBox?: { width: 300; height: 300; shirorekhaY: number; baselineY: number };
-  shirorekha?: { enforcedLast: true; startX: number; endX: number; y: number };
+  shirorekha?: {
+    enforcedLast: true;
+    startX: number;
+    endX: number;
+    y: number;
+    segments?: Array<{ startX: number; endX: number }>;
+  };
   [extra: string]: unknown;
 }
 
@@ -82,6 +88,23 @@ export function waypointCountFor(length: number, spacing: number): number {
   return Math.max(3, Math.ceil(length / spacing) + 1);
 }
 
+/**
+ * Sample waypoints for a stroke. Single-subpath strokes are sampled at equal
+ * arc length. A split Shirorekha (one subpath per headline segment) is sampled
+ * per subpath so every segment starts and ends on a waypoint and no waypoint
+ * falls inside a gap.
+ */
+export function sampleStroke(segments: Segment[], count: number): Point[] {
+  const subpaths = splitSubpaths(segments);
+  if (subpaths.length === 1) return sampleEquidistant(segments, count);
+  const lengths = subpaths.map(pathLength);
+  const total = lengths.reduce((a, b) => a + b, 0);
+  return subpaths.flatMap((sp, i) => {
+    const n = Math.max(2, Math.round((count * lengths[i]!) / total));
+    return sampleEquidistant(sp, n);
+  });
+}
+
 export interface CompiledStroke {
   id: string;
   order: number;
@@ -120,9 +143,15 @@ export function compileGlyph(spec: GlyphSpec, options: CompileOptions = {}): Rec
   let maxY = -Infinity;
   const strokes: CompiledStroke[] = spec.strokes.map((s, i) => {
     const segments = parseSvgPath(s.svgPath);
+    const subpathCount = splitSubpaths(segments).length;
+    if (subpathCount > 1 && s.type !== 'shirorekha') {
+      throw new Error(
+        `Stroke ${i + 1} of '${spec.id}': only a split Shirorekha may contain multiple subpaths (found ${subpathCount}).`
+      );
+    }
     const count = s.waypointCount ?? waypointCountFor(pathLength(segments), spacing);
     if (count < 3) throw new Error(`Stroke ${i + 1} of '${spec.id}': waypointCount must be >= 3.`);
-    const pts = sampleEquidistant(segments, count);
+    const pts = sampleStroke(segments, count);
     maxY = Math.max(maxY, pathBoundingBox(segments).maxY);
     const order = i + 1;
     return {
@@ -144,7 +173,20 @@ export function compileGlyph(spec: GlyphSpec, options: CompileOptions = {}): Rec
   const bar = spec.strokes[lastIdx]!.type === 'shirorekha' ? parseSvgPath(spec.strokes[lastIdx]!.svgPath) : null;
   if (!spec.shirorekha && bar) {
     const box = pathBoundingBox(bar);
-    out.shirorekha = { enforcedLast: true, startX: round(box.minX), endX: round(box.maxX), y: round(box.minY) };
+    const shirorekha: Record<string, unknown> = {
+      enforcedLast: true,
+      startX: round(box.minX),
+      endX: round(box.maxX),
+      y: round(box.minY),
+    };
+    const pieces = splitSubpaths(bar);
+    if (pieces.length > 1) {
+      shirorekha.segments = pieces.map((p) => {
+        const b = pathBoundingBox(p);
+        return { startX: round(b.minX), endX: round(b.maxX) };
+      });
+    }
+    out.shirorekha = shirorekha;
   }
   if (!spec.viewBox && bar) {
     const box = pathBoundingBox(bar);

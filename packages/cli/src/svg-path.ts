@@ -147,3 +147,13 @@ export function parseSvgPath(d: string): Segment[] {
   }
   return segments;
 }
+
+/** Split a parsed path into independent subpaths, each beginning with its own M segment. */
+export function splitSubpaths(segments: Segment[]): Segment[][] {
+  const out: Segment[][] = [];
+  for (const seg of segments) {
+    if (seg.type === 'M' || out.length === 0) out.push([]);
+    out[out.length - 1]!.push(seg);
+  }
+  return out;
+}

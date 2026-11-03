@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { parseSvgPath } from '../src/svg-path.js';
+import { parseSvgPath, splitSubpaths } from '../src/svg-path.js';
 
 describe('parseSvgPath', () => {
   it('parses absolute M/L/C commands from the ka loop stroke', () => {
@@ -38,5 +38,13 @@ describe('parseSvgPath', () => {
     expect(() => parseSvgPath('M 0 0 A 5 5 0 0 1 10 10')).toThrow(/arc/i);
     expect(() => parseSvgPath('M 0 0 L 10')).toThrow();
     expect(() => parseSvgPath('10 10')).toThrow();
+  });
+});
+
+describe('splitSubpaths', () => {
+  it('splits on every move-to', () => {
+    const parts = splitSubpaths(parseSvgPath('M 60 75 L 140 75 M 170 75 L 240 75'));
+    expect(parts).toHaveLength(2);
+    expect(parts[1]![0]).toEqual({ type: 'M', to: { x: 170, y: 75 } });
   });
 });
