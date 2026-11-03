@@ -6,19 +6,19 @@ This document outlines the multi-milestone engineering, computational linguistic
 
 | Milestone | Focus | Est. Hours | Done | Progress |
 |---|---|---|---|---|
-| 1 | Devanagari Vector Stroke Dataset | ~35 | 24 | 69% |
+| 1 | Devanagari Vector Stroke Dataset | ~35 | 30 | 86% |
 | 2 | Computational Geometry & Motor-Control Engine | ~21 | 0 | 0% |
 | 3 | *Samyukta Akshara* & *Barakhari* Typography | ~21 | 0 | 0% |
 | 4 | Audio Corpus, Speech DSP & Pronunciation Grading | ~37 | 0 | 0% |
 | 5 | SOV Grammar, *Vibhakti* & Story Reader | ~29 | 0 | 0% |
 | 6 | Spaced Repetition, Offline PWA & Mobile App | ~24 | 0 | 0% |
-| **Total** | | **~167** | **24** | **~14%** |
+| **Total** | | **~167** | **30** | **~18%** |
 
 ---
 
 ## Milestone 1: Complete 49-Letter Devanagari Vector Stroke Dataset + Numerals (`packages/data/strokes/`) (~35 hrs)
 
-`packages/data/strokes/` now provides vector definitions for all 13 *Swor Varna* (`अ` to `अः`) and the first 25 *Vyanjan* (`क` to `म`: *Kanthya*, *Talavya*, *Murdhanya*, *Dantya*, *Oshthya*). This milestone completes the canonical `300x300` vector stroke and waypoint corpus across the entire Nepali Varnamala (13 vowels + 33 consonants + 3 compounds = 49 letters), plus the 10 Nepali numerals:
+`packages/data/strokes/` now provides vector definitions for all 49 letters: the 13 *Swor Varna* (`अ` to `अः`) and the 36 *Vyanjan Varna* (`क` to `ज्ञ`), enforced by `npm run validate:data`. Only the numerals remain. This milestone completes the canonical `300x300` vector stroke and waypoint corpus across the entire Nepali Varnamala (13 vowels + 33 consonants + 3 compounds = 49 letters), plus the 10 Nepali numerals:
 
 - [x] **1.1 Complete Remaining 11 *Swor Varna* (स्वर वर्ण) Stroke Vectors (`इ` to `अः`) (~5 hrs):**
   - Author verified SVG cubic Bézier paths, directional hints, and ordered waypoint arrays for `इ, ई, उ, ऊ, ऋ, ए, ऐ, ओ, औ, अं, अः`, including top-hook *Ekar/Aikar* flags and *Shirbindu/Visarga* marks.
@@ -30,7 +30,7 @@ This document outlines the multi-milestone engineering, computational linguistic
   - Encode stroke topologies for `ङ`, `च, छ, ज, झ, ञ` and `ट, ठ, ड, ढ, ण` enforcing body/loop-first, right-stem (*Khadi Pai*) second where present, and *Shirorekha* strictly last. Note that `ङ, छ, ट, ठ, ड, ढ` have no vertical stem.
 - [x] **1.5 *Dantya* (Dental) & *Oshthya* (Labial) Vyanjan Vectors (`त–न`, `प–म`) (~5 hrs):**
   - Encode stroke topologies for `त, थ, द, ध, न` and `प, फ, ब, भ, म`, handling the inner diagonal slash of `ब`, the split *Shirorekha* of `ध` (using the schema from 1.3), and the partial headlines of `थ` and `भ` whose left elements sit outside the bar.
-- [ ] **1.6 *Antastha*, *Ushma* & *Samyukta* Compound Vectors (`य–ह`, `क्ष, त्र, ज्ञ`) (~6 hrs):**
+- [x] **1.6 *Antastha*, *Ushma* & *Samyukta* Compound Vectors (`य–ह`, `क्ष, त्र, ज्ञ`) (~6 hrs):**
   - Encode stroke sequences for `य, र, ल, व`, `श, ष, स, ह`, and the three canonical Nepali compound letters `क्ष` (`क् + ष`), `त्र` (`त् + र`), and `ज्ञ` (`ज् + ञ`).
 - [ ] **1.7 Nepali Devanagari Numerals (`०` to `९` / सुन्ना देखि नौ) (~5 hrs):**
   - Add a `numerals` category to `letter.schema.json` and author single- and multi-stroke tracing definitions for Nepali numerals `०, १, २, ३, ४, ५, ६, ७, ८, ९`.

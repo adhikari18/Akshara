@@ -39,8 +39,8 @@ Yet today, millions of Nepali diaspora children and early learners lack modern, 
 │ • schema/letter.schema.json           │   │ • src/tracing-evaluator.ts       │
 │ • vowels.json (13 Swor: अ – अः)       │──►│   - Euclidean Waypoint Check:    │
 │ • consonants.json (36 Vyanjan: क – ज्ञ)│   │     √((xp-xw)²+(yp-yw)²) ≤ r_ad  │
-│ • strokes/*.json (38 letters: अ–अः,   │   │   - EMA Child Jitter Smoothing   │
-│   क–म 300x300 SVG + Waypoints)        │   │   - Shirorekha-Last Enforcement  │
+│ • strokes/*.json (all 49: अ–अः,       │   │   - EMA Child Jitter Smoothing   │
+│   क–ज्ञ 300x300 SVG + Waypoints)      │   │   - Shirorekha-Last Enforcement  │
 │ • words.json (कलम, घर, बस, चरा...)    │   │ • src/matra-engine.ts            │
 │ • sentences.json (SOV Corpus)         │   │   - 13-Step Barakhari Fusion     │
 └───────────────────┬───────────────────┘   │   - Orthographic Akshara Split   │
@@ -82,7 +82,7 @@ Akshara/
 │   │   ├── ci.yml                                        # Monorepo build, schema validation, typecheck & Vitest CI
 │   │   └── deploy.yml                                    # Static build & GitHub Pages deployment workflow
 │   └── ISSUE_TEMPLATE/
-│       ├── 01-good-first-issue-stroke-vectors.md         # Seeded issue: Chavarga (च, छ, ज, झ, ञ) stroke vectors
+│       ├── 01-good-first-issue-stroke-vectors.md         # Seeded issue: native-speaker review of stroke vectors
 │       ├── 02-math-frechet-jitter-smoothing.md           # Seeded issue: Discrete Fréchet distance & spline resampling
 │       ├── 03-assets-native-nepali-phonics-audio.md      # Seeded issue: Native Nepali speaker phonics audio pack
 │       └── 04-education-conjunct-akshara-samyukta.md     # Seeded issue: Samyukta Akshara conjunct ligature builder
@@ -93,7 +93,7 @@ Akshara/
 │   │   ├── strokes/
 │   │   │   ├── ka.json                                   # 4-step vector & waypoint definition for "क" (U+0915)
 │   │   │   ├── kha.json                                  # 4-step vector & waypoint definition for "ख" (U+0916)
-│   │   │   └── …                                         # 38 letters so far: all 13 Swor (अ–अः) + Vyanjan क–म
+│   │   │   └── …                                         # All 49 letters: 13 Swor (अ–अः) + 36 Vyanjan (क–ज्ञ)
 │   │   ├── vowels.json                                   # Complete 13 Swor Varna (अ to अः) with Matra mappings
 │   │   ├── consonants.json                               # Complete 36 Vyanjan Varna (क to ज्ञ) with Paninian Varga
 │   │   ├── words.json                                    # 2- and 3-letter noun building blocks (कलम, घर, बस, चरा...)
@@ -185,7 +185,7 @@ We designed `Akshara` so educators, parents, native speakers, and illustrators c
 
 1. **Record Native Nepali Phonics Audio (`assets`):** Record short, clear `.mp3`/`.ogg` clips for the 13 *Swor* and 36 *Vyanjan* characters ([Issue Template #03](./.github/ISSUE_TEMPLATE/03-assets-native-nepali-phonics-audio.md)).
 2. **Add New Vocabulary & SOV Sentences (`education`):** Add everyday Nepali children's words to [`packages/data/words.json`](./packages/data/words.json) or simple Subject-Object-Verb sentences to [`packages/data/sentences.json`](./packages/data/sentences.json).
-3. **Plot Character Stroke Coordinates (`good first issue`):** Add `300x300` waypoint coordinates for new letters in [`packages/data/strokes/`](./packages/data/strokes/) ([Issue Template #01](./.github/ISSUE_TEMPLATE/01-good-first-issue-stroke-vectors.md)).
+3. **Review Character Stroke Vectors (`good first issue`):** Check stroke order, direction, and shape of the letters in [`packages/data/strokes/`](./packages/data/strokes/) against how Nepali is taught by hand ([Issue Template #01](./.github/ISSUE_TEMPLATE/01-good-first-issue-stroke-vectors.md)).
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`ROADMAP.md`](./ROADMAP.md) for full details.
 
