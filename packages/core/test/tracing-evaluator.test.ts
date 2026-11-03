@@ -214,3 +214,39 @@ describe('TracingEvaluator & Vector Geometry Engine', () => {
   });
 });
 
+
+describe('premature Shirorekha detection for strokes that start at the headline', () => {
+  const neckLetter = {
+    ...STROKE_DATASETS.ka,
+    id: 'neck',
+    strokes: [
+      {
+        ...STROKE_DATASETS.ka.strokes[0],
+        id: 'neck-stroke-1',
+        order: 1,
+        type: 'curve' as const,
+        svgPath: 'M 176 75 L 176 122 L 120 140',
+        waypoints: [
+          { index: 0, x: 176, y: 75 },
+          { index: 1, x: 176, y: 117 },
+          { index: 2, x: 120, y: 140 },
+        ],
+      },
+      { ...STROKE_DATASETS.ka.strokes[3], order: 2 },
+    ],
+  };
+
+  it('does not flag a learner following a short neck down from the headline', () => {
+    const evaluator = new TracingEvaluator(neckLetter, { mode: 'standard', smoothingAlpha: 1.0 });
+    for (const y of [75, 85, 96, 105, 117]) {
+      expect(evaluator.evaluatePointerSample({ x: 176, y }).topologicalViolation).toBeNull();
+    }
+  });
+
+  it('still flags a learner sweeping along the headline away from the neck', () => {
+    const evaluator = new TracingEvaluator(neckLetter, { mode: 'standard', smoothingAlpha: 1.0 });
+    evaluator.evaluatePointerSample({ x: 176, y: 75 });
+    evaluator.evaluatePointerSample({ x: 176, y: 117 });
+    expect(evaluator.evaluatePointerSample({ x: 70, y: 76 }).topologicalViolation).not.toBeNull();
+  });
+});

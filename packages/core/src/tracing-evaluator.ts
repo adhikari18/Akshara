@@ -244,6 +244,19 @@ export class TracingEvaluator {
       return null;
     }
 
+    // Strokes that themselves touch the headline (e.g. the short neck of ङ, ट, ड, or the
+    // rising arm of ण) legitimately pass through the headline band. A learner who stays
+    // on such a stroke's own path is not drawing the Shirorekha early.
+    const touchesHeadline = currentStroke.waypoints.some(
+      (wp) => Math.abs(wp.y - shirorekha.y) <= 22
+    );
+    if (
+      touchesHeadline &&
+      distanceToWaypointPolyline(point, currentStroke.waypoints) <= currentStroke.toleranceRadius
+    ) {
+      return null;
+    }
+
     // Check if the current stroke's next target waypoint or just-unlocked waypoint is near the headline
     const nextWp =
       currentStroke.waypoints[Math.max(0, this.unlockedWaypointIndex + 1)] ??
