@@ -94,6 +94,14 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
   const isDrawingRef = useRef<boolean>(false);
   const activeTrailRef = useRef<Point2D[]>([]);
   const particlesRef = useRef<ChalkParticle[]>([]);
+  const autoDemoTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const stopAutoDemoTimer = useCallback(() => {
+    if (autoDemoTimerRef.current !== null) {
+      clearInterval(autoDemoTimerRef.current);
+      autoDemoTimerRef.current = null;
+    }
+  }, []);
 
   const [lastEval, setLastEval] = useState<StrokeStepEvaluation | null>(null);
   const [progress, setProgress] = useState<TracingProgressSummary>(() =>
@@ -290,13 +298,15 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
 
   // Reset evaluator when character or tolerance mode changes
   useEffect(() => {
+    stopAutoDemoTimer();
     evaluatorRef.current = new TracingEvaluator(dataset, { mode: toleranceMode });
     activeTrailRef.current = [];
     particlesRef.current = [];
     setLastEval(null);
     setProgress(evaluatorRef.current.getProgress());
     setIsAutoDemoPlaying(false);
-  }, [dataset, toleranceMode]);
+    return () => stopAutoDemoTimer();
+  }, [dataset, toleranceMode, stopAutoDemoTimer]);
 
   useEffect(() => {
     renderCanvas();
@@ -330,7 +340,7 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     }
   };
 
-  const processPointerSample = (pt: Point2D) => {
+  const processPointerSample = (pt: Point2D): StrokeStepEvaluation => {
     const evaluator = evaluatorRef.current;
     const prevUnlocked = evaluator.getProgress().unlockedWaypointsInCurrentStroke;
     const step = evaluator.evaluatePointerSample(pt);
@@ -342,10 +352,12 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     if (step.topologicalViolation) {
       playTopologicalWarningSound();
     } else if (step.letterCompleted) {
+      isDrawingRef.current = false;
       activeTrailRef.current = [];
       playStrokeSuccessSound(true);
       speakNepaliPhonics(dataset.phonetics.audioPrompt, dataset.phonetics.romanized);
     } else if (step.strokeCompleted) {
+      isDrawingRef.current = false;
       activeTrailRef.current = [];
       playStrokeSuccessSound(false);
     } else if (updatedProgress.unlockedWaypointsInCurrentStroke > prevUnlocked) {
@@ -355,6 +367,7 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     setLastEval(step);
     setProgress(updatedProgress);
     renderCanvas();
+    return step;
   };
 
   const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -362,6 +375,9 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     e.currentTarget.setPointerCapture(e.pointerId);
     isDrawingRef.current = true;
     activeTrailRef.current = [];
+    if (evaluatorRef.current.getProgress().unlockedWaypointsInCurrentStroke === 0) {
+      evaluatorRef.current.resetCurrentStroke();
+    }
     processPointerSample(toCanvasCoords(e));
   };
 
@@ -378,6 +394,7 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
   };
 
   const handleReset = () => {
+    stopAutoDemoTimer();
     setIsAutoDemoPlaying(false);
     evaluatorRef.current.reset();
     activeTrailRef.current = [];
@@ -389,36 +406,67 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
 
   const handlePlayAutoDemo = () => {
     if (isAutoDemoPlaying) return;
+    stopAutoDemoTimer();
     evaluatorRef.current.reset();
     activeTrailRef.current = [];
     particlesRef.current = [];
     setIsAutoDemoPlaying(true);
 
-    // Flatten all strokes into interpolated animation frames
-    const frames: Point2D[] = [];
-    dataset.strokes.forEach((stroke) => {
+    // Build per-stroke interpolated frames so completing one stroke lifts the chalk
+    // cleanly before starting the next stroke (no diagonal jump trail across strokes).
+    const strokeFrames: Point2D[][] = dataset.strokes.map((stroke) => {
+      const pts: Point2D[] = [];
+      const steps = 8;
       for (let i = 0; i < stroke.waypoints.length - 1; i++) {
         const a = stroke.waypoints[i];
         const b = stroke.waypoints[i + 1];
-        const steps = 8;
-        for (let s = 0; s <= steps; s++) {
+        for (let s = i === 0 ? 0 : 1; s <= steps; s++) {
           const t = s / steps;
-          frames.push({
+          pts.push({
             x: a.x + (b.x - a.x) * t,
             y: a.y + (b.y - a.y) * t,
           });
         }
       }
+      // Repeat final endpoint once so EMA smoothing converges within strict tolerance
+      const lastWp = stroke.waypoints[stroke.waypoints.length - 1];
+      pts.push({ x: lastWp.x, y: lastWp.y });
+      return pts;
     });
 
+    let strokeIdx = 0;
     let frameIdx = 0;
-    const interval = setInterval(() => {
-      if (frameIdx >= frames.length) {
-        clearInterval(interval);
+    let pauseTicks = 0;
+
+    autoDemoTimerRef.current = setInterval(() => {
+      if (pauseTicks > 0) {
+        pauseTicks -= 1;
+        return;
+      }
+      if (strokeIdx >= strokeFrames.length) {
+        stopAutoDemoTimer();
         setIsAutoDemoPlaying(false);
         return;
       }
-      processPointerSample(frames[frameIdx]);
+      const currentFrames = strokeFrames[strokeIdx];
+      const pt = currentFrames[Math.min(frameIdx, currentFrames.length - 1)];
+      const step = processPointerSample(pt);
+
+      if (step.letterCompleted) {
+        stopAutoDemoTimer();
+        setIsAutoDemoPlaying(false);
+        return;
+      }
+
+      if (step.strokeCompleted || frameIdx >= currentFrames.length - 1) {
+        activeTrailRef.current = [];
+        renderCanvas();
+        strokeIdx += 1;
+        frameIdx = 0;
+        pauseTicks = 5; // Brief pen-lift pause (~175ms) between separate strokes
+        return;
+      }
+
       frameIdx += 1;
     }, 35);
   };
