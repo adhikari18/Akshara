@@ -13,12 +13,13 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspace=@akshara/data && npm run build --workspace=@akshara/core && npm run build --workspace=@akshara/web",
+    "build": "npm run build --workspace=@akshara/data && npm run build --workspace=@akshara/core && npm run build --workspace=@akshara/cli && npm run build --workspace=@akshara/web",
     "test": "vitest run",
     "test:watch": "vitest",
     "dev": "npm run dev --workspace=@akshara/web",
-    "typecheck": "npm run typecheck --workspace=@akshara/data && npm run typecheck --workspace=@akshara/core && npm run typecheck --workspace=@akshara/web",
-    "validate:data": "node packages/data/dist/validate-cli.js"
+    "typecheck": "npm run typecheck --workspace=@akshara/data && npm run typecheck --workspace=@akshara/core && npm run typecheck --workspace=@akshara/cli && npm run typecheck --workspace=@akshara/web",
+    "validate:data": "node packages/data/dist/validate-cli.js",
+    "akshara": "node packages/cli/dist/cli.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
@@ -29,4 +30,3 @@
     "node": ">=20.0.0"
   }
 }
-
