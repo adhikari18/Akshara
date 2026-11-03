@@ -1,0 +1,101 @@
+{
+  "id": "bha",
+  "character": "भ",
+  "unicode": "U+092D",
+  "category": "vyanjan",
+  "varga": "ओष्ठ्य (Oshthya / Labial)",
+  "phonetics": {
+    "romanized": "bha",
+    "ipa": "/bʱʌ/",
+    "nepaliName": "भालु भ",
+    "audioPrompt": "भ — भालु भ",
+    "articulationTip": "Voiced breathy bilabial stop: say ब with a breathy murmur, as in 'भालु' (bhalu - bear)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 160,
+    "endX": 230,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "bha-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Hooked Left Arm & Foot (अंकुशे बायाँ हात र खुट्टा)",
+      "nepaliInstruction": "माथि बायाँबाट दायाँ गई तल झर्नुहोस् र तल सानो खुट्टा बनाउनुहोस्।",
+      "englishInstruction": "Start at the top left, turn down the hooked arm and finish with the small foot.",
+      "svgPath": "M 72 80 L 100 80 C 110 80, 113 88, 113 100 L 113 158 C 95 165, 98 190, 120 192",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 72, "y": 80, "label": "Curve Start" },
+        { "index": 1, "x": 110.5, "y": 85.9, "label": "Upper Right Arc" },
+        { "index": 2, "x": 113, "y": 126.3, "label": "Right Arc" },
+        { "index": 3, "x": 105.6, "y": 163, "label": "Lower Right Arc" },
+        { "index": 4, "x": 120, "y": 192, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "bha-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Middle Crossbar (बीचको तेर्सो धर्को)",
+      "nepaliInstruction": "बीचको तेर्सो धर्को बायाँबाट दायाँ ठाडो धर्कोसम्म तान्नुहोस्।",
+      "englishInstruction": "Draw the middle crossbar from the left arm to the stem.",
+      "svgPath": "M 113 161 L 190 161",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 113, "y": 161, "label": "Curve Start" },
+        { "index": 1, "x": 151.5, "y": 161, "label": "Center Point" },
+        { "index": 2, "x": 190, "y": 161, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "bha-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 190 75 L 190 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 190, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 190, "y": 116.3, "label": "Upper Spine" },
+        { "index": 2, "x": 190, "y": 157.5, "label": "Middle Spine" },
+        { "index": 3, "x": 190, "y": 198.8, "label": "Lower Spine" },
+        { "index": 4, "x": 190, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "bha-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Short Shirorekha (छोटो शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा ठाडो धर्कोमाथि मात्र छोटो शिरोरेखा तान्नुहोस्; बायाँको अंकुश छुट्टै रहन्छ।",
+      "englishInstruction": "Finish with the short Shirorekha over the stem only; the hooked left arm stays separate.",
+      "svgPath": "M 160 75 L 230 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 160, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 195, "y": 75, "label": "Center Headline" },
+        { "index": 2, "x": 230, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "भालु", "romanized": "bhalu", "meaning": "Bear", "emoji": "🐻" },
+    { "word": "भात", "romanized": "bhat", "meaning": "Cooked Rice", "emoji": "🍚" },
+    { "word": "भाँडा", "romanized": "bhanda", "meaning": "Cooking Pot", "emoji": "🍲" }
+  ]
+}

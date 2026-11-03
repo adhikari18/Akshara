@@ -312,7 +312,7 @@
     "sampleWordRomanized": "parewa",
     "sampleWordMeaning": "Pigeon",
     "emoji": "🕊️",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "pha",
@@ -327,7 +327,7 @@
     "sampleWordRomanized": "phal",
     "sampleWordMeaning": "Fruit",
     "emoji": "🍎",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ba",
@@ -342,7 +342,7 @@
     "sampleWordRomanized": "bas",
     "sampleWordMeaning": "Bus",
     "emoji": "🚌",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "bha",
@@ -357,7 +357,7 @@
     "sampleWordRomanized": "bhalu",
     "sampleWordMeaning": "Bear",
     "emoji": "🐻",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ma",
@@ -372,7 +372,7 @@
     "sampleWordRomanized": "machha",
     "sampleWordMeaning": "Fish",
     "emoji": "🐟",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ya",
