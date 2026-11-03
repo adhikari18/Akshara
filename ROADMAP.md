@@ -6,13 +6,13 @@ This document outlines the multi-milestone engineering, computational linguistic
 
 | Milestone | Focus | Est. Hours | Done | Progress |
 |---|---|---|---|---|
-| 1 | Devanagari Vector Stroke Dataset | ~35 | 5 | 14% |
+| 1 | Devanagari Vector Stroke Dataset | ~35 | 10 | 29% |
 | 2 | Computational Geometry & Motor-Control Engine | ~21 | 0 | 0% |
 | 3 | *Samyukta Akshara* & *Barakhari* Typography | ~21 | 0 | 0% |
 | 4 | Audio Corpus, Speech DSP & Pronunciation Grading | ~37 | 0 | 0% |
 | 5 | SOV Grammar, *Vibhakti* & Story Reader | ~29 | 0 | 0% |
 | 6 | Spaced Repetition, Offline PWA & Mobile App | ~24 | 0 | 0% |
-| **Total** | | **~167** | **5** | **~3%** |
+| **Total** | | **~167** | **10** | **~6%** |
 
 ---
 
@@ -22,7 +22,7 @@ This document outlines the multi-milestone engineering, computational linguistic
 
 - [x] **1.1 Complete Remaining 11 *Swor Varna* (स्वर वर्ण) Stroke Vectors (`इ` to `अः`) (~5 hrs):**
   - Author verified SVG cubic Bézier paths, directional hints, and ordered waypoint arrays for `इ, ई, उ, ऊ, ऋ, ए, ऐ, ओ, औ, अं, अः`, including top-hook *Ekar/Aikar* flags and *Shirbindu/Visarga* marks.
-- [ ] **1.2 Automated SVG-to-Waypoint Compiler CLI (`@akshara/cli`) (~5 hrs):**
+- [x] **1.2 Automated SVG-to-Waypoint Compiler CLI (`@akshara/cli`) (~5 hrs):**
   - Build a CLI utility that parses raw SVG `<path d="...">` glyphs using cubic Bézier arc-length quadrature and automatically samples equidistant waypoints and bounding boxes, so the remaining 36 letters and 10 numerals can be authored quickly.
 - [ ] **1.3 Split/Partial *Shirorekha* Schema Extension (~3 hrs):**
   - Extend the `shirorekha` metadata in `letter.schema.json` (currently a single `shirorekhaY` full-width bar) to support split/partial headline spans required by letters with an open upper-left loop (`ख, ग, ण, थ, ध, भ, श`), and migrate existing `kha.json` / `ga.json` definitions.
