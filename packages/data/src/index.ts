@@ -380,7 +380,9 @@ export function validateStrokeTopology(strokes: StrokeDefinition[], headlineY?: 
       (stroke.type === 'loop' || stroke.type === 'curve' || stroke.type === 'diagonal')
     ) {
       const isUpperCrownMark = stroke.waypoints.every((wp) => wp.y <= resolvedHeadlineY + 4);
-      const isRightPostStemMark = stroke.waypoints.every((wp) => wp.x > lastStemX);
+      const isRightPostStemMark =
+        stroke.waypoints.every((wp) => wp.x >= lastStemX) &&
+        stroke.waypoints.some((wp) => wp.x > lastStemX);
       if (isUpperCrownMark || isRightPostStemMark) {
         priority = 2;
       }

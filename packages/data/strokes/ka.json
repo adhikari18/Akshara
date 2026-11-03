@@ -45,23 +45,6 @@
     {
       "id": "ka-stroke-2",
       "order": 2,
-      "type": "curve",
-      "label": "Right Curved Hook (दायाँ अंकुश)",
-      "nepaliInstruction": "बीचबाट दायाँतिर घुमाउरो पुच्छर तलतिर तान्नुहोस्।",
-      "englishInstruction": "Branch out from the center to form the right curved hook sweeping down.",
-      "svgPath": "M 150 145 C 182 122, 222 132, 225 168 C 227 195, 210 210, 195 215",
-      "directionHint": "down-and-right-curve",
-      "toleranceRadius": 28,
-      "waypoints": [
-        { "index": 0, "x": 150, "y": 145, "label": "Hook Origin" },
-        { "index": 1, "x": 196, "y": 132, "label": "Right Arch Crest" },
-        { "index": 2, "x": 225, "y": 168, "label": "Right Outer Curve" },
-        { "index": 3, "x": 195, "y": 215, "label": "Hook Tip" }
-      ]
-    },
-    {
-      "id": "ka-stroke-3",
-      "order": 3,
       "type": "stem",
       "label": "Central Vertical Stem (ठाडो धर्को / खडी पाई)",
       "nepaliInstruction": "माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
@@ -74,6 +57,23 @@
         { "index": 1, "x": 150, "y": 130, "label": "Upper Spine" },
         { "index": 2, "x": 150, "y": 185, "label": "Lower Spine" },
         { "index": 3, "x": 150, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "ka-stroke-3",
+      "order": 3,
+      "type": "curve",
+      "label": "Right Curved Hook (दायाँ अंकुश)",
+      "nepaliInstruction": "बीचबाट दायाँतिर घुमाउरो पुच्छर तलतिर तान्नुहोस्।",
+      "englishInstruction": "Branch out from the center to form the right curved hook sweeping down.",
+      "svgPath": "M 150 145 C 182 122, 222 132, 225 168 C 227 195, 210 210, 195 215",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 150, "y": 145, "label": "Hook Origin" },
+        { "index": 1, "x": 196, "y": 132, "label": "Right Arch Crest" },
+        { "index": 2, "x": 225, "y": 168, "label": "Right Outer Curve" },
+        { "index": 3, "x": 195, "y": 215, "label": "Hook Tip" }
       ]
     },
     {
