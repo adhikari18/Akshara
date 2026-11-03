@@ -39,8 +39,8 @@ Yet today, millions of Nepali diaspora children and early learners lack modern, 
 │ • schema/letter.schema.json           │   │ • src/tracing-evaluator.ts       │
 │ • vowels.json (13 Swor: अ – अः)       │──►│   - Euclidean Waypoint Check:    │
 │ • consonants.json (36 Vyanjan: क – ज्ञ)│   │     √((xp-xw)²+(yp-yw)²) ≤ r_ad  │
-│ • strokes/*.json (ka, kha, ga, gha,   │   │   - EMA Child Jitter Smoothing   │
-│   a, aa 300x300 SVG + Waypoints)      │   │   - Shirorekha-Last Enforcement  │
+│ • strokes/*.json (28 letters: अ–अः,   │   │   - EMA Child Jitter Smoothing   │
+│   क–ण 300x300 SVG + Waypoints)        │   │   - Shirorekha-Last Enforcement  │
 │ • words.json (कलम, घर, बस, चरा...)    │   │ • src/matra-engine.ts            │
 │ • sentences.json (SOV Corpus)         │   │   - 13-Step Barakhari Fusion     │
 └───────────────────┬───────────────────┘   │   - Orthographic Akshara Split   │
@@ -93,10 +93,7 @@ Akshara/
 │   │   ├── strokes/
 │   │   │   ├── ka.json                                   # 4-step vector & waypoint definition for "क" (U+0915)
 │   │   │   ├── kha.json                                  # 4-step vector & waypoint definition for "ख" (U+0916)
-│   │   │   ├── ga.json                                   # 3-step vector & waypoint definition for "ग" (U+0917)
-│   │   │   ├── gha.json                                  # 3-step vector & waypoint definition for "घ" (U+0918)
-│   │   │   ├── a.json                                    # 4-step vector & waypoint definition for "अ" (U+0905)
-│   │   │   └── aa.json                                   # 5-step vector & waypoint definition for "आ" (U+0906)
+│   │   │   └── …                                         # 28 letters so far: all 13 Swor (अ–अः) + Vyanjan क–ण
 │   │   ├── vowels.json                                   # Complete 13 Swor Varna (अ to अः) with Matra mappings
 │   │   ├── consonants.json                               # Complete 36 Vyanjan Varna (क to ज्ञ) with Paninian Varga
 │   │   ├── words.json                                    # 2- and 3-letter noun building blocks (कलम, घर, बस, चरा...)
