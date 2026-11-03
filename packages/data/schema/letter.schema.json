@@ -120,7 +120,7 @@
         "segments": {
           "type": "array",
           "minItems": 2,
-          "description": "Optional split/partial headline spans, ordered left to right. Used by letters whose upper-left element is detached from the headline (e.g. ध, भ) so the glyph is not confused with another letter (ध vs घ, भ vs म). Letters whose headline simply stops short (e.g. थ) need no segments: set startX/endX to the partial span. Omit for a single continuous bar from startX to endX. The first segment must start at startX, the last must end at endX, and the Shirorekha stroke's svgPath must contain one subpath (M ...) per segment.",
+          "description": "Optional split/partial headline spans, ordered left to right. Used by letters whose upper-left element is detached from the headline (e.g. ध) so the glyph is not confused with another letter (ध vs घ). Letters whose headline simply stops short (e.g. थ, भ) need no segments: set startX/endX to the partial span. Omit for a single continuous bar from startX to endX. The first segment must start at startX, the last must end at endX, and the Shirorekha stroke's svgPath must contain one subpath (M ...) per segment.",
           "items": {
             "type": "object",
             "required": ["startX", "endX"],

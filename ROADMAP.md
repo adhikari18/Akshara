@@ -6,19 +6,19 @@ This document outlines the multi-milestone engineering, computational linguistic
 
 | Milestone | Focus | Est. Hours | Done | Progress |
 |---|---|---|---|---|
-| 1 | Devanagari Vector Stroke Dataset | ~35 | 19 | 54% |
+| 1 | Devanagari Vector Stroke Dataset | ~35 | 24 | 69% |
 | 2 | Computational Geometry & Motor-Control Engine | ~21 | 0 | 0% |
 | 3 | *Samyukta Akshara* & *Barakhari* Typography | ~21 | 0 | 0% |
 | 4 | Audio Corpus, Speech DSP & Pronunciation Grading | ~37 | 0 | 0% |
 | 5 | SOV Grammar, *Vibhakti* & Story Reader | ~29 | 0 | 0% |
 | 6 | Spaced Repetition, Offline PWA & Mobile App | ~24 | 0 | 0% |
-| **Total** | | **~167** | **19** | **~11%** |
+| **Total** | | **~167** | **24** | **~14%** |
 
 ---
 
 ## Milestone 1: Complete 49-Letter Devanagari Vector Stroke Dataset + Numerals (`packages/data/strokes/`) (~35 hrs)
 
-`packages/data/strokes/` now provides vector definitions for all 13 *Swor Varna* (`अ` to `अः`) and the first 15 *Vyanjan* (`क` to `ण`: *Kanthya*, *Talavya*, *Murdhanya*). This milestone completes the canonical `300x300` vector stroke and waypoint corpus across the entire Nepali Varnamala (13 vowels + 33 consonants + 3 compounds = 49 letters), plus the 10 Nepali numerals:
+`packages/data/strokes/` now provides vector definitions for all 13 *Swor Varna* (`अ` to `अः`) and the first 25 *Vyanjan* (`क` to `म`: *Kanthya*, *Talavya*, *Murdhanya*, *Dantya*, *Oshthya*). This milestone completes the canonical `300x300` vector stroke and waypoint corpus across the entire Nepali Varnamala (13 vowels + 33 consonants + 3 compounds = 49 letters), plus the 10 Nepali numerals:
 
 - [x] **1.1 Complete Remaining 11 *Swor Varna* (स्वर वर्ण) Stroke Vectors (`इ` to `अः`) (~5 hrs):**
   - Author verified SVG cubic Bézier paths, directional hints, and ordered waypoint arrays for `इ, ई, उ, ऊ, ऋ, ए, ऐ, ओ, औ, अं, अः`, including top-hook *Ekar/Aikar* flags and *Shirbindu/Visarga* marks.
@@ -28,8 +28,8 @@ This document outlines the multi-milestone engineering, computational linguistic
   - Extend the `shirorekha` metadata in `letter.schema.json` (previously a single `startX`–`endX` span) with optional `segments` to support split headline spans (e.g. `ध`, `भ`), validate segment/subpath/waypoint invariants, and teach `@akshara/cli` to emit segments. *(A trial migration of `ख`/`ग` was reverted: Kohinoor, ITF Devanagari and Devanagari MT all draw their headlines continuous.)*
 - [x] **1.4 *Kanthya* `ङ`, *Talavya* (Palatal) & *Murdhanya* (Retroflex) Vyanjan Vectors (`ङ`, `च–ञ`, `ट–ण`) (~6 hrs):**
   - Encode stroke topologies for `ङ`, `च, छ, ज, झ, ञ` and `ट, ठ, ड, ढ, ण` enforcing body/loop-first, right-stem (*Khadi Pai*) second where present, and *Shirorekha* strictly last. Note that `ङ, छ, ट, ठ, ड, ढ` have no vertical stem.
-- [ ] **1.5 *Dantya* (Dental) & *Oshthya* (Labial) Vyanjan Vectors (`त–न`, `प–म`) (~5 hrs):**
-  - Encode stroke topologies for `त, थ, द, ध, न` and `प, फ, ब, भ, म`, handling the inner diagonal slash of `ब` and the broken-*Shirorekha* top loop of `थ`, `ध`, and `भ` (using the schema from 1.3).
+- [x] **1.5 *Dantya* (Dental) & *Oshthya* (Labial) Vyanjan Vectors (`त–न`, `प–म`) (~5 hrs):**
+  - Encode stroke topologies for `त, थ, द, ध, न` and `प, फ, ब, भ, म`, handling the inner diagonal slash of `ब`, the split *Shirorekha* of `ध` (using the schema from 1.3), and the partial headlines of `थ` and `भ` whose left elements sit outside the bar.
 - [ ] **1.6 *Antastha*, *Ushma* & *Samyukta* Compound Vectors (`य–ह`, `क्ष, त्र, ज्ञ`) (~6 hrs):**
   - Encode stroke sequences for `य, र, ल, व`, `श, ष, स, ह`, and the three canonical Nepali compound letters `क्ष` (`क् + ष`), `त्र` (`त् + र`), and `ज्ञ` (`ज् + ञ`).
 - [ ] **1.7 Nepali Devanagari Numerals (`०` to `९` / सुन्ना देखि नौ) (~5 hrs):**
@@ -43,7 +43,7 @@ This document outlines the multi-milestone engineering, computational linguistic
   - Implement uniform arc-length polyline resampling (`resampleByArcLength`) and dynamic-programming Discrete Fréchet Distance (`discreteFrechetDistance`) in `packages/core/src/tracing-evaluator.ts` to grade continuous curve fidelity alongside waypoint unlocks.
 - [ ] **2.2 Tangent-Angle Directional Enforcement & Loop Winding Detector (~4 hrs):**
   - Compute signed turning angles ($\sum \Delta \theta$) along `loop` strokes (`क`, `ख`, `छ`, `ठ`, `ढ`) to verify that learners trace counter-clockwise vs. clockwise loops in the authentic hand-movement direction rather than tracing backward.
-- [ ] **2.3 Broken-*Shirorekha* Evaluator & Renderer Support (`ध, भ`; partial `थ`) (~4 hrs):**
+- [ ] **2.3 Broken-*Shirorekha* Evaluator & Renderer Support (split `ध`; partial `थ`, `भ`) (~4 hrs):**
   - In classical Devanagari typography, characters with an upper-left open loop leave a gap in the *Shirorekha* above the loop so the glyph does not visually collapse into another letter (e.g., `ध` vs. `घ`, `भ` vs. `म`). Teach the evaluator and `TracingCanvas.tsx` ghost-guides to validate and render the split headline spans defined in 1.3.
 - [ ] **2.4 Velocity-Adaptive 1€ Filter & Stylus Pressure Curves (~4 hrs):**
   - Upgrade the Exponential Moving Average (EMA) smoother to a velocity-adaptive **1€ Filter** (Casiez et al.) and incorporate `PointerEvent.pressure` and `tiltX/tiltY` to modulate chalk stroke width dynamically.

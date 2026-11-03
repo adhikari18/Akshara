@@ -1,18 +1,18 @@
 ---
-name: "✏️ [Good First Issue] Author Vector Stroke Definitions for Pavarga (प, फ, ब, भ, म)"
-about: "Add canonical 300x300 SVG stroke paths and ordered waypoints for the Labial (ओष्ठ्य) consonant row"
-title: "feat(data): add canonical vector stroke definitions for Pavarga (प, फ, ब, भ, म)"
+name: "✏️ [Good First Issue] Author Vector Stroke Definitions for Antastha (य, र, ल, व)"
+about: "Add canonical 300x300 SVG stroke paths and ordered waypoints for the semivowel (अन्तस्थ) consonant row"
+title: "feat(data): add canonical vector stroke definitions for Antastha (य, र, ल, व)"
 labels: ["good first issue", "education"]
 assignees: ""
 ---
 
 ## Context
 
-`packages/data/strokes/` currently includes vector stroke definitions for all 13 Swor Varna (`अ` to `अः`) and the Vyanjan rows from `क` to `ण` (Kanthya, Talavya, Murdhanya). We need community contributors to author the Labial row of Vyanjan Varna: **Pavarga (`प, फ, ब, भ, म`)**. Note that `भ` has a split *Shirorekha* (see `kha.json` and the `segments` field).
+`packages/data/strokes/` currently includes vector stroke definitions for all 13 Swor Varna (`अ` to `अः`) and the five Vyanjan vargas from `क` to `म`. We need community contributors to author the semivowels: **Antastha (`य, र, ल, व`)**. Note that `र` has no vertical stem and `व` must not include the inner diagonal of `ब`.
 
 ## Acceptance Criteria
 
-1. Create `pa.json`, `pha.json`, `ba.json`, `bha.json`, and `ma.json` inside `packages/data/strokes/` conforming to [`packages/data/schema/letter.schema.json`](../../packages/data/schema/letter.schema.json).
+1. Create `ya.json`, `ra.json`, `la.json`, and `wa.json` inside `packages/data/strokes/` conforming to [`packages/data/schema/letter.schema.json`](../../packages/data/schema/letter.schema.json).
 2. Enforce the **Devanagari Topological Invariant**:
    - Loop / curve body components (`type: "loop" | "curve"`) must come **first**.
    - Right vertical stems (`type: "stem"`) must come **second**.

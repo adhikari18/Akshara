@@ -89,8 +89,8 @@ export interface ShirorekhaDefinition {
   y: number;
   /**
    * Optional split headline spans, ordered left to right. Letters whose upper-left
-   * element is detached from the headline (e.g. ध, भ) leave a gap in the Shirorekha;
-   * letters whose headline merely stops short (e.g. थ) just use a partial startX/endX.
+   * element is detached from the headline (e.g. ध) leave a gap in the Shirorekha;
+   * letters whose headline merely stops short (e.g. थ, भ) just use a partial startX/endX.
    * When omitted, the headline is one continuous bar from startX to endX.
    */
   segments?: ShirorekhaSegment[];
