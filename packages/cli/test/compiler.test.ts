@@ -85,27 +85,32 @@ describe('compiler guards', () => {
 });
 
 describe('split Shirorekha compilation', () => {
-  const ga = JSON.parse(readFileSync(fileURLToPath(new URL('../../data/strokes/ga.json', import.meta.url)), 'utf8'));
+  // ध-style headline: a short bar over the upper-left loop, a gap, then the bar over the stem.
+  const segments = [{ startX: 62, endX: 127 }, { startX: 165, endX: 237 }];
   const spec: GlyphSpec = {
-    id: ga.id,
-    character: ga.character,
-    unicode: ga.unicode,
-    category: ga.category,
-    strokes: ga.strokes.map((s: any) => ({ type: s.type, svgPath: s.svgPath })),
+    id: 'dha',
+    character: 'ध',
+    unicode: 'U+0927',
+    category: 'vyanjan',
+    strokes: [
+      { type: 'curve', svgPath: 'M 122 78 C 98 85, 92 108, 102 122 C 110 133, 130 138, 150 140' },
+      { type: 'stem', svgPath: 'M 195 75 L 195 240' },
+      { type: 'shirorekha', svgPath: 'M 62 75 L 127 75 M 165 75 L 237 75' },
+    ],
   };
   const out = compileGlyph(spec) as any;
 
   it('derives headline segments from a multi-subpath Shirorekha', () => {
-    expect(out.shirorekha).toEqual(ga.shirorekha);
+    expect(out.shirorekha).toEqual({ enforcedLast: true, startX: 62, endX: 237, y: 75, segments });
   });
 
   it('places waypoints on both ends of each segment and none in the gap', () => {
     const xs = out.strokes.at(-1).waypoints.map((w: any) => w.x);
-    for (const seg of ga.shirorekha.segments) {
+    for (const seg of segments) {
       expect(xs).toContain(seg.startX);
       expect(xs).toContain(seg.endX);
     }
-    expect(xs.some((x: number) => x > 140 && x < 170)).toBe(false);
+    expect(xs.some((x: number) => x > 127 && x < 165)).toBe(false);
   });
 
   it('rejects multiple subpaths in non-headline strokes', () => {

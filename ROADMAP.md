@@ -25,7 +25,7 @@ This document outlines the multi-milestone engineering, computational linguistic
 - [x] **1.2 Automated SVG-to-Waypoint Compiler CLI (`@akshara/cli`) (~5 hrs):**
   - Build a CLI utility that parses raw SVG `<path d="...">` glyphs using cubic Bézier arc-length quadrature and automatically samples equidistant waypoints and bounding boxes, so the remaining 36 letters and 10 numerals can be authored quickly.
 - [x] **1.3 Split/Partial *Shirorekha* Schema Extension (~3 hrs):**
-  - Extend the `shirorekha` metadata in `letter.schema.json` (previously a single `startX`–`endX` span) with optional `segments` to support split headline spans required by letters with an open upper-left loop (`ख, ग, ण, थ, ध, भ, श`), validate segment/subpath/waypoint invariants, teach `@akshara/cli` to emit segments, and migrate existing `kha.json` / `ga.json` definitions.
+  - Extend the `shirorekha` metadata in `letter.schema.json` (previously a single `startX`–`endX` span) with optional `segments` to support split headline spans (e.g. `ध`, `भ`), validate segment/subpath/waypoint invariants, and teach `@akshara/cli` to emit segments. *(A trial migration of `ख`/`ग` was reverted: Kohinoor, ITF Devanagari and Devanagari MT all draw their headlines continuous.)*
 - [x] **1.4 *Kanthya* `ङ`, *Talavya* (Palatal) & *Murdhanya* (Retroflex) Vyanjan Vectors (`ङ`, `च–ञ`, `ट–ण`) (~6 hrs):**
   - Encode stroke topologies for `ङ`, `च, छ, ज, झ, ञ` and `ट, ठ, ड, ढ, ण` enforcing body/loop-first, right-stem (*Khadi Pai*) second where present, and *Shirorekha* strictly last. Note that `ङ, छ, ट, ठ, ड, ढ` have no vertical stem.
 - [ ] **1.5 *Dantya* (Dental) & *Oshthya* (Labial) Vyanjan Vectors (`त–न`, `प–म`) (~5 hrs):**
@@ -43,7 +43,7 @@ This document outlines the multi-milestone engineering, computational linguistic
   - Implement uniform arc-length polyline resampling (`resampleByArcLength`) and dynamic-programming Discrete Fréchet Distance (`discreteFrechetDistance`) in `packages/core/src/tracing-evaluator.ts` to grade continuous curve fidelity alongside waypoint unlocks.
 - [ ] **2.2 Tangent-Angle Directional Enforcement & Loop Winding Detector (~4 hrs):**
   - Compute signed turning angles ($\sum \Delta \theta$) along `loop` strokes (`क`, `ख`, `छ`, `ठ`, `ढ`) to verify that learners trace counter-clockwise vs. clockwise loops in the authentic hand-movement direction rather than tracing backward.
-- [ ] **2.3 Broken-*Shirorekha* Evaluator & Renderer Support (`ख, ग, ण, थ, ध, भ, श`) (~4 hrs):**
+- [ ] **2.3 Broken-*Shirorekha* Evaluator & Renderer Support (`ध, भ`; partial `थ`) (~4 hrs):**
   - In classical Devanagari typography, characters with an upper-left open loop leave a gap in the *Shirorekha* above the loop so the glyph does not visually collapse into another letter (e.g., `ध` vs. `घ`, `भ` vs. `म`). Teach the evaluator and `TracingCanvas.tsx` ghost-guides to validate and render the split headline spans defined in 1.3.
 - [ ] **2.4 Velocity-Adaptive 1€ Filter & Stylus Pressure Curves (~4 hrs):**
   - Upgrade the Exponential Moving Average (EMA) smoother to a velocity-adaptive **1€ Filter** (Casiez et al.) and incorporate `PointerEvent.pressure` and `tiltX/tiltY` to modulate chalk stroke width dynamically.

@@ -21,11 +21,7 @@
     "enforcedLast": true,
     "startX": 55,
     "endX": 245,
-    "y": 75,
-    "segments": [
-      { "startX": 55, "endX": 120 },
-      { "startX": 150, "endX": 245 }
-    ]
+    "y": 75
   },
   "strokes": [
     {
@@ -83,19 +79,16 @@
       "id": "kha-stroke-4",
       "order": 4,
       "type": "shirorekha",
-      "label": "Split Shirorekha Top Bar (टुटेको शिरोरेखा)",
-      "nepaliInstruction": "अन्त्यमा शिरोरेखा दुई टुक्रामा तान्नुहोस्: पहिले बायाँ घुम्तीमाथि छोटो डिको, अनि खाली ठाउँ छोडेर भित्री गोलो र ठाडो धर्कोमाथि।",
-      "englishInstruction": "Finish with the Shirorekha in two pieces: a short bar over the left hook, then leave a gap and draw the bar over the inner bowl and right stem.",
-      "svgPath": "M 55 75 L 120 75 M 150 75 L 245 75",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 55 75 L 245 75",
       "directionHint": "left-to-right",
       "toleranceRadius": 26,
       "waypoints": [
-        { "index": 0, "x": 55, "y": 75, "label": "Left Headline Start" },
-        { "index": 1, "x": 88, "y": 75, "label": "Left Headline Mid" },
-        { "index": 2, "x": 120, "y": 75, "label": "Left Headline End (Gap)" },
-        { "index": 3, "x": 150, "y": 75, "label": "Right Headline Start" },
-        { "index": 4, "x": 198, "y": 75, "label": "Right Headline Mid" },
-        { "index": 5, "x": 245, "y": 75, "label": "Shirorekha End" }
+        { "index": 0, "x": 55, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 150, "y": 75, "label": "Shirorekha Mid" },
+        { "index": 2, "x": 245, "y": 75, "label": "Shirorekha End" }
       ]
     }
   ],

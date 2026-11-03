@@ -24,7 +24,7 @@ The compiler fills in:
   `Segment 1 End (Gap)`, …) — override per stroke with `waypointLabels`
 - `viewBox` and `shirorekha` derived from the final *Shirorekha* stroke (if omitted)
 - split headline `shirorekha.segments` when the *Shirorekha* `svgPath` has several subpaths
-  (e.g. `"M 60 75 L 140 75 M 170 75 L 240 75"` for `ग`); each segment is sampled separately
+  (e.g. `"M 62 75 L 127 75 M 165 75 L 237 75"` for `ध`); each segment is sampled separately
   so its ends are waypoints and no waypoint falls in the gap
 
 The compiled result is checked against `letter.schema.json` (Ajv) and `validateLetterDataset`
