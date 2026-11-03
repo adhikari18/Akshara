@@ -17,6 +17,8 @@ You do not need to write TypeScript to make a lasting impact on Nepali literacy:
    - **Step 1:** Loop, curve, or diagonal body strokes (`"type": "loop"` or `"curve"`).
    - **Step 2:** Vertical stem / *Khadi Pai* (`"type": "stem"`).
    - **Final Step:** Top horizontal headline bar / *Shirorekha* (`"type": "shirorekha"`).
+   - **Split headlines:** Letters with an open upper-left loop (`ख, ग, ण, थ, ध, भ, श`) leave a gap in the *Shirorekha*. Add `"segments": [{ "startX": …, "endX": … }, …]` to the `shirorekha` block, write the stroke's `svgPath` with one `M … L …` subpath per segment, and place waypoints at both ends of every segment. See [`kha.json`](./packages/data/strokes/kha.json).
+   - **Shortcut:** sketch only `type` + `svgPath` per stroke and let `npm run akshara -- compile` generate waypoints and headline metadata (see [`packages/cli`](./packages/cli/README.md)).
 4. Run `npm run validate:data` to verify your JSON against [`packages/data/schema/letter.schema.json`](./packages/data/schema/letter.schema.json).
 
 ### B. Recording Native Nepali Phonics Audio

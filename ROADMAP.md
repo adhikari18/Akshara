@@ -6,13 +6,13 @@ This document outlines the multi-milestone engineering, computational linguistic
 
 | Milestone | Focus | Est. Hours | Done | Progress |
 |---|---|---|---|---|
-| 1 | Devanagari Vector Stroke Dataset | ~35 | 10 | 29% |
+| 1 | Devanagari Vector Stroke Dataset | ~35 | 13 | 37% |
 | 2 | Computational Geometry & Motor-Control Engine | ~21 | 0 | 0% |
 | 3 | *Samyukta Akshara* & *Barakhari* Typography | ~21 | 0 | 0% |
 | 4 | Audio Corpus, Speech DSP & Pronunciation Grading | ~37 | 0 | 0% |
 | 5 | SOV Grammar, *Vibhakti* & Story Reader | ~29 | 0 | 0% |
 | 6 | Spaced Repetition, Offline PWA & Mobile App | ~24 | 0 | 0% |
-| **Total** | | **~167** | **10** | **~6%** |
+| **Total** | | **~167** | **13** | **~8%** |
 
 ---
 
@@ -24,8 +24,8 @@ This document outlines the multi-milestone engineering, computational linguistic
   - Author verified SVG cubic Bézier paths, directional hints, and ordered waypoint arrays for `इ, ई, उ, ऊ, ऋ, ए, ऐ, ओ, औ, अं, अः`, including top-hook *Ekar/Aikar* flags and *Shirbindu/Visarga* marks.
 - [x] **1.2 Automated SVG-to-Waypoint Compiler CLI (`@akshara/cli`) (~5 hrs):**
   - Build a CLI utility that parses raw SVG `<path d="...">` glyphs using cubic Bézier arc-length quadrature and automatically samples equidistant waypoints and bounding boxes, so the remaining 36 letters and 10 numerals can be authored quickly.
-- [ ] **1.3 Split/Partial *Shirorekha* Schema Extension (~3 hrs):**
-  - Extend the `shirorekha` metadata in `letter.schema.json` (currently a single `shirorekhaY` full-width bar) to support split/partial headline spans required by letters with an open upper-left loop (`ख, ग, ण, थ, ध, भ, श`), and migrate existing `kha.json` / `ga.json` definitions.
+- [x] **1.3 Split/Partial *Shirorekha* Schema Extension (~3 hrs):**
+  - Extend the `shirorekha` metadata in `letter.schema.json` (previously a single `startX`–`endX` span) with optional `segments` to support split headline spans required by letters with an open upper-left loop (`ख, ग, ण, थ, ध, भ, श`), validate segment/subpath/waypoint invariants, teach `@akshara/cli` to emit segments, and migrate existing `kha.json` / `ga.json` definitions.
 - [ ] **1.4 *Kanthya* `ङ`, *Talavya* (Palatal) & *Murdhanya* (Retroflex) Vyanjan Vectors (`ङ`, `च–ञ`, `ट–ण`) (~6 hrs):**
   - Encode stroke topologies for `ङ`, `च, छ, ज, झ, ञ` and `ट, ठ, ड, ढ, ण` enforcing body/loop-first, right-stem (*Khadi Pai*) second where present, and *Shirorekha* strictly last. Note that `ङ, छ, ट, ठ, ड, ढ` have no vertical stem.
 - [ ] **1.5 *Dantya* (Dental) & *Oshthya* (Labial) Vyanjan Vectors (`त–न`, `प–म`) (~5 hrs):**

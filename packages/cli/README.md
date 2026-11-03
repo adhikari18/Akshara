@@ -21,8 +21,13 @@ The compiler fills in:
 - `waypoints` sampled at equal arc-length spacing (default 45 units, min 3, exact endpoints)
 - `directionHint` inferred from stroke type and loop winding
 - `viewBox` and `shirorekha` derived from the final *Shirorekha* stroke (if omitted)
+- split headline `shirorekha.segments` when the *Shirorekha* `svgPath` has several subpaths
+  (e.g. `"M 60 75 L 140 75 M 170 75 L 240 75"` for `ग`); each segment is sampled separately
+  so its ends are waypoints and no waypoint falls in the gap
 
-It rejects glyphs whose *Shirorekha* stroke is not last. Supported path commands:
+The compiled result is checked with `validateLetterDataset` from `@akshara/data` and is not
+written if it fails. It rejects glyphs whose *Shirorekha* stroke is not last, and multiple
+subpaths in any stroke other than the *Shirorekha*. Supported path commands:
 `M L H V C S Q T Z` (absolute and relative); arcs are not supported.
 
 Always run `npm run validate:data` and review the output visually in the Pati studio before committing.
