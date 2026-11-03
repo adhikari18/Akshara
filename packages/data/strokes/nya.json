@@ -1,0 +1,106 @@
+{
+  "id": "nya",
+  "character": "ञ",
+  "unicode": "U+091E",
+  "category": "vyanjan",
+  "varga": "तालव्य (Talavya / Palatal)",
+  "phonetics": {
+    "romanized": "nya",
+    "ipa": "/ɲʌ/",
+    "nepaliName": "गोरुसिङे ञ",
+    "audioPrompt": "ञ — गोरुसिङे ञ",
+    "articulationTip": "Palatal nasal: like 'ny' in 'canyon'; in Nepali words it usually comes before च or ज, as in 'चञ्चल' (chanchal - playful)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 53,
+    "endX": 245,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "nya-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Double Curve (दोहोरो घुम्ती)",
+      "nepaliInstruction": "बायाँ टुप्पोबाट माथि घुमी बीचमा आउनुहोस्, अनि तल घुमाउँदै बायाँतिर टुङ्ग्याउनुहोस्।",
+      "englishInstruction": "From the left tip, arc over to the middle, then curve down and back to the lower left like a '3'.",
+      "svgPath": "M 97 130 C 108 112, 150 112, 152 138 C 153 150, 150 156, 145 160 C 165 170, 160 200, 130 205 C 105 210, 85 198, 70 180",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 97, "y": 130, "label": "Curve Start" },
+        { "index": 1, "x": 130.7, "y": 117.8, "label": "Upper Right Arc 1" },
+        { "index": 2, "x": 152.2, "y": 144, "label": "Upper Right Arc 2" },
+        { "index": 3, "x": 156.6, "y": 174.9, "label": "Lower Right Arc 1" },
+        { "index": 4, "x": 136.8, "y": 203.3, "label": "Lower Right Arc 2" },
+        { "index": 5, "x": 99.8, "y": 202.6, "label": "Lower Left Arc" },
+        { "index": 6, "x": 70, "y": 180, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "nya-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Connecting Bar (जोड्ने तेर्सो धर्को)",
+      "nepaliInstruction": "बीचको जोर्नीबाट दायाँ ठाडो धर्कोसम्म तेर्सो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the short bar from the middle joint right to the stem.",
+      "svgPath": "M 148 160 L 205 160",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 148, "y": 160, "label": "Curve Start" },
+        { "index": 1, "x": 176.5, "y": 160, "label": "Center Point" },
+        { "index": 2, "x": 205, "y": 160, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "nya-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 205 75 L 205 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 205, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 205, "y": 116.3, "label": "Upper Spine" },
+        { "index": 2, "x": 205, "y": 157.5, "label": "Middle Spine" },
+        { "index": 3, "x": 205, "y": 198.8, "label": "Lower Spine" },
+        { "index": 4, "x": 205, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "nya-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 53 75 L 245 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 53, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 91.4, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 129.8, "y": 75, "label": "Center Headline 1" },
+        { "index": 3, "x": 168.2, "y": 75, "label": "Center Headline 2" },
+        { "index": 4, "x": 206.6, "y": 75, "label": "Right Headline" },
+        { "index": 5, "x": 245, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "चञ्चल", "romanized": "chanchal", "meaning": "Playful", "emoji": "✨" },
+    { "word": "पञ्जा", "romanized": "panja", "meaning": "Paw", "emoji": "🐾" },
+    { "word": "मञ्जन", "romanized": "manjan", "meaning": "Tooth Powder", "emoji": "🪥" }
+  ]
+}

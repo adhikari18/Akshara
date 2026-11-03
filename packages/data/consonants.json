@@ -87,7 +87,7 @@
     "sampleWordRomanized": "chara",
     "sampleWordMeaning": "Bird",
     "emoji": "🐦",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "chha",
@@ -102,7 +102,7 @@
     "sampleWordRomanized": "chhata",
     "sampleWordMeaning": "Umbrella",
     "emoji": "☂️",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "ja",
@@ -117,7 +117,7 @@
     "sampleWordRomanized": "jahaj",
     "sampleWordMeaning": "Ship",
     "emoji": "🚢",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "jha",
@@ -132,7 +132,7 @@
     "sampleWordRomanized": "jharana",
     "sampleWordMeaning": "Waterfall",
     "emoji": "🏞️",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "nya",
@@ -147,7 +147,7 @@
     "sampleWordRomanized": "chanchal",
     "sampleWordMeaning": "Playful",
     "emoji": "✨",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "tta",

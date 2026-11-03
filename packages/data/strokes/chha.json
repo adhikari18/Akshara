@@ -1,0 +1,107 @@
+{
+  "id": "chha",
+  "character": "छ",
+  "unicode": "U+091B",
+  "category": "vyanjan",
+  "varga": "तालव्य (Talavya / Palatal)",
+  "phonetics": {
+    "romanized": "chha",
+    "ipa": "/t͡sʰʌ/",
+    "nepaliName": "छाता छ",
+    "audioPrompt": "छ — छाता छ",
+    "articulationTip": "Aspirated voiceless affricate: say च with a strong puff of breath, as in 'छाता' (chhata - umbrella)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 50,
+    "endX": 248,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "chha-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Upper Left Lobe (माथिल्लो बायाँ घुम्ती)",
+      "nepaliInstruction": "शिरोरेखाबाट बायाँतिर घुमाउँदै बीचको जोर्नीसम्म ल्याउनुहोस्।",
+      "englishInstruction": "Curve down and left from the headline, then back right to the middle joint.",
+      "svgPath": "M 118 75 C 88 82, 80 110, 92 130 C 100 143, 120 147, 138 147",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 118, "y": 75, "label": "Curve Start" },
+        { "index": 1, "x": 88.3, "y": 100.3, "label": "Upper Left Arc" },
+        { "index": 2, "x": 98.9, "y": 137.3, "label": "Lower Left Arc" },
+        { "index": 3, "x": 138, "y": 147, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "chha-stroke-2",
+      "order": 2,
+      "type": "loop",
+      "label": "Lower Bowl & Inner Curl (तल्लो घेरा र भित्री घुम्ती)",
+      "nepaliInstruction": "जोर्नीबाट बायाँ हुँदै तल ठूलो घेरा बनाई दायाँबाट माथि उठेर भित्रतिर घुमाउनुहोस्।",
+      "englishInstruction": "From the joint, sweep left and around the large lower bowl, rise on the right and curl inward.",
+      "svgPath": "M 138 152 C 108 155, 92 175, 92 200 C 92 222, 115 229, 145 229 C 190 229, 218 200, 218 168 C 218 140, 200 128, 188 135 C 172 145, 172 165, 185 170",
+      "directionHint": "counter-clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 138, "y": 152, "label": "Loop Start" },
+        { "index": 1, "x": 100.9, "y": 171.2, "label": "Upper Left Arc" },
+        { "index": 2, "x": 94.9, "y": 211.9, "label": "Lower Left Arc 1" },
+        { "index": 3, "x": 132.8, "y": 228.6, "label": "Lower Left Arc 2" },
+        { "index": 4, "x": 175.3, "y": 224, "label": "Lower Right Arc 1" },
+        { "index": 5, "x": 208.9, "y": 198.3, "label": "Lower Right Arc 2" },
+        { "index": 6, "x": 217, "y": 157.2, "label": "Upper Right Arc 1" },
+        { "index": 7, "x": 187.7, "y": 135.2, "label": "Upper Right Arc 2" },
+        { "index": 8, "x": 185, "y": 170, "label": "Loop Closure" }
+      ]
+    },
+    {
+      "id": "chha-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Neck (दायाँ छोटो ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि शिरोरेखाबाट घेरासम्म छोटो ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the short right neck from the headline down to the top of the bowl.",
+      "svgPath": "M 192 75 L 192 122",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 192, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 192, "y": 98.5, "label": "Middle Spine" },
+        { "index": 2, "x": 192, "y": 122, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "chha-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 50 75 L 248 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 50, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 89.6, "y": 75, "label": "Left Headline 1" },
+        { "index": 2, "x": 129.2, "y": 75, "label": "Left Headline 2" },
+        { "index": 3, "x": 168.8, "y": 75, "label": "Right Headline 1" },
+        { "index": 4, "x": 208.4, "y": 75, "label": "Right Headline 2" },
+        { "index": 5, "x": 248, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "छाता", "romanized": "chhata", "meaning": "Umbrella", "emoji": "☂️" },
+    { "word": "छोरी", "romanized": "chhori", "meaning": "Daughter", "emoji": "👧" },
+    { "word": "छेपारो", "romanized": "chheparo", "meaning": "Lizard", "emoji": "🦎" }
+  ]
+}

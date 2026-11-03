@@ -1,0 +1,104 @@
+{
+  "id": "cha",
+  "character": "च",
+  "unicode": "U+091A",
+  "category": "vyanjan",
+  "varga": "तालव्य (Talavya / Palatal)",
+  "phonetics": {
+    "romanized": "cha",
+    "ipa": "/t͡sʌ/",
+    "nepaliName": "चरा च",
+    "audioPrompt": "च — चरा च",
+    "articulationTip": "Unaspirated voiceless affricate: in Nepali it sounds closer to 'ts' in 'cats' than English 'ch'; keep the breath puff small, as in 'चरा' (chara - bird)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 60,
+    "endX": 237,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "cha-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Middle Crossbar (बीचको तेर्सो धर्को)",
+      "nepaliInstruction": "बीचमा बायाँदेखि दायाँसम्म तेर्सो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the short horizontal crossbar from left to right at mid-height.",
+      "svgPath": "M 72 130 L 163 130",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 72, "y": 130, "label": "Curve Start" },
+        { "index": 1, "x": 102.3, "y": 130, "label": "Left Arc" },
+        { "index": 2, "x": 132.7, "y": 130, "label": "Right Arc" },
+        { "index": 3, "x": 163, "y": 130, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "cha-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Lower Bowl (तल्लो घुम्ती)",
+      "nepaliInstruction": "तेर्सो धर्कोको बायाँ भागबाट तल घुमाउँदै दायाँ ठाडो धर्कोसम्म जोड्नुहोस्।",
+      "englishInstruction": "From the left part of the crossbar, curve down and sweep right to meet the stem.",
+      "svgPath": "M 103 132 C 98 170, 105 200, 140 200 C 165 200, 185 192, 197 180",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 103, "y": 132, "label": "Curve Start" },
+        { "index": 1, "x": 103.2, "y": 169.9, "label": "Left Arc" },
+        { "index": 2, "x": 126, "y": 198, "label": "Lower Left Arc" },
+        { "index": 3, "x": 163.7, "y": 197.4, "label": "Lower Right Arc" },
+        { "index": 4, "x": 197, "y": 180, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "cha-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 197 75 L 197 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 197, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 197, "y": 116.3, "label": "Upper Spine" },
+        { "index": 2, "x": 197, "y": 157.5, "label": "Middle Spine" },
+        { "index": 3, "x": 197, "y": 198.8, "label": "Lower Spine" },
+        { "index": 4, "x": 197, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "cha-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 60 75 L 237 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 60, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 104.3, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 148.5, "y": 75, "label": "Center Headline" },
+        { "index": 3, "x": 192.8, "y": 75, "label": "Right Headline" },
+        { "index": 4, "x": 237, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "चरा", "romanized": "chara", "meaning": "Bird", "emoji": "🐦" },
+    { "word": "चम्चा", "romanized": "chamcha", "meaning": "Spoon", "emoji": "🥄" },
+    { "word": "चिया", "romanized": "chiya", "meaning": "Tea", "emoji": "🍵" }
+  ]
+}
