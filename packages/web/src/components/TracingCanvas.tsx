@@ -41,6 +41,11 @@ interface ChalkParticle {
 
 type DeckCategoryFilter = 'all' | 'swor' | 'vyanjan';
 
+/** Samyukta compounds (क्ष, त्र, ज्ञ) are taught as the last letters of the Vyanjan Varna deck. */
+function deckCategoryOf(category: 'swor' | 'vyanjan' | 'samyukta'): Exclude<DeckCategoryFilter, 'all'> {
+  return category === 'swor' ? 'swor' : 'vyanjan';
+}
+
 interface TracingCanvasProps {
   initialLetterId?: string;
 }
@@ -63,7 +68,7 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     () =>
       categoryFilter === 'all'
         ? STROKE_LIST
-        : STROKE_LIST.filter((item) => item.category === categoryFilter),
+        : STROKE_LIST.filter((item) => deckCategoryOf(item.category) === categoryFilter),
     [categoryFilter]
   );
 
@@ -72,7 +77,7 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     []
   );
   const vyanjanCount = useMemo(
-    () => STROKE_LIST.filter((item) => item.category === 'vyanjan').length,
+    () => STROKE_LIST.filter((item) => deckCategoryOf(item.category) === 'vyanjan').length,
     []
   );
 

@@ -1,0 +1,102 @@
+{
+  "id": "tra",
+  "character": "त्र",
+  "unicode": "U+0924 U+094D U+0930",
+  "category": "samyukta",
+  "varga": "संयुक्त (Samyukta / Conjunct)",
+  "phonetics": {
+    "romanized": "tra",
+    "ipa": "/t̪rʌ/",
+    "nepaliName": "त्रिशूल त्र",
+    "audioPrompt": "त्र — त्रिशूल त्र",
+    "articulationTip": "Conjunct of त् + र: a dental 't' followed straight away by a tapped 'r', as in 'मित्र' (mitra - friend)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 72,
+    "endX": 226,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "tra-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Top Arch (माथिल्लो मेहराब)",
+      "nepaliInstruction": "बायाँ टुप्पोबाट माथि मेहराब बनाउँदै दायाँ ठाडो धर्कोसम्म जोड्नुहोस्।",
+      "englishInstruction": "From the left tip, arch over to the right and meet the stem.",
+      "svgPath": "M 90 140 C 108 120, 148 118, 165 145 C 170 153, 174 160, 180 165",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 90, "y": 140, "label": "Curve Start" },
+        { "index": 1, "x": 122.9, "y": 125, "label": "Upper Left Arc" },
+        { "index": 2, "x": 157.3, "y": 135.9, "label": "Upper Right Arc" },
+        { "index": 3, "x": 180, "y": 165, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "tra-stroke-2",
+      "order": 2,
+      "type": "diagonal",
+      "label": "Rakar Diagonal (रकारको छड्के धर्को)",
+      "nepaliInstruction": "ठाडो धर्कोबाट बायाँतिर तल छड्के धर्को तान्नुहोस्; यो र को चिन्ह हो।",
+      "englishInstruction": "Draw the diagonal from the stem down to the left; this is the र (rakar) mark.",
+      "svgPath": "M 182 178 L 105 215",
+      "directionHint": "diagonal-down-left",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 182, "y": 178, "label": "Diagonal Start" },
+        { "index": 1, "x": 143.5, "y": 196.5, "label": "Center Point" },
+        { "index": 2, "x": 105, "y": 215, "label": "Diagonal End" }
+      ]
+    },
+    {
+      "id": "tra-stroke-3",
+      "order": 3,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 185 75 L 185 240",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 185, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 185, "y": 116.3, "label": "Upper Spine" },
+        { "index": 2, "x": 185, "y": 157.5, "label": "Middle Spine" },
+        { "index": 3, "x": 185, "y": 198.8, "label": "Lower Spine" },
+        { "index": 4, "x": 185, "y": 240, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "tra-stroke-4",
+      "order": 4,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 72 75 L 226 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 72, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 110.5, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 149, "y": 75, "label": "Center Headline" },
+        { "index": 3, "x": 187.5, "y": 75, "label": "Right Headline" },
+        { "index": 4, "x": 226, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "त्रिशूल", "romanized": "trishul", "meaning": "Trident", "emoji": "🔱" },
+    { "word": "मित्र", "romanized": "mitra", "meaning": "Friend", "emoji": "🤝" },
+    { "word": "पत्र", "romanized": "patra", "meaning": "Letter", "emoji": "✉️" }
+  ]
+}

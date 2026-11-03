@@ -1,0 +1,120 @@
+{
+  "id": "gya",
+  "character": "ज्ञ",
+  "unicode": "U+091C U+094D U+091E",
+  "category": "samyukta",
+  "varga": "संयुक्त (Samyukta / Conjunct)",
+  "phonetics": {
+    "romanized": "gya",
+    "ipa": "/ɡjʌ/",
+    "nepaliName": "ज्ञानी ज्ञ",
+    "audioPrompt": "ज्ञ — ज्ञानी ज्ञ",
+    "articulationTip": "Conjunct of ज् + ञ: in Nepali it is pronounced 'gya', as in 'ज्ञान' (gyan - knowledge)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 65,
+    "endX": 234,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "gya-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Top Crossbar (माथिल्लो तेर्सो धर्को)",
+      "nepaliInstruction": "बायाँबाट दायाँ ठाडो धर्कोसम्म तेर्सो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the crossbar from the left across to the stem.",
+      "svgPath": "M 98 126 L 198 126",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 98, "y": 126, "label": "Curve Start" },
+        { "index": 1, "x": 131.3, "y": 126, "label": "Left Arc" },
+        { "index": 2, "x": 164.7, "y": 126, "label": "Right Arc" },
+        { "index": 3, "x": 198, "y": 126, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "gya-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Curved Body (घुमाउरो शरीर)",
+      "nepaliInstruction": "तेर्सो धर्कोको बायाँ छेउबाट दायाँ घुमाउँदै तल र बायाँतिर फर्काउनुहोस्।",
+      "englishInstruction": "From the left end of the bar, curve out to the right, then down and back to the left.",
+      "svgPath": "M 100 132 C 135 140, 152 160, 145 180 C 138 198, 105 202, 80 172",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 100, "y": 132, "label": "Curve Start" },
+        { "index": 1, "x": 134.3, "y": 147.6, "label": "Upper Right Arc" },
+        { "index": 2, "x": 144.4, "y": 181.4, "label": "Lower Right Arc" },
+        { "index": 3, "x": 111, "y": 192.8, "label": "Lower Arc" },
+        { "index": 4, "x": 80, "y": 172, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "gya-stroke-3",
+      "order": 3,
+      "type": "diagonal",
+      "label": "Diagonal Tail (छड्के पुच्छर)",
+      "nepaliInstruction": "तल बायाँबाट दायाँतिर छड्के पुच्छर तान्नुहोस्।",
+      "englishInstruction": "Draw the diagonal tail down and to the right.",
+      "svgPath": "M 102 192 L 145 235",
+      "directionHint": "diagonal-down-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 102, "y": 192, "label": "Diagonal Start" },
+        { "index": 1, "x": 123.5, "y": 213.5, "label": "Center Point" },
+        { "index": 2, "x": 145, "y": 235, "label": "Diagonal End" }
+      ]
+    },
+    {
+      "id": "gya-stroke-4",
+      "order": 4,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 198 75 L 198 220",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 198, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 198, "y": 111.3, "label": "Upper Spine" },
+        { "index": 2, "x": 198, "y": 147.5, "label": "Middle Spine" },
+        { "index": 3, "x": 198, "y": 183.8, "label": "Lower Spine" },
+        { "index": 4, "x": 198, "y": 220, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "gya-stroke-5",
+      "order": 5,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 65 75 L 234 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 65, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 107.3, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 149.5, "y": 75, "label": "Center Headline" },
+        { "index": 3, "x": 191.8, "y": 75, "label": "Right Headline" },
+        { "index": 4, "x": 234, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "ज्ञान", "romanized": "gyan", "meaning": "Knowledge", "emoji": "📚" },
+    { "word": "विज्ञान", "romanized": "bigyan", "meaning": "Science", "emoji": "🔬" },
+    { "word": "यज्ञ", "romanized": "yagya", "meaning": "Fire Ritual", "emoji": "🔥" }
+  ]
+}

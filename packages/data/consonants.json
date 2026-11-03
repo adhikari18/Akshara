@@ -507,7 +507,7 @@
     "sampleWordRomanized": "kaksha",
     "sampleWordMeaning": "Classroom",
     "emoji": "🏫",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "tra",
@@ -522,7 +522,7 @@
     "sampleWordRomanized": "trishul",
     "sampleWordMeaning": "Trident",
     "emoji": "🔱",
-    "hasStrokeData": false
+    "hasStrokeData": true
   },
   {
     "id": "gya",
@@ -537,7 +537,7 @@
     "sampleWordRomanized": "gyaan",
     "sampleWordMeaning": "Knowledge",
     "emoji": "📚",
-    "hasStrokeData": false
+    "hasStrokeData": true
   }
 ]
 

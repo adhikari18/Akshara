@@ -1,0 +1,134 @@
+{
+  "id": "ksha",
+  "character": "क्ष",
+  "unicode": "U+0915 U+094D U+0937",
+  "category": "samyukta",
+  "varga": "संयुक्त (Samyukta / Conjunct)",
+  "phonetics": {
+    "romanized": "ksha",
+    "ipa": "/k͡sʌ/",
+    "nepaliName": "क्षत्री क्ष",
+    "audioPrompt": "क्ष — क्षत्री क्ष",
+    "articulationTip": "Conjunct of क् + ष: pronounced 'ksh' (often 'chhya' in everyday Nepali), as in 'कक्षा' (kakshya - classroom)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 153,
+    "endX": 230,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "ksha-stroke-1",
+      "order": 1,
+      "type": "loop",
+      "label": "Top Loop (माथिल्लो घेरा)",
+      "nepaliInstruction": "बीचको जोर्नीबाट माथि सानो घेरा बनाई फेरि जोर्नीमै फर्कनुहोस्।",
+      "englishInstruction": "From the middle crossing, draw the small top loop and return to the crossing.",
+      "svgPath": "M 112 132 C 80 110, 82 82, 103 82 C 125 82, 130 108, 112 132",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 112, "y": 132, "label": "Loop Start" },
+        { "index": 1, "x": 87.5, "y": 96.9, "label": "Upper Left Arc" },
+        { "index": 2, "x": 119.9, "y": 90.8, "label": "Upper Right Arc" },
+        { "index": 3, "x": 112, "y": 132, "label": "Loop Closure" }
+      ]
+    },
+    {
+      "id": "ksha-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Lower Bowl & Curl (तल्लो घुम्ती र बटारो)",
+      "nepaliInstruction": "जोर्नीबाट बायाँ हुँदै तल ठूलो घुम्ती बनाई भित्रतिर बटार्नुहोस्।",
+      "englishInstruction": "From the crossing, sweep left and around the lower bowl and curl back inward.",
+      "svgPath": "M 112 132 C 80 150, 70 180, 85 197 C 100 212, 135 208, 145 192 C 152 180, 145 172, 135 174",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 112, "y": 132, "label": "Curve Start" },
+        { "index": 1, "x": 81.8, "y": 162.6, "label": "Left Arc" },
+        { "index": 2, "x": 90.6, "y": 201.3, "label": "Lower Left Arc" },
+        { "index": 3, "x": 132.9, "y": 201.9, "label": "Lower Right Arc" },
+        { "index": 4, "x": 135, "y": 174, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "ksha-stroke-3",
+      "order": 3,
+      "type": "curve",
+      "label": "Crossbar to Stem (ठाडो धर्कोसम्म तेर्सो धर्को)",
+      "nepaliInstruction": "जोर्नीबाट दायाँ ठाडो धर्कोसम्म तेर्सो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the bar from the crossing across to the stem.",
+      "svgPath": "M 112 135 C 140 145, 165 145, 190 140",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 112, "y": 135, "label": "Curve Start" },
+        { "index": 1, "x": 150.6, "y": 143, "label": "Lower Arc" },
+        { "index": 2, "x": 190, "y": 140, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "ksha-stroke-4",
+      "order": 4,
+      "type": "diagonal",
+      "label": "Diagonal Tail (छड्के पुच्छर)",
+      "nepaliInstruction": "घुम्तीमुनिबाट दायाँतिर सानो छड्के पुच्छर तान्नुहोस्।",
+      "englishInstruction": "Draw the short diagonal tail down from under the bowl.",
+      "svgPath": "M 140 198 L 157 235",
+      "directionHint": "diagonal-down-right",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 140, "y": 198, "label": "Diagonal Start" },
+        { "index": 1, "x": 148.5, "y": 216.5, "label": "Center Point" },
+        { "index": 2, "x": 157, "y": 235, "label": "Diagonal End" }
+      ]
+    },
+    {
+      "id": "ksha-stroke-5",
+      "order": 5,
+      "type": "stem",
+      "label": "Right Vertical Stem (दायाँ ठाडो धर्को)",
+      "nepaliInstruction": "दायाँपट्टि माथिदेखि तलसम्म सिधा ठाडो धर्को तान्नुहोस्।",
+      "englishInstruction": "Draw the right vertical Khadi Pai stem straight down.",
+      "svgPath": "M 190 75 L 190 225",
+      "directionHint": "top-to-bottom",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 190, "y": 75, "label": "Stem Top" },
+        { "index": 1, "x": 190, "y": 112.5, "label": "Upper Spine" },
+        { "index": 2, "x": 190, "y": 150, "label": "Middle Spine" },
+        { "index": 3, "x": 190, "y": 187.5, "label": "Lower Spine" },
+        { "index": 4, "x": 190, "y": 225, "label": "Stem Foot" }
+      ]
+    },
+    {
+      "id": "ksha-stroke-6",
+      "order": 6,
+      "type": "shirorekha",
+      "label": "Short Shirorekha (छोटो शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा ठाडो धर्कोमाथि मात्र छोटो शिरोरेखा तान्नुहोस्; माथिको घेरा शिरोरेखामुनि पर्दैन।",
+      "englishInstruction": "Finish with the short Shirorekha over the stem only; the top loop stays outside it.",
+      "svgPath": "M 153 75 L 230 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 153, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 191.5, "y": 75, "label": "Center Headline" },
+        { "index": 2, "x": 230, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "कक्षा", "romanized": "kakshya", "meaning": "Classroom", "emoji": "🏫" },
+    { "word": "क्षमा", "romanized": "kshama", "meaning": "Forgiveness", "emoji": "🤝" },
+    { "word": "पक्षी", "romanized": "pakshi", "meaning": "Bird", "emoji": "🐦" }
+  ]
+}
