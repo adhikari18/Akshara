@@ -17,6 +17,8 @@ export interface StrokeSpec {
   toleranceRadius?: number;
   /** Override the automatically chosen waypoint count (>= 3). */
   waypointCount?: number;
+  /** Explicit waypoint labels (must match the sampled waypoint count). */
+  waypointLabels?: string[];
 }
 
 /** Authoring input for one glyph. Extra letter metadata is passed through untouched. */
@@ -113,10 +115,70 @@ export interface CompiledStroke {
   waypoints: Array<{ index: number; x: number; y: number; label: string }>;
 }
 
-function waypointLabel(i: number, n: number): string {
-  if (i === 0) return 'Stroke Start';
-  if (i === n - 1) return 'Stroke End';
-  return `Waypoint ${i}`;
+const START_LABELS: Record<StrokeType, string> = {
+  loop: 'Loop Start',
+  curve: 'Curve Start',
+  diagonal: 'Diagonal Start',
+  stem: 'Stem Top',
+  shirorekha: 'Shirorekha Start',
+};
+const END_LABELS: Record<StrokeType, string> = {
+  loop: 'Loop Closure',
+  curve: 'Curve Tip',
+  diagonal: 'Diagonal End',
+  stem: 'Stem Foot',
+  shirorekha: 'Shirorekha End',
+};
+
+function band(value: number, min: number, max: number, names: [string, string, string]): string {
+  const span = max - min;
+  if (span < 1) return names[1];
+  const r = (value - min) / span;
+  return r < 0.4 ? names[0] : r > 0.6 ? names[2] : names[1];
+}
+
+/**
+ * Generate descriptive waypoint labels from stroke type and geometry, e.g.
+ * "Stem Top" / "Upper Spine" / "Stem Foot", "Upper Left Arc", or
+ * "Left Headline End (Gap)" for split Shirorekha boundaries.
+ */
+export function describeWaypoints(type: StrokeType, pts: Point[], subpathEnds: number[] = []): string[] {
+  const xs = pts.map((p) => p.x);
+  const ys = pts.map((p) => p.y);
+  const [minX, maxX, minY, maxY] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  const last = pts.length - 1;
+  const labels = pts.map((p, i) => {
+    if (i === 0) return START_LABELS[type];
+    if (i === last) return END_LABELS[type];
+    if (type === 'stem') return `${band(p.y, minY, maxY, ['Upper', 'Middle', 'Lower'])} Spine`;
+    if (type === 'shirorekha') return `${band(p.x, minX, maxX, ['Left', 'Center', 'Right'])} Headline`;
+    const v = band(p.y, minY, maxY, ['Upper', 'Middle', 'Lower']);
+    const h = band(p.x, minX, maxX, ['Left', 'Center', 'Right']);
+    return v === 'Middle' && h === 'Center' ? 'Center Point' : `${v} ${h} Arc`.replace('Middle ', '').replace(' Center', '');
+  });
+  // Split Shirorekha: label each waypoint by its headline segment and mark the gaps.
+  if (type === 'shirorekha' && subpathEnds.length > 0) {
+    let seg = 0;
+    for (let i = 0; i <= last; i++) {
+      const isSegStart = i === 0 || subpathEnds.includes(i - 1);
+      const isSegEnd = i === last || subpathEnds.includes(i);
+      if (i === 0) labels[i] = START_LABELS.shirorekha;
+      else if (i === last) labels[i] = END_LABELS.shirorekha;
+      else if (isSegStart) labels[i] = `Segment ${seg + 1} Start (After Gap)`;
+      else if (isSegEnd) labels[i] = `Segment ${seg + 1} End (Gap)`;
+      else labels[i] = `Segment ${seg + 1} Headline`;
+      if (isSegEnd) seg++;
+    }
+  }
+  // Disambiguate repeated labels with a running number.
+  const seen = new Map<string, number>();
+  const totals = labels.reduce((m, l) => m.set(l, (m.get(l) ?? 0) + 1), new Map<string, number>());
+  return labels.map((l) => {
+    if ((totals.get(l) ?? 0) < 2) return l;
+    const n = (seen.get(l) ?? 0) + 1;
+    seen.set(l, n);
+    return `${l} ${n}`;
+  });
 }
 
 /**
@@ -147,6 +209,26 @@ export function compileGlyph(spec: GlyphSpec, options: CompileOptions = {}): Rec
     const count = s.waypointCount ?? waypointCountFor(pathLength(segments), spacing);
     if (count < 3) throw new Error(`Stroke ${i + 1} of '${spec.id}': waypointCount must be >= 3.`);
     const pts = sampleStroke(segments, count);
+    if (s.waypointLabels && s.waypointLabels.length !== pts.length) {
+      throw new Error(
+        `Stroke ${i + 1} of '${spec.id}': waypointLabels has ${s.waypointLabels.length} entries but ${pts.length} waypoints were sampled.`
+      );
+    }
+    const subpathEnds: number[] = [];
+    if (subpathCount > 1) {
+      // Recover subpath boundaries: consecutive points that straddle a gap are far apart horizontally.
+      for (let k = 0; k < pts.length - 1; k++) {
+        const inGap = splitSubpaths(segments).some((sp, j, all) => {
+          const next = all[j + 1];
+          if (!next) return false;
+          const endX = pathBoundingBox(sp).maxX;
+          const startX = pathBoundingBox(next).minX;
+          return Math.abs(pts[k]!.x - endX) < 0.5 && Math.abs(pts[k + 1]!.x - startX) < 0.5;
+        });
+        if (inGap) subpathEnds.push(k);
+      }
+    }
+    const labels = s.waypointLabels ?? describeWaypoints(s.type, pts, subpathEnds);
     maxY = Math.max(maxY, pathBoundingBox(segments).maxY);
     const order = i + 1;
     return {
@@ -159,7 +241,7 @@ export function compileGlyph(spec: GlyphSpec, options: CompileOptions = {}): Rec
       svgPath: s.svgPath,
       directionHint: s.directionHint ?? inferDirectionHint(s.type, pts),
       toleranceRadius: s.toleranceRadius ?? options.toleranceRadius ?? (s.type === 'stem' || s.type === 'shirorekha' ? 26 : 28),
-      waypoints: pts.map((p, idx) => ({ index: idx, x: round(p.x), y: round(p.y), label: waypointLabel(idx, pts.length) })),
+      waypoints: pts.map((p, idx) => ({ index: idx, x: round(p.x), y: round(p.y), label: labels[idx]! })),
     };
   });
 

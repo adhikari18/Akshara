@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { compileGlyph, inferDirectionHint, waypointCountFor, type GlyphSpec } from '../src/compiler.js';
+import { compileGlyph, describeWaypoints, inferDirectionHint, waypointCountFor, type GlyphSpec } from '../src/compiler.js';
 
 const kaPath = fileURLToPath(new URL('../../data/strokes/ka.json', import.meta.url));
 const ka = JSON.parse(readFileSync(kaPath, 'utf8'));
@@ -111,5 +111,41 @@ describe('split Shirorekha compilation', () => {
   it('rejects multiple subpaths in non-headline strokes', () => {
     const bad: GlyphSpec = { ...spec, strokes: [{ type: 'stem', svgPath: 'M 0 0 L 0 10 M 5 0 L 5 10' }, spec.strokes.at(-1)!] };
     expect(() => compileGlyph(bad)).toThrow(/only a split Shirorekha/);
+  });
+});
+
+describe('describeWaypoints', () => {
+  it('labels stems, headlines and arcs descriptively', () => {
+    const stem = describeWaypoints('stem', [0, 55, 110, 165].map((y) => ({ x: 150, y: 75 + y })));
+    expect(stem).toEqual(['Stem Top', 'Upper Spine', 'Lower Spine', 'Stem Foot']);
+    const bar = describeWaypoints('shirorekha', [55, 120, 180, 245].map((x) => ({ x, y: 75 })));
+    expect(bar).toEqual(['Shirorekha Start', 'Left Headline', 'Right Headline', 'Shirorekha End']);
+  });
+
+  it('numbers duplicate labels and marks split-headline gaps', () => {
+    const out = compileGlyph({
+      id: 'ga', character: 'ग', unicode: 'U+0917', category: 'vyanjan',
+      strokes: [
+        { type: 'stem', svgPath: 'M 195 75 L 195 240' },
+        { type: 'shirorekha', svgPath: 'M 60 75 L 140 75 M 170 75 L 240 75' },
+      ],
+    }) as any;
+    const labels: string[] = out.strokes[1].waypoints.map((w: any) => w.label);
+    expect(labels.some((l) => l.endsWith('End (Gap)'))).toBe(true);
+    expect(labels.some((l) => l.endsWith('Start (After Gap)'))).toBe(true);
+    expect(new Set(labels).size).toBe(labels.length);
+  });
+
+  it('honours explicit waypointLabels and validates their count', () => {
+    const base = { id: 'x', character: 'x', unicode: 'U+0915', category: 'vyanjan' as const };
+    const ok = compileGlyph({ ...base, strokes: [
+      { type: 'stem', svgPath: 'M 150 75 L 150 165', waypointCount: 3, waypointLabels: ['A', 'B', 'C'] },
+      { type: 'shirorekha', svgPath: 'M 55 75 L 245 75' },
+    ] }) as any;
+    expect(ok.strokes[0].waypoints.map((w: any) => w.label)).toEqual(['A', 'B', 'C']);
+    expect(() => compileGlyph({ ...base, strokes: [
+      { type: 'stem', svgPath: 'M 150 75 L 150 165', waypointCount: 3, waypointLabels: ['A'] },
+      { type: 'shirorekha', svgPath: 'M 55 75 L 245 75' },
+    ] })).toThrow(/waypointLabels has 1 entries/);
   });
 });

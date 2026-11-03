@@ -15,11 +15,13 @@ npm run akshara -- compile spec.json -o packages/data/strokes/cha.json
 ## Spec format
 
 A spec is a normal letter file where each stroke only needs `type` and `svgPath`
-(plus optional `label`, instructions, `directionHint`, `toleranceRadius`, `waypointCount`).
+(plus optional `label`, instructions, `directionHint`, `toleranceRadius`, `waypointCount`, `waypointLabels`).
 The compiler fills in:
 
 - `waypoints` sampled at equal arc-length spacing (default 45 units, min 3, exact endpoints)
 - `directionHint` inferred from stroke type and loop winding
+- descriptive waypoint labels from stroke type and position (`Stem Top`, `Upper Left Arc`,
+  `Segment 1 End (Gap)`, …) — override per stroke with `waypointLabels`
 - `viewBox` and `shirorekha` derived from the final *Shirorekha* stroke (if omitted)
 - split headline `shirorekha.segments` when the *Shirorekha* `svgPath` has several subpaths
   (e.g. `"M 60 75 L 140 75 M 170 75 L 240 75"` for `ग`); each segment is sampled separately
