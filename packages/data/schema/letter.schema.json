@@ -108,9 +108,29 @@
           "const": true,
           "description": "Devanagari topological invariant: the Shirorekha top bar must always be drawn as the final stroke."
         },
-        "startX": { "type": "number" },
-        "endX": { "type": "number" },
-        "y": { "type": "number" }
+        "startX": {
+          "type": "number",
+          "description": "Left-most X of the headline (start of the first segment when split)."
+        },
+        "endX": {
+          "type": "number",
+          "description": "Right-most X of the headline (end of the last segment when split)."
+        },
+        "y": { "type": "number" },
+        "segments": {
+          "type": "array",
+          "minItems": 2,
+          "description": "Optional split/partial headline spans, ordered left to right. Used by letters with an open upper-left loop (ख, ग, ण, थ, ध, भ, श) whose Shirorekha leaves a gap so the glyph is not confused with another letter (ध vs घ, भ vs म). Omit for a single continuous bar from startX to endX. The first segment must start at startX, the last must end at endX, and the Shirorekha stroke's svgPath must contain one subpath (M ...) per segment.",
+          "items": {
+            "type": "object",
+            "required": ["startX", "endX"],
+            "additionalProperties": false,
+            "properties": {
+              "startX": { "type": "number", "minimum": 0, "maximum": 300 },
+              "endX": { "type": "number", "minimum": 0, "maximum": 300 }
+            }
+          }
+        }
       }
     },
     "strokes": {

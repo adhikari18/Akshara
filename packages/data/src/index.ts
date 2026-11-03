@@ -53,6 +53,27 @@ export interface StrokeDefinition {
   waypoints: WaypointDefinition[];
 }
 
+/** A single continuous horizontal span of the Shirorekha headline. */
+export interface ShirorekhaSegment {
+  startX: number;
+  endX: number;
+}
+
+export interface ShirorekhaDefinition {
+  enforcedLast: boolean;
+  /** Left-most X of the headline (start of the first segment when split). */
+  startX: number;
+  /** Right-most X of the headline (end of the last segment when split). */
+  endX: number;
+  y: number;
+  /**
+   * Optional split headline spans, ordered left to right. Letters with an open
+   * upper-left loop (ख, ग, ण, थ, ध, भ, श) leave a gap in the Shirorekha.
+   * When omitted, the headline is one continuous bar from startX to endX.
+   */
+  segments?: ShirorekhaSegment[];
+}
+
 export interface LetterStrokeDataset {
   id: string;
   character: string;
@@ -72,12 +93,7 @@ export interface LetterStrokeDataset {
     shirorekhaY: number;
     baselineY: number;
   };
-  shirorekha: {
-    enforcedLast: boolean;
-    startX: number;
-    endX: number;
-    y: number;
-  };
+  shirorekha: ShirorekhaDefinition;
   strokes: StrokeDefinition[];
   vocabulary: Array<{
     word: string;
@@ -200,6 +216,23 @@ export const STROKE_LIST: LetterStrokeDataset[] = [
   STROKE_DATASETS.am,
   STROKE_DATASETS.aha,
 ];
+
+/**
+ * Returns the headline spans for a letter: the explicit split segments when
+ * present, otherwise a single span from startX to endX.
+ */
+export function getShirorekhaSegments(dataset: Pick<LetterStrokeDataset, 'shirorekha'>): ShirorekhaSegment[] {
+  const { shirorekha } = dataset;
+  if (shirorekha.segments && shirorekha.segments.length > 0) {
+    return shirorekha.segments.map((s) => ({ startX: s.startX, endX: s.endX }));
+  }
+  return [{ startX: shirorekha.startX, endX: shirorekha.endX }];
+}
+
+/** True when the letter's Shirorekha is split into two or more spans with gaps. */
+export function hasSplitShirorekha(dataset: Pick<LetterStrokeDataset, 'shirorekha'>): boolean {
+  return (dataset.shirorekha.segments?.length ?? 0) > 1;
+}
 
 export interface DatasetValidationResult {
   valid: boolean;
