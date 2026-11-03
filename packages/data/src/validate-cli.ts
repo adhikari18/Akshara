@@ -26,7 +26,17 @@ if (CONSONANTS.length !== 36) {
   console.error(`❌ Expected 36 Vyanjan Varna consonants, found ${CONSONANTS.length}`);
   hasError = true;
 } else {
-  console.log(`✅ Consonants (Vyanjan Varna): ${CONSONANTS.length} canonical entries verified (क to ज्ञ).`);
+  const missingConsonantStrokes = CONSONANTS.filter((c) => !c.hasStrokeData || !STROKE_DATASETS[c.id]);
+  if (missingConsonantStrokes.length > 0) {
+    console.error(
+      `❌ Missing stroke vectors for Vyanjan Varna: ${missingConsonantStrokes.map((c) => c.character).join(', ')}`
+    );
+    hasError = true;
+  } else {
+    console.log(
+      `✅ Consonants (Vyanjan Varna): ${CONSONANTS.length}/36 canonical entries and stroke vectors verified (क to ज्ञ).`
+    );
+  }
 }
 
 for (const strokeSet of STROKE_LIST) {
