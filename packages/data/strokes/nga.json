@@ -1,0 +1,92 @@
+{
+  "id": "nga",
+  "character": "ङ",
+  "unicode": "U+0919",
+  "category": "vyanjan",
+  "varga": "कण्ठ्य (Kanthya / Velar)",
+  "phonetics": {
+    "romanized": "nga",
+    "ipa": "/ŋʌ/",
+    "nepaliName": "नाकतोप्ले ङ",
+    "audioPrompt": "ङ — नाकतोप्ले ङ",
+    "articulationTip": "Velar nasal: the 'ng' sound at the end of 'sing', made with the back of the tongue raised against the soft palate, as in 'नङ' (nang - fingernail)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "shirorekha": {
+    "enforcedLast": true,
+    "startX": 62,
+    "endX": 236,
+    "y": 75
+  },
+  "strokes": [
+    {
+      "id": "nga-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Neck, Hood & Lower Sweep (घाँटी, टोपी र तल्लो घुम्ती)",
+      "nepaliInstruction": "शिरोरेखाबाट छोटो ठाडो धर्को तानी बायाँतिर टोपीजस्तो घुमाउनुहोस्, अनि दायाँ हुँदै तल ठूलो घुम्ती बनाएर बायाँतिर टुङ्ग्याउनुहोस्।",
+      "englishInstruction": "Drop a short neck from the headline, curl left into the small hood, then swing right and around into the large lower bowl, finishing at the lower left.",
+      "svgPath": "M 176 75 L 176 122 C 140 122, 110 122, 106 145 C 103 162, 118 168, 132 166 L 172 160 C 192 172, 195 228, 148 231 C 115 233, 95 215, 85 197",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 176, "y": 75, "label": "Curve Start" },
+        { "index": 1, "x": 176, "y": 117.2, "label": "Upper Right Arc" },
+        { "index": 2, "x": 138.6, "y": 123.3, "label": "Upper Arc" },
+        { "index": 3, "x": 106, "y": 144.8, "label": "Left Arc" },
+        { "index": 4, "x": 133.8, "y": 165.7, "label": "Center Point" },
+        { "index": 5, "x": 174.9, "y": 162.2, "label": "Right Arc" },
+        { "index": 6, "x": 184.6, "y": 201.5, "label": "Lower Right Arc 1" },
+        { "index": 7, "x": 156.5, "y": 229.8, "label": "Lower Right Arc 2" },
+        { "index": 8, "x": 115.2, "y": 225.4, "label": "Lower Left Arc" },
+        { "index": 9, "x": 85, "y": 197, "label": "Curve Tip" }
+      ]
+    },
+    {
+      "id": "nga-stroke-2",
+      "order": 2,
+      "type": "loop",
+      "label": "Side Dot (दायाँ थोप्लो)",
+      "nepaliInstruction": "दायाँपट्टि सानो गोलो थोप्लो बनाउनुहोस्।",
+      "englishInstruction": "Draw the small round dot to the right of the letter.",
+      "svgPath": "M 210 138 C 224 138, 224 158, 210 158 C 196 158, 196 138, 210 138",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        { "index": 0, "x": 210, "y": 138, "label": "Loop Start" },
+        { "index": 1, "x": 220.5, "y": 148, "label": "Right Arc" },
+        { "index": 2, "x": 210, "y": 158, "label": "Lower Arc" },
+        { "index": 3, "x": 199.5, "y": 148, "label": "Left Arc" },
+        { "index": 4, "x": 210, "y": 138, "label": "Loop Closure" }
+      ]
+    },
+    {
+      "id": "nga-stroke-3",
+      "order": 3,
+      "type": "shirorekha",
+      "label": "Shirorekha Top Bar (शिरोरेखा)",
+      "nepaliInstruction": "अन्त्यमा बायाँदेखि दायाँसम्म शिरोरेखा तान्नुहोस्।",
+      "englishInstruction": "Finish with the horizontal Shirorekha headline bar from left to right.",
+      "svgPath": "M 62 75 L 236 75",
+      "directionHint": "left-to-right",
+      "toleranceRadius": 26,
+      "waypoints": [
+        { "index": 0, "x": 62, "y": 75, "label": "Shirorekha Start" },
+        { "index": 1, "x": 105.5, "y": 75, "label": "Left Headline" },
+        { "index": 2, "x": 149, "y": 75, "label": "Center Headline" },
+        { "index": 3, "x": 192.5, "y": 75, "label": "Right Headline" },
+        { "index": 4, "x": 236, "y": 75, "label": "Shirorekha End" }
+      ]
+    }
+  ],
+  "vocabulary": [
+    { "word": "नङ", "romanized": "nang", "meaning": "Fingernail", "emoji": "💅" },
+    { "word": "रङ", "romanized": "rang", "meaning": "Colour", "emoji": "🎨" },
+    { "word": "सिङ", "romanized": "sing", "meaning": "Horn", "emoji": "🐂" }
+  ]
+}

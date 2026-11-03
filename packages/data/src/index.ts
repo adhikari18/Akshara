@@ -8,6 +8,7 @@ import strokeKa from '../strokes/ka.json' with { type: 'json' };
 import strokeKha from '../strokes/kha.json' with { type: 'json' };
 import strokeGa from '../strokes/ga.json' with { type: 'json' };
 import strokeGha from '../strokes/gha.json' with { type: 'json' };
+import strokeNga from '../strokes/nga.json' with { type: 'json' };
 import strokeA from '../strokes/a.json' with { type: 'json' };
 import strokeAa from '../strokes/aa.json' with { type: 'json' };
 import strokeI from '../strokes/i.json' with { type: 'json' };
@@ -182,6 +183,7 @@ export const STROKE_DATASETS: Record<string, LetterStrokeDataset> = {
   kha: strokeKha as LetterStrokeDataset,
   ga: strokeGa as LetterStrokeDataset,
   gha: strokeGha as LetterStrokeDataset,
+  nga: strokeNga as LetterStrokeDataset,
   a: strokeA as LetterStrokeDataset,
   aa: strokeAa as LetterStrokeDataset,
   i: strokeI as LetterStrokeDataset,
@@ -202,6 +204,7 @@ export const STROKE_LIST: LetterStrokeDataset[] = [
   STROKE_DATASETS.kha,
   STROKE_DATASETS.ga,
   STROKE_DATASETS.gha,
+  STROKE_DATASETS.nga,
   STROKE_DATASETS.a,
   STROKE_DATASETS.aa,
   STROKE_DATASETS.i,
