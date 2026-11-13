@@ -27,16 +27,35 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Build workspaces
+      - name: Build workspaces (static export to packages/web/out)
         run: npm run build
+        env:
+          # e.g. "/Akshara" for https://<user>.github.io/Akshara/ (empty for a custom domain)
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+
+      - name: Disable Jekyll processing (keeps the _next/ asset folder)
+        run: touch packages/web/out/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: packages/web/out
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Echo deployment summary
-        run: echo "Akshara static web build verified for GitHub Pages deployment."
-
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
