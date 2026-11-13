@@ -12,7 +12,16 @@ export type Segment =
   | { type: 'Z'; from: Point; to: Point };
 
 const ARG_COUNTS: Record<string, number> = {
-  M: 2, L: 2, H: 1, V: 1, C: 6, S: 4, Q: 4, T: 2, Z: 0, A: 7,
+  M: 2,
+  L: 2,
+  H: 1,
+  V: 1,
+  C: 6,
+  S: 4,
+  Q: 4,
+  T: 2,
+  Z: 0,
+  A: 7,
 };
 
 const TOKEN_RE = /([MmLlHhVvCcSsQqTtZzAa])|([-+]?(?:\d*\.\d+|\d+\.?)(?:[eE][-+]?\d+)?)/g;
@@ -66,7 +75,8 @@ export function parseSvgPath(d: string): Segment[] {
     if (typeof t === 'string') {
       cmd = t;
       i++;
-      if (cmd === 'A' || cmd === 'a') throw new Error('SVG arc commands (A/a) are not supported; use cubic Béziers.');
+      if (cmd === 'A' || cmd === 'a')
+        throw new Error('SVG arc commands (A/a) are not supported; use cubic Béziers.');
     } else if (!cmd) {
       throw new Error('SVG path must begin with a command.');
     } else if (cmd === 'Z' || cmd === 'z') {
@@ -94,9 +104,11 @@ export function parseSvgPath(d: string): Segment[] {
       case 'H':
       case 'V': {
         const to =
-          upper === 'L' ? { x: ox + num(), y: oy + num() }
-          : upper === 'H' ? { x: ox + num(), y: cur.y }
-          : { x: cur.x, y: oy + num() };
+          upper === 'L'
+            ? { x: ox + num(), y: oy + num() }
+            : upper === 'H'
+              ? { x: ox + num(), y: cur.y }
+              : { x: cur.x, y: oy + num() };
         segments.push({ type: 'L', from: cur, to });
         cur = to;
         break;

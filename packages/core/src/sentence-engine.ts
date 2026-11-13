@@ -103,8 +103,10 @@ export function evaluateSOVSentence(
     feedbackEnglish =
       'Tip: You used English SVO order (Subject-Verb-Object). In Nepali, the Verb (क्रिया) always goes at the very end (Subject-Object-Verb)!';
   } else if (complete && !correct) {
-    feedbackNepali = 'वाक्यको क्रम मिलेन। पहिले कर्ता (कसले?), अनि कर्म (के/कहाँ?), र अन्त्यमा क्रिया (गर्छ) राख्नुहोस्।';
-    feedbackEnglish = 'Order mismatch: start with the Subject (कर्ता), then the Object (कर्म), and place the Verb (क्रिया) last.';
+    feedbackNepali =
+      'वाक्यको क्रम मिलेन। पहिले कर्ता (कसले?), अनि कर्म (के/कहाँ?), र अन्त्यमा क्रिया (गर्छ) राख्नुहोस्।';
+    feedbackEnglish =
+      'Order mismatch: start with the Subject (कर्ता), then the Object (कर्म), and place the Verb (क्रिया) last.';
   }
 
   return {
@@ -118,4 +120,3 @@ export function evaluateSOVSentence(
     feedbackEnglish,
   };
 }
-

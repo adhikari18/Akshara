@@ -318,7 +318,9 @@ export const STROKE_LIST: LetterStrokeDataset[] = [
  * Returns the headline spans for a letter: the explicit split segments when
  * present, otherwise a single span from startX to endX.
  */
-export function getShirorekhaSegments(dataset: Pick<LetterStrokeDataset, 'shirorekha'>): ShirorekhaSegment[] {
+export function getShirorekhaSegments(
+  dataset: Pick<LetterStrokeDataset, 'shirorekha'>
+): ShirorekhaSegment[] {
   const { shirorekha } = dataset;
   if (shirorekha.segments && shirorekha.segments.length > 0) {
     return shirorekha.segments.map((s) => ({ startX: s.startX, endX: s.endX }));
@@ -349,7 +351,10 @@ export const TOPOLOGY_PRIORITY: Record<StrokeTopologyType, number> = {
  * above the headline) or marks entirely to the right of the last stem.
  * `headlineY` defaults to the Shirorekha stroke's first waypoint (or 75).
  */
-export function validateStrokeTopology(strokes: StrokeDefinition[], headlineY?: number): {
+export function validateStrokeTopology(
+  strokes: StrokeDefinition[],
+  headlineY?: number
+): {
   valid: boolean;
   violations: string[];
 } {
@@ -434,7 +439,9 @@ export function validateLetterDataset(dataset: LetterStrokeDataset): DatasetVali
     errors.push('Missing required letter id or character.');
   }
   if (dataset.viewBox.width !== 300 || dataset.viewBox.height !== 300) {
-    errors.push(`Invalid viewBox (${dataset.viewBox.width}x${dataset.viewBox.height}); expected 300x300.`);
+    errors.push(
+      `Invalid viewBox (${dataset.viewBox.width}x${dataset.viewBox.height}); expected 300x300.`
+    );
   }
   if (!dataset.shirorekha.enforcedLast) {
     errors.push(`Letter '${dataset.id}' must enforce shirorekha.enforcedLast = true.`);
@@ -453,7 +460,9 @@ export function validateLetterDataset(dataset: LetterStrokeDataset): DatasetVali
         errors.push(`Stroke '${stroke.id}' waypoint ${wpIdx} has mismatched index ${wp.index}.`);
       }
       if (wp.x < 0 || wp.x > 300 || wp.y < 0 || wp.y > 300) {
-        errors.push(`Stroke '${stroke.id}' waypoint ${wpIdx} (${wp.x}, ${wp.y}) out of 300x300 bounds.`);
+        errors.push(
+          `Stroke '${stroke.id}' waypoint ${wpIdx} (${wp.x}, ${wp.y}) out of 300x300 bounds.`
+        );
       }
     });
   });
@@ -488,17 +497,23 @@ export function validateShirorekhaGeometry(dataset: LetterStrokeDataset): string
   const id = dataset.id;
 
   if (shirorekha.startX >= shirorekha.endX) {
-    errors.push(`Letter '${id}' shirorekha startX (${shirorekha.startX}) must be less than endX (${shirorekha.endX}).`);
+    errors.push(
+      `Letter '${id}' shirorekha startX (${shirorekha.startX}) must be less than endX (${shirorekha.endX}).`
+    );
   }
 
   const segments = getShirorekhaSegments(dataset);
   if (shirorekha.segments) {
     if (shirorekha.segments.length < 2) {
-      errors.push(`Letter '${id}' shirorekha.segments must contain at least 2 spans; omit it for a continuous bar.`);
+      errors.push(
+        `Letter '${id}' shirorekha.segments must contain at least 2 spans; omit it for a continuous bar.`
+      );
     }
     segments.forEach((seg, i) => {
       if (seg.startX >= seg.endX) {
-        errors.push(`Letter '${id}' shirorekha segment ${i} has startX (${seg.startX}) >= endX (${seg.endX}).`);
+        errors.push(
+          `Letter '${id}' shirorekha segment ${i} has startX (${seg.startX}) >= endX (${seg.endX}).`
+        );
       }
       const prev = segments[i - 1];
       if (prev && seg.startX - prev.endX < MIN_SHIROREKHA_GAP) {
@@ -510,10 +525,14 @@ export function validateShirorekhaGeometry(dataset: LetterStrokeDataset): string
     const first = segments[0];
     const last = segments[segments.length - 1];
     if (first && first.startX !== shirorekha.startX) {
-      errors.push(`Letter '${id}' first shirorekha segment must start at shirorekha.startX (${shirorekha.startX}).`);
+      errors.push(
+        `Letter '${id}' first shirorekha segment must start at shirorekha.startX (${shirorekha.startX}).`
+      );
     }
     if (last && last.endX !== shirorekha.endX) {
-      errors.push(`Letter '${id}' last shirorekha segment must end at shirorekha.endX (${shirorekha.endX}).`);
+      errors.push(
+        `Letter '${id}' last shirorekha segment must end at shirorekha.endX (${shirorekha.endX}).`
+      );
     }
   }
 
@@ -533,22 +552,28 @@ export function validateShirorekhaGeometry(dataset: LetterStrokeDataset): string
     segments.some((s) => x >= s.startX - SHIROREKHA_EPSILON && x <= s.endX + SHIROREKHA_EPSILON);
   stroke.waypoints.forEach((wp) => {
     if (Math.abs(wp.y - shirorekha.y) > SHIROREKHA_EPSILON) {
-      errors.push(`Shirorekha stroke '${stroke.id}' waypoint ${wp.index} (y=${wp.y}) is off the headline y=${shirorekha.y}.`);
+      errors.push(
+        `Shirorekha stroke '${stroke.id}' waypoint ${wp.index} (y=${wp.y}) is off the headline y=${shirorekha.y}.`
+      );
     }
     if (!inSegment(wp.x)) {
-      errors.push(`Shirorekha stroke '${stroke.id}' waypoint ${wp.index} (x=${wp.x}) falls outside every headline segment.`);
+      errors.push(
+        `Shirorekha stroke '${stroke.id}' waypoint ${wp.index} (x=${wp.x}) falls outside every headline segment.`
+      );
     }
   });
 
   if (segments.length > 1) {
-    const hasWaypointAt = (x: number) => stroke.waypoints.some((wp) => Math.abs(wp.x - x) <= SHIROREKHA_EPSILON);
+    const hasWaypointAt = (x: number) =>
+      stroke.waypoints.some((wp) => Math.abs(wp.x - x) <= SHIROREKHA_EPSILON);
     segments.forEach((seg, i) => {
       if (!hasWaypointAt(seg.startX) || !hasWaypointAt(seg.endX)) {
-        errors.push(`Shirorekha stroke '${stroke.id}' must place waypoints at both ends of segment ${i} (${seg.startX}–${seg.endX}).`);
+        errors.push(
+          `Shirorekha stroke '${stroke.id}' must place waypoints at both ends of segment ${i} (${seg.startX}–${seg.endX}).`
+        );
       }
     });
   }
 
   return errors;
 }
-

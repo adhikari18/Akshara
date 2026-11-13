@@ -232,14 +232,11 @@ export class TracingEvaluator {
     }
     const { shirorekha } = this.dataset;
     const nearHeadlineY = Math.abs(point.y - shirorekha.y) <= 22;
-    const withinHeadlineX =
-      point.x >= shirorekha.startX - 15 && point.x <= shirorekha.endX + 15;
+    const withinHeadlineX = point.x >= shirorekha.startX - 15 && point.x <= shirorekha.endX + 15;
 
     // Upper-crown strokes (such as Dirgha Ikar arch hook, Ekar/Aikar flags, or Shirbindu)
     // operate at or above the Shirorekha headline by design.
-    const isUpperCrownStroke = currentStroke.waypoints.every(
-      (wp) => wp.y <= shirorekha.y + 4
-    );
+    const isUpperCrownStroke = currentStroke.waypoints.every((wp) => wp.y <= shirorekha.y + 4);
     if (isUpperCrownStroke) {
       return null;
     }
@@ -262,9 +259,7 @@ export class TracingEvaluator {
       currentStroke.waypoints[Math.max(0, this.unlockedWaypointIndex + 1)] ??
       currentStroke.waypoints[0];
     const prevWp =
-      this.unlockedWaypointIndex >= 0
-        ? currentStroke.waypoints[this.unlockedWaypointIndex]
-        : null;
+      this.unlockedWaypointIndex >= 0 ? currentStroke.waypoints[this.unlockedWaypointIndex] : null;
     const targetNearHeadline = Math.abs(nextWp.y - shirorekha.y) <= 22;
     const departingHeadlineWaypoint =
       prevWp !== null &&
@@ -311,14 +306,8 @@ export class TracingEvaluator {
       };
     }
 
-    const smoothedPoint = smoothPointerPoint(
-      this.lastSmoothedPoint,
-      rawPoint,
-      this.smoothingAlpha
-    );
-    const jitterDelta = this.lastSmoothedPoint
-      ? euclideanDistance(rawPoint, smoothedPoint)
-      : 0;
+    const smoothedPoint = smoothPointerPoint(this.lastSmoothedPoint, rawPoint, this.smoothingAlpha);
+    const jitterDelta = this.lastSmoothedPoint ? euclideanDistance(rawPoint, smoothedPoint) : 0;
     this.lastSmoothedPoint = smoothedPoint;
 
     if (!this.strokeStartPoint) {
@@ -365,10 +354,7 @@ export class TracingEvaluator {
       currentStroke.waypoints[currentStroke.waypoints.length - 1];
 
     const distanceToTarget = euclideanDistance(smoothedPoint, targetWaypoint);
-    const corridorDeviation = distanceToWaypointPolyline(
-      smoothedPoint,
-      currentStroke.waypoints
-    );
+    const corridorDeviation = distanceToWaypointPolyline(smoothedPoint, currentStroke.waypoints);
 
     const isOffTrack =
       this.unlockedWaypointIndex >= 0 &&
@@ -386,16 +372,12 @@ export class TracingEvaluator {
     if (isWithinWaypointTolerance(smoothedPoint, targetWaypoint, effectiveTolerance)) {
       this.unlockedWaypointIndex = nextWaypointIndex;
       accepted = true;
-    } else if (
-      this.unlockedWaypointIndex >= 0 &&
-      corridorDeviation <= effectiveTolerance
-    ) {
+    } else if (this.unlockedWaypointIndex >= 0 && corridorDeviation <= effectiveTolerance) {
       // Moving smoothly along the corridor toward the next waypoint
       accepted = true;
     }
 
-    const strokeCompleted =
-      this.unlockedWaypointIndex >= currentStroke.waypoints.length - 1;
+    const strokeCompleted = this.unlockedWaypointIndex >= currentStroke.waypoints.length - 1;
 
     if (strokeCompleted) {
       this.completedStrokeIds.push(currentStroke.id);
@@ -423,10 +405,7 @@ export class TracingEvaluator {
       accepted,
       strokeCompleted,
       letterCompleted,
-      currentStrokeIndex: Math.min(
-        this.currentStrokeIndex,
-        this.dataset.strokes.length - 1
-      ),
+      currentStrokeIndex: Math.min(this.currentStrokeIndex, this.dataset.strokes.length - 1),
       currentStrokeOrder: currentStroke.order,
       unlockedWaypointIndex: this.unlockedWaypointIndex,
       totalWaypointsInStroke: currentStroke.waypoints.length,
@@ -458,14 +437,12 @@ export class TracingEvaluator {
     const unlockedInActive = Math.max(0, this.unlockedWaypointIndex + 1);
     const overallCompletionRatio = Math.min(
       1,
-      (completedWaypointsPriorStrokes + unlockedInActive) /
-        Math.max(1, totalWaypointsAllStrokes)
+      (completedWaypointsPriorStrokes + unlockedInActive) / Math.max(1, totalWaypointsAllStrokes)
     );
 
     const meanDeviation =
       this.cumulativeDeviations.length > 0
-        ? this.cumulativeDeviations.reduce((a, b) => a + b, 0) /
-          this.cumulativeDeviations.length
+        ? this.cumulativeDeviations.reduce((a, b) => a + b, 0) / this.cumulativeDeviations.length
         : 0;
     const deviationPenalty = Math.min(35, meanDeviation * 0.9);
     const offTrackPenalty = Math.min(30, this.offTrackCount * 4);
@@ -491,4 +468,3 @@ export class TracingEvaluator {
     };
   }
 }
-

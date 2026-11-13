@@ -142,19 +142,31 @@ function band(value: number, min: number, max: number, names: [string, string, s
  * "Stem Top" / "Upper Spine" / "Stem Foot", "Upper Left Arc", or
  * "Left Headline End (Gap)" for split Shirorekha boundaries.
  */
-export function describeWaypoints(type: StrokeType, pts: Point[], subpathEnds: number[] = []): string[] {
+export function describeWaypoints(
+  type: StrokeType,
+  pts: Point[],
+  subpathEnds: number[] = []
+): string[] {
   const xs = pts.map((p) => p.x);
   const ys = pts.map((p) => p.y);
-  const [minX, maxX, minY, maxY] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  const [minX, maxX, minY, maxY] = [
+    Math.min(...xs),
+    Math.max(...xs),
+    Math.min(...ys),
+    Math.max(...ys),
+  ];
   const last = pts.length - 1;
   const labels = pts.map((p, i) => {
     if (i === 0) return START_LABELS[type];
     if (i === last) return END_LABELS[type];
     if (type === 'stem') return `${band(p.y, minY, maxY, ['Upper', 'Middle', 'Lower'])} Spine`;
-    if (type === 'shirorekha') return `${band(p.x, minX, maxX, ['Left', 'Center', 'Right'])} Headline`;
+    if (type === 'shirorekha')
+      return `${band(p.x, minX, maxX, ['Left', 'Center', 'Right'])} Headline`;
     const v = band(p.y, minY, maxY, ['Upper', 'Middle', 'Lower']);
     const h = band(p.x, minX, maxX, ['Left', 'Center', 'Right']);
-    return v === 'Middle' && h === 'Center' ? 'Center Point' : `${v} ${h} Arc`.replace('Middle ', '').replace(' Center', '');
+    return v === 'Middle' && h === 'Center'
+      ? 'Center Point'
+      : `${v} ${h} Arc`.replace('Middle ', '').replace(' Center', '');
   });
   // Split Shirorekha: label each waypoint by its headline segment and mark the gaps.
   if (type === 'shirorekha' && subpathEnds.length > 0) {
@@ -186,14 +198,19 @@ export function describeWaypoints(type: StrokeType, pts: Point[], subpathEnds: n
  * samples equidistant waypoints for every stroke, infers direction hints,
  * and derives viewBox / shirorekha metadata from the geometry when absent.
  */
-export function compileGlyph(spec: GlyphSpec, options: CompileOptions = {}): Record<string, unknown> {
+export function compileGlyph(
+  spec: GlyphSpec,
+  options: CompileOptions = {}
+): Record<string, unknown> {
   const spacing = options.spacing ?? 45;
   if (spec.strokes.length < 2) throw new Error(`Glyph '${spec.id}' needs at least 2 strokes.`);
 
   const lastIdx = spec.strokes.length - 1;
   spec.strokes.forEach((s, i) => {
     if (s.type === 'shirorekha' && i !== lastIdx) {
-      throw new Error(`Glyph '${spec.id}': shirorekha stroke must be last (found at position ${i + 1}).`);
+      throw new Error(
+        `Glyph '${spec.id}': shirorekha stroke must be last (found at position ${i + 1}).`
+      );
     }
   });
 
@@ -240,14 +257,25 @@ export function compileGlyph(spec: GlyphSpec, options: CompileOptions = {}): Rec
       englishInstruction: s.englishInstruction ?? '',
       svgPath: s.svgPath,
       directionHint: s.directionHint ?? inferDirectionHint(s.type, sampleEquidistant(segments, 64)),
-      toleranceRadius: s.toleranceRadius ?? options.toleranceRadius ?? (s.type === 'stem' || s.type === 'shirorekha' ? 26 : 28),
-      waypoints: pts.map((p, idx) => ({ index: idx, x: round(p.x), y: round(p.y), label: labels[idx]! })),
+      toleranceRadius:
+        s.toleranceRadius ??
+        options.toleranceRadius ??
+        (s.type === 'stem' || s.type === 'shirorekha' ? 26 : 28),
+      waypoints: pts.map((p, idx) => ({
+        index: idx,
+        x: round(p.x),
+        y: round(p.y),
+        label: labels[idx]!,
+      })),
     };
   });
 
   const out: Record<string, unknown> = { ...spec, strokes };
 
-  const bar = spec.strokes[lastIdx]!.type === 'shirorekha' ? parseSvgPath(spec.strokes[lastIdx]!.svgPath) : null;
+  const bar =
+    spec.strokes[lastIdx]!.type === 'shirorekha'
+      ? parseSvgPath(spec.strokes[lastIdx]!.svgPath)
+      : null;
   if (!spec.shirorekha && bar) {
     const box = pathBoundingBox(bar);
     const shirorekha: Record<string, unknown> = {

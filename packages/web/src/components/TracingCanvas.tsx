@@ -1,11 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  STROKE_DATASETS,
-  STROKE_LIST,
-  type LetterStrokeDataset,
-} from '@akshara/data';
+import { STROKE_DATASETS, STROKE_LIST, type LetterStrokeDataset } from '@akshara/data';
 import {
   TracingEvaluator,
   type LearnerToleranceMode,
@@ -50,7 +46,9 @@ const MAX_BACKING_PX = 2048;
 type DeckCategoryFilter = 'all' | 'swor' | 'vyanjan';
 
 /** Samyukta compounds (क्ष, त्र, ज्ञ) are taught as the last letters of the Vyanjan Varna deck. */
-function deckCategoryOf(category: 'swor' | 'vyanjan' | 'samyukta'): Exclude<DeckCategoryFilter, 'all'> {
+function deckCategoryOf(
+  category: 'swor' | 'vyanjan' | 'samyukta'
+): Exclude<DeckCategoryFilter, 'all'> {
   return category === 'swor' ? 'swor' : 'vyanjan';
 }
 
@@ -188,18 +186,14 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.lineWidth = isCurrent ? 18 : 14;
-        ctx.strokeStyle = isCurrent
-          ? 'rgba(254, 243, 199, 0.16)'
-          : 'rgba(148, 163, 184, 0.08)';
+        ctx.strokeStyle = isCurrent ? 'rgba(254, 243, 199, 0.16)' : 'rgba(148, 163, 184, 0.08)';
         ctx.stroke(path);
 
         if (isCurrent) {
           ctx.setLineDash([6, 6]);
           ctx.lineWidth = 2.5;
           ctx.strokeStyle =
-            stroke.type === 'shirorekha'
-              ? 'rgba(251, 191, 36, 0.65)'
-              : 'rgba(56, 189, 248, 0.65)';
+            stroke.type === 'shirorekha' ? 'rgba(251, 191, 36, 0.65)' : 'rgba(56, 189, 248, 0.65)';
           ctx.stroke(path);
         }
         ctx.restore();
@@ -283,11 +277,7 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
         // Waypoint node circle
         ctx.beginPath();
         ctx.arc(wp.x, wp.y, isNextTarget ? 11 : 8, 0, Math.PI * 2);
-        ctx.fillStyle = isUnlocked
-          ? '#10b981'
-          : isNextTarget
-            ? '#f59e0b'
-            : 'rgba(30, 41, 59, 0.9)';
+        ctx.fillStyle = isUnlocked ? '#10b981' : isNextTarget ? '#f59e0b' : 'rgba(30, 41, 59, 0.9)';
         ctx.fill();
         ctx.lineWidth = 2;
         ctx.strokeStyle = isUnlocked
@@ -649,6 +639,18 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
               </button>
               <button
                 type="button"
+                onClick={() => setShowWaypoints((v) => !v)}
+                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs border transition ${
+                  showWaypoints
+                    ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-200'
+                    : 'bg-slate-900 border-slate-700 text-slate-400'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Waypoints
+              </button>
+              <button
+                type="button"
                 onClick={handlePlayAutoDemo}
                 disabled={isAutoDemoPlaying}
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-500/20 border border-amber-500/40 text-amber-200 hover:bg-amber-500/30 disabled:opacity-50 transition"
@@ -692,7 +694,8 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
                   स्याबास! {dataset.phonetics.nepaliName} पूरा भयो!
                 </h3>
                 <p className="text-xs text-slate-300 mt-1">
-                  Accuracy: <span className="font-bold text-amber-300">{progress.accuracyScore}%</span> •{' '}
+                  Accuracy:{' '}
+                  <span className="font-bold text-amber-300">{progress.accuracyScore}%</span> •{' '}
                   {'⭐'.repeat(progress.stars)}
                 </p>
                 <div className="flex items-center gap-3 mt-4">
@@ -868,8 +871,7 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
             <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
               <div className="text-[10px] text-slate-400 uppercase">Waypoints</div>
               <div className="text-sm font-mono font-bold text-emerald-300 mt-0.5">
-                {progress.unlockedWaypointsInCurrentStroke}/
-                {progress.totalWaypointsInCurrentStroke}
+                {progress.unlockedWaypointsInCurrentStroke}/{progress.totalWaypointsInCurrentStroke}
               </div>
             </div>
           </div>
@@ -907,4 +909,3 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     </div>
   );
 }
-

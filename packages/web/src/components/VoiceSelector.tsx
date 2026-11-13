@@ -13,27 +13,25 @@ import {
   type VoiceSettings,
 } from '@/lib/audio';
 
-const TIER_BADGE: Record<
-  PhonicsVoiceOption['qualityTier'],
-  { label: string; className: string }
-> = {
-  neural: {
-    label: 'Neural / Cloud',
-    className: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
-  },
-  enhanced: {
-    label: 'Enhanced',
-    className: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
-  },
-  standard: {
-    label: 'System',
-    className: 'bg-slate-800 text-slate-300 border-slate-700',
-  },
-  compact: {
-    label: 'Compact',
-    className: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-  },
-};
+const TIER_BADGE: Record<PhonicsVoiceOption['qualityTier'], { label: string; className: string }> =
+  {
+    neural: {
+      label: 'Neural / Cloud',
+      className: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+    },
+    enhanced: {
+      label: 'Enhanced',
+      className: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+    },
+    standard: {
+      label: 'System',
+      className: 'bg-slate-800 text-slate-300 border-slate-700',
+    },
+    compact: {
+      label: 'Compact',
+      className: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+    },
+  };
 
 export const VoiceSelector: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -308,11 +306,13 @@ export const VoiceSelector: React.FC = () => {
           {/* Helpful tip when only compact voice is present */}
           {activeOption?.qualityTier === 'compact' && (
             <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
-              <strong className="text-amber-300">Tip for better audio:</strong> macOS&apos;s built-in{' '}
-              <code>Lekha</code> voice is a compact synth. For natural neural speech, open in{' '}
-              <strong className="text-slate-200">Chrome</strong> (<code>Google हिन्दी</code>) or{' '}
-              <strong className="text-slate-200">Edge</strong> (<code>Microsoft Hemkala ne-NP</code>),
-              or download <strong className="text-slate-200">Kiyara / Neel (Enhanced)</strong> in{' '}
+              <strong className="text-amber-300">Tip for better audio:</strong> macOS&apos;s
+              built-in <code>Lekha</code> voice is a compact synth. For natural neural speech, open
+              in <strong className="text-slate-200">Chrome</strong> (<code>Google हिन्दी</code>) or{' '}
+              <strong className="text-slate-200">Edge</strong> (<code>Microsoft Hemkala ne-NP</code>
+              ), or download <strong className="text-slate-200">
+                Kiyara / Neel (Enhanced)
+              </strong> in{' '}
               <code>System Settings ➔ Accessibility ➔ Spoken Content ➔ System Voice</code>.
             </div>
           )}

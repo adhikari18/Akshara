@@ -2,7 +2,7 @@
   "name": "akshara",
   "version": "0.1.0",
   "private": true,
-  "description": "Akshara (अक्षर) — Interactive Nepali Devanagari literacy engine with parametric Pati slate stroke tracing, Shirorekha topological validation, Barakhari Matra fusion, and SOV sentence construction.",
+  "description": "Akshara (\u0905\u0915\u094d\u0937\u0930) \u2014 Interactive Nepali Devanagari literacy engine with parametric Pati slate stroke tracing, Shirorekha topological validation, Barakhari Matra fusion, and SOV sentence construction.",
   "license": "MIT",
   "author": "Ashok Adhikari",
   "repository": {
@@ -19,11 +19,30 @@
     "dev": "npm run dev --workspace=@akshara/web",
     "typecheck": "npm run typecheck --workspace=@akshara/data && npm run typecheck --workspace=@akshara/core && npm run typecheck --workspace=@akshara/cli && npm run typecheck --workspace=@akshara/web",
     "validate:data": "node packages/data/dist/validate-cli.js",
-    "akshara": "node packages/cli/dist/cli.js"
+    "akshara": "node packages/cli/dist/cli.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@next/eslint-plugin-next": "^16.4.6",
+    "@playwright/test": "^1.65.0",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.10",
     "@types/node": "^22.10.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
+    "jsdom": "^29.1.1",
+    "prettier": "^3.10.1",
     "typescript": "^5.7.2",
+    "typescript-eslint": "^8.72.2",
     "vitest": "^2.1.8"
   },
   "engines": {

@@ -14,7 +14,12 @@ describe('arc length', () => {
 
   it('approximates a quarter circle Bézier to within 0.01%', () => {
     const k = 0.5522847498;
-    const len = cubicArcLength({ x: 100, y: 0 }, { x: 100, y: 100 * k }, { x: 100 * k, y: 100 }, { x: 0, y: 100 });
+    const len = cubicArcLength(
+      { x: 100, y: 0 },
+      { x: 100, y: 100 * k },
+      { x: 100 * k, y: 100 },
+      { x: 0, y: 100 }
+    );
     expect(len).toBeCloseTo((Math.PI * 100) / 2, 1);
   });
 });
@@ -44,7 +49,9 @@ describe('sampleEquidistant', () => {
 
 describe('pathBoundingBox', () => {
   it('bounds the ka loop within its authored extents', () => {
-    const box = pathBoundingBox(parseSvgPath('M 150 125 C 105 105, 72 125, 75 155 C 78 185, 112 195, 150 165'));
+    const box = pathBoundingBox(
+      parseSvgPath('M 150 125 C 105 105, 72 125, 75 155 C 78 185, 112 195, 150 165')
+    );
     expect(box.maxX).toBeCloseTo(150, 5);
     expect(box.minX).toBeGreaterThan(70);
     expect(box.minX).toBeLessThan(80);

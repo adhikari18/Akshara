@@ -3,7 +3,8 @@ import type { ErrorObject } from 'ajv';
 import letterSchema from '../schema/letter.schema.json' with { type: 'json' };
 
 // ajv ships CommonJS; normalise the default export across ESM/CJS interop.
-const Ajv2020 = (Ajv2020Module as unknown as { default?: typeof Ajv2020Module }).default ?? Ajv2020Module;
+const Ajv2020 =
+  (Ajv2020Module as unknown as { default?: typeof Ajv2020Module }).default ?? Ajv2020Module;
 
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 const validateLetter = ajv.compile(letterSchema);

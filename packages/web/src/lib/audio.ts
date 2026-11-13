@@ -80,10 +80,7 @@ export function updateVoiceSettings(patch: Partial<VoiceSettings>): VoiceSetting
   };
   if (typeof window !== 'undefined') {
     try {
-      window.localStorage.setItem(
-        VOICE_SETTINGS_STORAGE_KEY,
-        JSON.stringify(currentVoiceSettings)
-      );
+      window.localStorage.setItem(VOICE_SETTINGS_STORAGE_KEY, JSON.stringify(currentVoiceSettings));
     } catch {
       // Ignore storage write errors
     }
@@ -111,7 +108,8 @@ function classifyVoiceOption(voice: SpeechSynthesisVoice): PhonicsVoiceOption {
   const nameLower = (voice.name || '').toLowerCase();
 
   const isNepali = langLower.startsWith('ne') || nameLower.includes('nepali');
-  const isHindi = langLower.startsWith('hi') || nameLower.includes('hindi') || nameLower.includes('हिन्दी');
+  const isHindi =
+    langLower.startsWith('hi') || nameLower.includes('hindi') || nameLower.includes('हिन्दी');
   const isOtherDevanagari = DEVANAGARI_LANG_PREFIXES.some((p) => langLower.startsWith(p));
   const isIndic = INDIC_LANG_PREFIXES.some((p) => langLower.startsWith(p));
   const isDevanagariCapable = isNepali || isHindi || isOtherDevanagari;
@@ -285,9 +283,7 @@ export function playStrokeSuccessSound(isLetterComplete = false): void {
   const ctx = getAudioContext();
   if (!ctx) return;
 
-  const notes = isLetterComplete
-    ? [523.25, 659.25, 783.99, 1046.5]
-    : [587.33, 783.99];
+  const notes = isLetterComplete ? [523.25, 659.25, 783.99, 1046.5] : [587.33, 783.99];
 
   const now = ctx.currentTime;
   notes.forEach((freq, idx) => {

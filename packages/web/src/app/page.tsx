@@ -39,7 +39,8 @@ export default function AksharaStudioPage() {
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Tactile Devanagari Vector Stroke Tracing, Barakhari Matra Fusion &amp; SOV Sentence Studio
+                Tactile Devanagari Vector Stroke Tracing, Barakhari Matra Fusion &amp; SOV Sentence
+                Studio
               </p>
             </div>
           </div>
@@ -118,7 +119,8 @@ export default function AksharaStudioPage() {
                     स्वर वर्ण • Swor Varna (13 Nepali Vowels: अ — अः)
                   </h2>
                   <p className="text-xs text-slate-400">
-                    Tap any vowel card to hear its pronunciation, inspect its Matra diacritic, or trace it directly on the Pati slate.
+                    Tap any vowel card to hear its pronunciation, inspect its Matra diacritic, or
+                    trace it directly on the Pati slate.
                   </p>
                 </div>
                 <span className="px-3 py-1 rounded-full text-xs font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">
@@ -181,7 +183,8 @@ export default function AksharaStudioPage() {
                     व्यञ्जन वर्ण • Vyanjan Varna (36 Nepali Consonants: क — ज्ञ)
                   </h2>
                   <p className="text-xs text-slate-400">
-                    Organized by Paninian articulatory Varga (Velar, Palatal, Retroflex, Dental, Labial, Approximant, Sibilant &amp; Conjunct).
+                    Organized by Paninian articulatory Varga (Velar, Palatal, Retroflex, Dental,
+                    Labial, Approximant, Sibilant &amp; Conjunct).
                   </p>
                 </div>
                 <span className="px-3 py-1 rounded-full text-xs font-mono bg-sky-500/15 text-sky-300 border border-sky-500/30">
@@ -224,4 +227,3 @@ export default function AksharaStudioPage() {
     </div>
   );
 }
-

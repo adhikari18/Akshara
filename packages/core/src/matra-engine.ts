@@ -56,7 +56,8 @@ export const MATRA_DEFINITIONS: MatraDefinition[] = [
     romanizedSuffix: 'aa',
     ipaSuffix: 'aː',
     position: 'right',
-    placementRule: 'Attaches as a full vertical stem (Khadi Pai) to the right of the base consonant.',
+    placementRule:
+      'Attaches as a full vertical stem (Khadi Pai) to the right of the base consonant.',
   },
   {
     id: 'i',
@@ -69,7 +70,8 @@ export const MATRA_DEFINITIONS: MatraDefinition[] = [
     romanizedSuffix: 'i',
     ipaSuffix: 'i',
     position: 'left',
-    placementRule: 'Visually stands to the LEFT of the consonant stem and arches over the Shirorekha, even though pronounced AFTER the consonant.',
+    placementRule:
+      'Visually stands to the LEFT of the consonant stem and arches over the Shirorekha, even though pronounced AFTER the consonant.',
   },
   {
     id: 'ii',
@@ -95,7 +97,8 @@ export const MATRA_DEFINITIONS: MatraDefinition[] = [
     romanizedSuffix: 'u',
     ipaSuffix: 'u',
     position: 'bottom',
-    placementRule: 'Attaches underneath the foot of the vertical stem, curling counter-clockwise to the left.',
+    placementRule:
+      'Attaches underneath the foot of the vertical stem, curling counter-clockwise to the left.',
   },
   {
     id: 'uu',
@@ -108,7 +111,8 @@ export const MATRA_DEFINITIONS: MatraDefinition[] = [
     romanizedSuffix: 'uu',
     ipaSuffix: 'uː',
     position: 'bottom',
-    placementRule: 'Attaches underneath the foot of the vertical stem, sweeping clockwise to the right.',
+    placementRule:
+      'Attaches underneath the foot of the vertical stem, sweeping clockwise to the right.',
   },
   {
     id: 'ri',
@@ -134,7 +138,8 @@ export const MATRA_DEFINITIONS: MatraDefinition[] = [
     romanizedSuffix: 'e',
     ipaSuffix: 'eː',
     position: 'top',
-    placementRule: 'Single diagonal flag rising above the Shirorekha headline anchored to the vertical stem.',
+    placementRule:
+      'Single diagonal flag rising above the Shirorekha headline anchored to the vertical stem.',
   },
   {
     id: 'ai',
@@ -160,7 +165,8 @@ export const MATRA_DEFINITIONS: MatraDefinition[] = [
     romanizedSuffix: 'o',
     ipaSuffix: 'oː',
     position: 'right',
-    placementRule: 'Combines a right-side vertical stem (ा) with a single top flag (े) above the Shirorekha.',
+    placementRule:
+      'Combines a right-side vertical stem (ा) with a single top flag (े) above the Shirorekha.',
   },
   {
     id: 'au',
@@ -173,7 +179,8 @@ export const MATRA_DEFINITIONS: MatraDefinition[] = [
     romanizedSuffix: 'au',
     ipaSuffix: 'ʌu',
     position: 'right',
-    placementRule: 'Combines a right-side vertical stem (ा) with double top flags (ै) above the Shirorekha.',
+    placementRule:
+      'Combines a right-side vertical stem (ा) with double top flags (ै) above the Shirorekha.',
   },
   {
     id: 'am',
@@ -212,7 +219,8 @@ export const MATRA_DEFINITIONS: MatraDefinition[] = [
     romanizedSuffix: '',
     ipaSuffix: '',
     position: 'bottom',
-    placementRule: 'Diagonal stroke beneath the stem that mutes the inherent "a" vowel (खुट्टो काटेको).',
+    placementRule:
+      'Diagonal stroke beneath the stem that mutes the inherent "a" vowel (खुट्टो काटेको).',
   },
 ];
 
@@ -296,11 +304,34 @@ export function generateBarakhari(consonantInput: string | ConsonantEntry): Fuse
 }
 
 const DEVANAGARI_COMBINING_MARKS = new Set<number>([
-  0x0900, 0x0901, 0x0902, 0x0903, // Chandrabindu, Anusvara, Visarga
-  0x093a, 0x093b, 0x093c, // Nukta
-  0x093e, 0x093f, 0x0940, 0x0941, 0x0942, 0x0943, 0x0944, 0x0945, 0x0946, 0x0947, 0x0948,
-  0x0949, 0x094a, 0x094b, 0x094c, 0x094d, // Matras & Virama (Halanta)
-  0x0955, 0x0956, 0x0957, 0x0962, 0x0963,
+  0x0900,
+  0x0901,
+  0x0902,
+  0x0903, // Chandrabindu, Anusvara, Visarga
+  0x093a,
+  0x093b,
+  0x093c, // Nukta
+  0x093e,
+  0x093f,
+  0x0940,
+  0x0941,
+  0x0942,
+  0x0943,
+  0x0944,
+  0x0945,
+  0x0946,
+  0x0947,
+  0x0948,
+  0x0949,
+  0x094a,
+  0x094b,
+  0x094c,
+  0x094d, // Matras & Virama (Halanta)
+  0x0955,
+  0x0956,
+  0x0957,
+  0x0962,
+  0x0963,
 ]);
 
 const VIRAMA_CODEPOINT = 0x094d;
@@ -346,4 +377,3 @@ export function segmentDevanagariAksharas(word: string): string[] {
 
   return clusters;
 }
-

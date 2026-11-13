@@ -1,8 +1,13 @@
 import type { Point, Segment } from './svg-path.js';
 
 // 5-point Gauss–Legendre nodes/weights on [-1, 1].
-const GL_NODES = [0, -0.5384693101056831, 0.5384693101056831, -0.906179845938664, 0.906179845938664];
-const GL_WEIGHTS = [0.5688888888888889, 0.47862867049936647, 0.47862867049936647, 0.23692688505618908, 0.23692688505618908];
+const GL_NODES = [
+  0, -0.5384693101056831, 0.5384693101056831, -0.906179845938664, 0.906179845938664,
+];
+const GL_WEIGHTS = [
+  0.5688888888888889, 0.47862867049936647, 0.47862867049936647, 0.23692688505618908,
+  0.23692688505618908,
+];
 
 /** Evaluate a cubic Bézier at parameter t in [0, 1]. */
 export function cubicPoint(p0: Point, c1: Point, c2: Point, p1: Point, t: number): Point {
@@ -66,7 +71,10 @@ function pointOnSegment(seg: Segment, s: number, length: number): Point {
   if (seg.type === 'M') return seg.to;
   if (seg.type === 'L' || seg.type === 'Z') {
     const t = length === 0 ? 0 : s / length;
-    return { x: seg.from.x + (seg.to.x - seg.from.x) * t, y: seg.from.y + (seg.to.y - seg.from.y) * t };
+    return {
+      x: seg.from.x + (seg.to.x - seg.from.x) * t,
+      y: seg.from.y + (seg.to.y - seg.from.y) * t,
+    };
   }
   if (s <= 0) return seg.from;
   if (s >= length) return seg.to;
@@ -103,7 +111,8 @@ export function pointAtLength(segments: Segment[], s: number): Point {
  * always including the exact start and end of the path.
  */
 export function sampleEquidistant(segments: Segment[], count: number): Point[] {
-  if (!Number.isInteger(count) || count < 2) throw new Error('Waypoint count must be an integer >= 2.');
+  if (!Number.isInteger(count) || count < 2)
+    throw new Error('Waypoint count must be an integer >= 2.');
   const total = pathLength(segments);
   const pts: Point[] = [];
   for (let i = 0; i < count; i++) {

@@ -1,4 +1,12 @@
-import { CONSONANTS, SENTENCES, STROKE_DATASETS, STROKE_LIST, VOWELS, WORDS, validateLetterDataset } from './index.js';
+import {
+  CONSONANTS,
+  SENTENCES,
+  STROKE_DATASETS,
+  STROKE_LIST,
+  VOWELS,
+  WORDS,
+  validateLetterDataset,
+} from './index.js';
 import { validateAgainstLetterSchema } from './schema-validator.js';
 
 let hasError = false;
@@ -26,7 +34,9 @@ if (CONSONANTS.length !== 36) {
   console.error(`❌ Expected 36 Vyanjan Varna consonants, found ${CONSONANTS.length}`);
   hasError = true;
 } else {
-  const missingConsonantStrokes = CONSONANTS.filter((c) => !c.hasStrokeData || !STROKE_DATASETS[c.id]);
+  const missingConsonantStrokes = CONSONANTS.filter(
+    (c) => !c.hasStrokeData || !STROKE_DATASETS[c.id]
+  );
   if (missingConsonantStrokes.length > 0) {
     console.error(
       `❌ Missing stroke vectors for Vyanjan Varna: ${missingConsonantStrokes.map((c) => c.character).join(', ')}`
@@ -51,7 +61,9 @@ for (const strokeSet of STROKE_LIST) {
   };
   if (!result.valid) {
     hasError = true;
-    console.error(`❌ Stroke dataset '${strokeSet.id}' (${strokeSet.character}) failed validation:`);
+    console.error(
+      `❌ Stroke dataset '${strokeSet.id}' (${strokeSet.character}) failed validation:`
+    );
     for (const err of result.errors) {
       console.error(`   - ${err}`);
     }
@@ -68,4 +80,3 @@ console.log(`✅ SOV sentence challenges: ${SENTENCES.length} sentences verified
 if (hasError) {
   process.exit(1);
 }
-

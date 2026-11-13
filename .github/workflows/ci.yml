@@ -30,12 +30,50 @@ jobs:
       - name: Validate Devanagari JSON schemas & Shirorekha topological invariants
         run: npm run validate:data
 
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Check formatting (Prettier)
+        run: npm run format:check
+
       - name: Typecheck all workspaces
         run: npm run typecheck
 
-      - name: Run Vitest unit test suite
+      - name: Run Vitest unit & component test suite
         run: npm test
 
       - name: Build @akshara/web Next.js frontend
         run: npm run build --workspace=@akshara/web
 
+  e2e:
+    name: Playwright E2E (Chromium)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install workspace dependencies
+        run: npm ci
+
+      - name: Build @akshara/data and @akshara/core
+        run: npm run build --workspace=@akshara/data && npm run build --workspace=@akshara/core
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright E2E suite
+        run: npm run test:e2e
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

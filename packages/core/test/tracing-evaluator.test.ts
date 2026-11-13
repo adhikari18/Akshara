@@ -214,7 +214,6 @@ describe('TracingEvaluator & Vector Geometry Engine', () => {
   });
 });
 
-
 describe('premature Shirorekha detection for strokes that start at the headline', () => {
   const neckLetter = {
     ...STROKE_DATASETS.ka,

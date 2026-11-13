@@ -26,10 +26,7 @@ export function MatraBuilder() {
     [activeConsonant, selectedMatraId]
   );
 
-  const barakhariList = useMemo(
-    () => generateBarakhari(activeConsonant),
-    [activeConsonant]
-  );
+  const barakhariList = useMemo(() => generateBarakhari(activeConsonant), [activeConsonant]);
 
   const handleApplyMatra = (matraId: string) => {
     setSelectedMatraId(matraId);
@@ -101,9 +98,7 @@ export function MatraBuilder() {
               <h3 className="text-xs font-semibold uppercase tracking-wider text-sky-400">
                 २. मात्रा तान्नुहोस् वा थिच्नुहोस् • Step 2: Drag or Tap a Matra Diacritic
               </h3>
-              <span className="text-[11px] text-slate-400">
-                Drag onto the Pati Fusion Anvil ➔
-              </span>
+              <span className="text-[11px] text-slate-400">Drag onto the Pati Fusion Anvil ➔</span>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -245,7 +240,8 @@ export function MatraBuilder() {
       <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5">
         <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-amber-400">
-            पूर्ण बाह्रखरी तालिका • Complete 13-Step Barakhari for &ldquo;{activeConsonant.character}&rdquo; (Tap Any Card to Hear)
+            पूर्ण बाह्रखरी तालिका • Complete 13-Step Barakhari for &ldquo;{activeConsonant.character}
+            &rdquo; (Tap Any Card to Hear)
           </h3>
           <span className="text-xs text-slate-400">
             {barakhariList.map((b) => b.compositeAkshara).join(' • ')}
@@ -277,4 +273,3 @@ export function MatraBuilder() {
     </div>
   );
 }
-

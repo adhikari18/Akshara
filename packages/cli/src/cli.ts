@@ -31,11 +31,14 @@ export function run(argv: string[]): number {
   const [command, ...rest] = argv;
   try {
     if (command === 'compile') {
-      const input = rest.find((a, i) => !a.startsWith('-') && rest[i - 1] !== '-o' && rest[i - 1] !== '--spacing');
+      const input = rest.find(
+        (a, i) => !a.startsWith('-') && rest[i - 1] !== '-o' && rest[i - 1] !== '--spacing'
+      );
       if (!input) throw new Error('compile requires an input spec file.');
       const spacingRaw = flag(rest, '--spacing');
       const spacing = spacingRaw === undefined ? undefined : Number(spacingRaw);
-      if (spacing !== undefined && !(spacing > 0)) throw new Error('--spacing must be a positive number.');
+      if (spacing !== undefined && !(spacing > 0))
+        throw new Error('--spacing must be a positive number.');
       const spec = JSON.parse(readFileSync(input, 'utf8')) as GlyphSpec;
       const compiled = compileGlyph(spec, { spacing });
       const schema = validateAgainstLetterSchema(compiled);
@@ -44,7 +47,9 @@ export function run(argv: string[]): number {
         : { valid: false, errors: [] };
       const errors = [...schema.errors.map((e) => `[schema] ${e}`), ...topology.errors];
       if (errors.length > 0) {
-        throw new Error(`Compiled '${spec.id}' failed dataset validation:\n   - ${errors.join('\n   - ')}`);
+        throw new Error(
+          `Compiled '${spec.id}' failed dataset validation:\n   - ${errors.join('\n   - ')}`
+        );
       }
       const json = JSON.stringify(compiled, null, 2) + '\n';
       const out = flag(rest, '-o');
@@ -61,8 +66,21 @@ export function run(argv: string[]): number {
       if (!d) throw new Error('sample requires an SVG path string.');
       const n = Number(flag(rest, '-n') ?? 5);
       const segs = parseSvgPath(d);
-      const pts = sampleEquidistant(segs, n).map((p) => ({ x: Math.round(p.x * 10) / 10, y: Math.round(p.y * 10) / 10 }));
-      console.log(JSON.stringify({ length: Math.round(pathLength(segs) * 10) / 10, bbox: pathBoundingBox(segs), waypoints: pts }, null, 2));
+      const pts = sampleEquidistant(segs, n).map((p) => ({
+        x: Math.round(p.x * 10) / 10,
+        y: Math.round(p.y * 10) / 10,
+      }));
+      console.log(
+        JSON.stringify(
+          {
+            length: Math.round(pathLength(segs) * 10) / 10,
+            bbox: pathBoundingBox(segs),
+            waypoints: pts,
+          },
+          null,
+          2
+        )
+      );
       return 0;
     }
     console.log(USAGE);

@@ -25,11 +25,13 @@ export function WordSentenceBuilder() {
   // Deterministic shuffled tile pool for the active word
   const wordTilePool = useMemo(() => {
     const combined = [...activeWord.aksharas, ...activeWord.distractors];
-    return combined.map((ak, idx) => ({
-      id: `${activeWord.id}-tile-${idx}`,
-      akshara: ak,
-      sortKey: ((idx * 7 + activeWord.word.length * 3) % 11),
-    })).sort((a, b) => a.sortKey - b.sortKey);
+    return combined
+      .map((ak, idx) => ({
+        id: `${activeWord.id}-tile-${idx}`,
+        akshara: ak,
+        sortKey: (idx * 7 + activeWord.word.length * 3) % 11,
+      }))
+      .sort((a, b) => a.sortKey - b.sortKey);
   }, [activeWord]);
 
   // Deterministic scrambled order (SVO-like or reversed) so learner unscrambles into SOV
@@ -146,8 +148,8 @@ export function WordSentenceBuilder() {
           <div className="rounded-2xl bg-slate-950/80 border border-slate-800 p-5 text-center mb-4">
             <div className="text-4xl mb-2">{activeWord.emoji}</div>
             <div className="text-sm font-semibold text-white">
-              Build the Nepali word for: <span className="text-amber-300">{activeWord.meaning}</span> (
-              {activeWord.romanized})
+              Build the Nepali word for:{' '}
+              <span className="text-amber-300">{activeWord.meaning}</span> ({activeWord.romanized})
             </div>
             <button
               type="button"
@@ -281,7 +283,8 @@ export function WordSentenceBuilder() {
                 {activeSentence.englishOrder}
               </div>
               <div className="bg-amber-500/10 p-2 rounded-lg border border-amber-500/20 text-amber-200">
-                <strong className="text-amber-300">Nepali (SOV):</strong> कर्ता (S) ➔ कर्म (O) ➔ क्रिया (V)
+                <strong className="text-amber-300">Nepali (SOV):</strong> कर्ता (S) ➔ कर्म (O) ➔ क्रिया
+                (V)
               </div>
             </div>
 
@@ -373,4 +376,3 @@ export function WordSentenceBuilder() {
     </div>
   );
 }
-
