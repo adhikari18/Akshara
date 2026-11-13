@@ -39,6 +39,14 @@ interface ChalkParticle {
   radius: number;
 }
 
+/**
+ * Logical drawing space. Stroke datasets, waypoints, the evaluator and pointer samples all
+ * live in this fixed 300x300 coordinate system; only the canvas backing store scales.
+ */
+const LOGICAL_SIZE = 300;
+/** Cap the backing store so very large or high-DPR displays don't allocate huge bitmaps. */
+const MAX_BACKING_PX = 2048;
+
 type DeckCategoryFilter = 'all' | 'swor' | 'vyanjan';
 
 /** Samyukta compounds (क्ष, त्र, ज्ञ) are taught as the last letters of the Vyanjan Varna deck. */
@@ -119,26 +127,30 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     const currentProgress = evaluator.getProgress();
     const activeStroke = evaluator.getCurrentStroke();
 
-    ctx.clearRect(0, 0, 300, 300);
+    // Map the 300x300 logical space onto the (DPI-scaled) backing store. Everything below
+    // draws in logical units, so the slate is crisp at any CSS size or devicePixelRatio.
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(canvas.width / LOGICAL_SIZE, 0, 0, canvas.height / LOGICAL_SIZE, 0, 0);
 
     // 1. Traditional Pati (पाटी) dark slate background texture
     const slateGrad = ctx.createRadialGradient(150, 150, 20, 150, 150, 220);
     slateGrad.addColorStop(0, '#1e242b');
     slateGrad.addColorStop(1, '#12161b');
     ctx.fillStyle = slateGrad;
-    ctx.fillRect(0, 0, 300, 300);
+    ctx.fillRect(0, 0, LOGICAL_SIZE, LOGICAL_SIZE);
 
     // Subtle slate grain grid lines
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
     ctx.lineWidth = 1;
-    for (let g = 30; g < 300; g += 30) {
+    for (let g = 30; g < LOGICAL_SIZE; g += 30) {
       ctx.beginPath();
       ctx.moveTo(g, 0);
-      ctx.lineTo(g, 300);
+      ctx.lineTo(g, LOGICAL_SIZE);
       ctx.stroke();
       ctx.beginPath();
       ctx.moveTo(0, g);
-      ctx.lineTo(300, g);
+      ctx.lineTo(LOGICAL_SIZE, g);
       ctx.stroke();
     }
 
@@ -308,6 +320,55 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     return () => stopAutoDemoTimer();
   }, [dataset, toleranceMode, stopAutoDemoTimer]);
 
+  // Keep the latest renderer reachable from the resize observer without re-subscribing.
+  const renderCanvasRef = useRef(renderCanvas);
+  renderCanvasRef.current = renderCanvas;
+
+  // DPI-aware, responsive backing store: whenever the canvas' CSS box or the display's
+  // devicePixelRatio changes (window resize, browser zoom, moving to another monitor),
+  // resize the bitmap to CSS size x DPR and immediately redraw. The learner's drawing is
+  // preserved because the scene is fully re-rendered from evaluator state and the
+  // logical-coordinate chalk trail, never from the old bitmap.
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const syncBackingStore = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return; // hidden tab / not laid out yet
+      const dpr = window.devicePixelRatio || 1;
+      const width = Math.min(MAX_BACKING_PX, Math.max(1, Math.round(rect.width * dpr)));
+      const height = Math.min(MAX_BACKING_PX, Math.max(1, Math.round(rect.height * dpr)));
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width; // resizing clears the bitmap...
+        canvas.height = height;
+      }
+      renderCanvasRef.current(); // ...so redraw synchronously in the same frame (no flicker)
+    };
+
+    syncBackingStore();
+
+    const resizeObserver = new ResizeObserver(syncBackingStore);
+    resizeObserver.observe(canvas);
+
+    // devicePixelRatio changes don't always resize the CSS box (e.g. dragging the window
+    // to a monitor with a different scale factor), so watch the resolution media query too.
+    let dprQuery: MediaQueryList | null = null;
+    const onDprChange = () => {
+      syncBackingStore();
+      dprQuery?.removeEventListener('change', onDprChange);
+      dprQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+      dprQuery.addEventListener('change', onDprChange);
+    };
+    dprQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+    dprQuery.addEventListener('change', onDprChange);
+
+    return () => {
+      resizeObserver.disconnect();
+      dprQuery?.removeEventListener('change', onDprChange);
+    };
+  }, []);
+
   useEffect(() => {
     renderCanvas();
   }, [renderCanvas, progress, lastEval]);
@@ -315,11 +376,11 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
   const toCanvasCoords = (e: React.PointerEvent<HTMLCanvasElement>): Point2D => {
     const canvas = canvasRef.current!;
     const rect = canvas.getBoundingClientRect();
-    const scaleX = 300 / rect.width;
-    const scaleY = 300 / rect.height;
+    const scaleX = LOGICAL_SIZE / rect.width;
+    const scaleY = LOGICAL_SIZE / rect.height;
     return {
-      x: Math.max(0, Math.min(300, (e.clientX - rect.left) * scaleX)),
-      y: Math.max(0, Math.min(300, (e.clientY - rect.top) * scaleY)),
+      x: Math.max(0, Math.min(LOGICAL_SIZE, (e.clientX - rect.left) * scaleX)),
+      y: Math.max(0, Math.min(LOGICAL_SIZE, (e.clientY - rect.top) * scaleY)),
       timestamp: performance.now(),
     };
   };
@@ -607,11 +668,13 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
           </div>
 
           {/* Interactive HTML5 Canvas */}
-          <div className="relative mx-auto w-full max-w-[420px] aspect-square rounded-2xl overflow-hidden border-2 border-stone-700 shadow-inner bg-[#12161b]">
+          <div className="relative mx-auto w-full max-w-[min(560px,75vh)] aspect-square rounded-2xl overflow-hidden border-2 border-stone-700 shadow-inner bg-[#12161b]">
             <canvas
               ref={canvasRef}
-              width={300}
-              height={300}
+              width={LOGICAL_SIZE}
+              height={LOGICAL_SIZE}
+              role="img"
+              aria-label={`Pati slate for tracing ${dataset.character}`}
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
