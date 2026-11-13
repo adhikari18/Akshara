@@ -30,6 +30,13 @@ import {
   speakNepaliPhonics,
 } from '@/lib/audio';
 
+/**
+ * All stroke data, waypoints and pointer math operate in this logical coordinate
+ * space; the canvas backing store is scaled to the displayed size × devicePixelRatio
+ * and mapped back to it with a single context transform.
+ */
+const LOGICAL_SIZE = 300;
+
 interface ChalkParticle {
   x: number;
   y: number;
@@ -91,6 +98,8 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
   );
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  /** Backing-store pixels per logical unit (displaySize × devicePixelRatio / LOGICAL_SIZE). */
+  const canvasScaleRef = useRef<number>(1);
   const isDrawingRef = useRef<boolean>(false);
   const activeTrailRef = useRef<Point2D[]>([]);
   const particlesRef = useRef<ChalkParticle[]>([]);
@@ -119,7 +128,10 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     const currentProgress = evaluator.getProgress();
     const activeStroke = evaluator.getCurrentStroke();
 
-    ctx.clearRect(0, 0, 300, 300);
+    // Map the logical 300×300 drawing space onto the DPI-scaled backing store.
+    const scale = canvasScaleRef.current;
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    ctx.clearRect(0, 0, LOGICAL_SIZE, LOGICAL_SIZE);
 
     // 1. Traditional Pati (पाटी) dark slate background texture
     const slateGrad = ctx.createRadialGradient(150, 150, 20, 150, 150, 220);
@@ -203,7 +215,8 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
       ctx.lineJoin = 'round';
       ctx.lineWidth = 15;
       ctx.shadowColor = 'rgba(254, 243, 199, 0.35)';
-      ctx.shadowBlur = 8;
+      // shadowBlur is specified in device pixels (unaffected by the transform)
+      ctx.shadowBlur = 8 * scale;
       ctx.strokeStyle = '#fef3c7';
       ctx.stroke(path);
       ctx.restore();
@@ -226,7 +239,7 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
           ? '#fb923c'
           : '#fef08a';
       ctx.shadowColor = 'rgba(254, 240, 138, 0.45)';
-      ctx.shadowBlur = 6;
+      ctx.shadowBlur = 6 * scale;
       ctx.stroke();
       ctx.restore();
     }
@@ -312,14 +325,61 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
     renderCanvas();
   }, [renderCanvas, progress, lastEval]);
 
+  // Keep the backing store in sync with the displayed size × devicePixelRatio so
+  // chalk strokes stay crisp on Retina/mobile screens. All drawing state (evaluator
+  // progress, active trail, particles) lives in logical coordinates, so re-rendering
+  // after a resize preserves the learner's drawing.
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const syncBackingStore = (
+      devicePixelWidth?: number,
+      devicePixelHeight?: number
+    ) => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const width = Math.max(1, Math.round(devicePixelWidth ?? rect.width * dpr));
+      const height = Math.max(1, Math.round(devicePixelHeight ?? rect.height * dpr));
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+      canvasScaleRef.current = width / LOGICAL_SIZE;
+      renderCanvas();
+    };
+
+    const observer = new ResizeObserver((entries) => {
+      const box = entries[0]?.devicePixelContentBoxSize?.[0];
+      syncBackingStore(box?.inlineSize, box?.blockSize);
+    });
+    try {
+      // Exact device-pixel tracking (also fires on devicePixelRatio changes).
+      observer.observe(canvas, { box: 'device-pixel-content-box' });
+    } catch {
+      observer.observe(canvas);
+    }
+    // Fallback for dpr changes the observer misses (e.g. Safari when the window
+    // moves between displays): window resize fires there, CSS size is unchanged.
+    const handleWindowResize = () => syncBackingStore();
+    window.addEventListener('resize', handleWindowResize);
+    syncBackingStore();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [renderCanvas]);
+
   const toCanvasCoords = (e: React.PointerEvent<HTMLCanvasElement>): Point2D => {
     const canvas = canvasRef.current!;
     const rect = canvas.getBoundingClientRect();
-    const scaleX = 300 / rect.width;
-    const scaleY = 300 / rect.height;
+    const scaleX = LOGICAL_SIZE / rect.width;
+    const scaleY = LOGICAL_SIZE / rect.height;
     return {
-      x: Math.max(0, Math.min(300, (e.clientX - rect.left) * scaleX)),
-      y: Math.max(0, Math.min(300, (e.clientY - rect.top) * scaleY)),
+      x: Math.max(0, Math.min(LOGICAL_SIZE, (e.clientX - rect.left) * scaleX)),
+      y: Math.max(0, Math.min(LOGICAL_SIZE, (e.clientY - rect.top) * scaleY)),
       timestamp: performance.now(),
     };
   };
@@ -610,8 +670,8 @@ export function TracingCanvas({ initialLetterId = 'ka' }: TracingCanvasProps = {
           <div className="relative mx-auto w-full max-w-[420px] aspect-square rounded-2xl overflow-hidden border-2 border-stone-700 shadow-inner bg-[#12161b]">
             <canvas
               ref={canvasRef}
-              width={300}
-              height={300}
+              width={LOGICAL_SIZE}
+              height={LOGICAL_SIZE}
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}

@@ -3,7 +3,9 @@
 **Interactive open-source Nepali Devanagari literacy engine teaching children and diaspora early learners how to read, pronounce, and write through parametric *Pati* slate stroke tracing, *Barakhari* *Matra* fusion, and Subject-Object-Verb (SOV) sentence construction.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](./LICENSE)
-[![CI Status](https://img.shields.io/badge/CI-Passing-emerald.svg)](./.github/workflows/ci.yml)
+[![CI](https://github.com/adhikari18/Akshara/actions/workflows/ci.yml/badge.svg)](https://github.com/adhikari18/Akshara/actions/workflows/ci.yml)
+[![Deploy](https://github.com/adhikari18/Akshara/actions/workflows/deploy.yml/badge.svg)](https://github.com/adhikari18/Akshara/actions/workflows/deploy.yml)
+[![Live Demo](https://img.shields.io/badge/demo-adhikari18.github.io%2FAkshara-amber.svg)](https://adhikari18.github.io/Akshara/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![JSON Schema](https://img.shields.io/badge/Schema-Draft_2020--12-purple.svg)](./packages/data/schema/letter.schema.json)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
