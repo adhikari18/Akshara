@@ -173,6 +173,56 @@
         "nepaliRole": "क्रिया (Verb)"
       }
     ]
+  },
+  {
+    "id": "sov-6",
+    "nepaliSentence": "म आज स्कुल जान्छु",
+    "romanized": "Ma aaja skul jaanchhu",
+    "englishTranslation": "I go to school today.",
+    "englishOrder": "Subject (I) → Verb (go) → Place (to school) → Time (today)",
+    "nepaliOrder": "कर्ता (म) + समय (आज) + स्थान (स्कुल) + क्रिया (जान्छु)",
+    "emoji": "🎒🏫",
+    "tokens": [
+      {
+        "id": "sov-6-s",
+        "text": "म",
+        "romanized": "ma",
+        "gloss": "I",
+        "role": "subject",
+        "nepaliRole": "कर्ता (Subject)"
+      },
+      {
+        "id": "sov-6-t",
+        "text": "आज",
+        "romanized": "aaja",
+        "gloss": "today",
+        "role": "time",
+        "nepaliRole": "समय (Time)"
+      },
+      {
+        "id": "sov-6-p",
+        "text": "स्कुल",
+        "romanized": "skul",
+        "gloss": "to school",
+        "role": "place",
+        "nepaliRole": "स्थान (Place)"
+      },
+      {
+        "id": "sov-6-v",
+        "text": "जान्छु",
+        "romanized": "jaanchhu",
+        "gloss": "go",
+        "role": "verb",
+        "nepaliRole": "क्रिया (Verb)"
+      }
+    ],
+    "acceptableOrders": [
+      [
+        "sov-6-t",
+        "sov-6-s",
+        "sov-6-p",
+        "sov-6-v"
+      ]
+    ]
   }
 ]
-

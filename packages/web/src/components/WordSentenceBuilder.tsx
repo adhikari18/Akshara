@@ -2,15 +2,25 @@
 
 import React, { useMemo, useState } from 'react';
 import { SENTENCES, WORDS } from '@akshara/data';
-import { evaluateSOVSentence, evaluateWordTiles } from '@akshara/core';
-import { CheckCircle2, Puzzle, RotateCcw, Sparkles, Volume2 } from 'lucide-react';
+import { evaluateSOVSentence, evaluateWordTiles, scrambleSentenceTokens } from '@akshara/core';
+import { ChevronRight, RotateCcw, Undo2, Volume2 } from 'lucide-react';
 import {
   playStrokeSuccessSound,
   playTopologicalWarningSound,
   speakNepaliPhonics,
 } from '@/lib/audio';
+import { HowToPlay } from '@/components/HowToPlay';
+import { sentenceFeedbackText, sentenceRoleLabel, wordFeedbackText } from '@/lib/messages';
 
-export function WordSentenceBuilder() {
+type WordGameMode = 'words' | 'sentences';
+
+interface WordSentenceBuilderProps {
+  initialMode?: WordGameMode;
+}
+
+export function WordSentenceBuilder({ initialMode = 'words' }: WordSentenceBuilderProps = {}) {
+  const [mode, setMode] = useState<WordGameMode>(initialMode);
+
   // Word Builder State
   const [selectedWordIdx, setSelectedWordIdx] = useState<number>(0);
   const [pickedAksharas, setPickedAksharas] = useState<string[]>([]);
@@ -34,15 +44,15 @@ export function WordSentenceBuilder() {
       .sort((a, b) => a.sortKey - b.sortKey);
   }, [activeWord]);
 
-  // Deterministic scrambled order (SVO-like or reversed) so learner unscrambles into SOV
-  const scrambledSentenceTokens = useMemo(() => {
-    const tokens = [...activeSentence.tokens];
-    // Present in English SVO order (Subject, Verb, Object) so learner practices converting to Nepali SOV!
-    if (tokens.length === 3) {
-      return [tokens[0], tokens[2], tokens[1]];
-    }
-    return tokens;
-  }, [activeSentence]);
+  // Deterministic scramble (English-like: verb next to the subject) that is never an accepted order
+  const scrambledSentenceTokens = useMemo(
+    () => scrambleSentenceTokens(activeSentence),
+    [activeSentence]
+  );
+  // One column per token, whatever the sentence length (Tailwind can't generate dynamic classes)
+  const sentenceColumns = {
+    gridTemplateColumns: `repeat(${activeSentence.tokens.length}, minmax(0, 1fr))`,
+  };
 
   const wordEval = useMemo(
     () => evaluateWordTiles(activeWord, pickedAksharas),
@@ -104,165 +114,226 @@ export function WordSentenceBuilder() {
     }
   };
 
+  const wordText = wordFeedbackText(wordEval.feedback);
+  const sentenceText = sentenceFeedbackText(sentenceEval.feedback);
+
+  const wordBubble = wordEval.correct
+    ? 'bubble-good'
+    : wordEval.complete
+      ? 'bubble-bad'
+      : 'bubble-neutral';
+  const sentenceBubble = sentenceEval.correct
+    ? 'bubble-good'
+    : sentenceEval.isSVOConfusion
+      ? 'bubble-warn'
+      : sentenceEval.complete
+        ? 'bubble-bad'
+        : 'bubble-neutral';
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* Left Column: 2- & 3-Letter Noun Building Blocks */}
-      <div className="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-amber-400">
-              <Puzzle className="w-4 h-4" />
-              भाग १: २ र ३ अक्षरका शब्द निर्माण • Word Tile Builder
-            </span>
-            <button
-              type="button"
-              onClick={() => setPickedAksharas([])}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 transition"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Reset
-            </button>
-          </div>
-
-          {/* Word Selector Pills */}
-          <div className="flex flex-wrap gap-1.5 mb-5">
-            {WORDS.map((w, idx) => (
-              <button
-                key={w.id}
-                type="button"
-                onClick={() => handleSelectWord(idx)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition flex items-center gap-1.5 ${
-                  idx === selectedWordIdx
-                    ? 'bg-amber-500/20 border-amber-400 text-amber-200 font-semibold'
-                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                <span>{w.emoji}</span>
-                <span>{w.word}</span>
-                <span className="text-[10px] opacity-75">({w.meaning})</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Target Word Card */}
-          <div className="rounded-2xl bg-slate-950/80 border border-slate-800 p-5 text-center mb-4">
-            <div className="text-4xl mb-2">{activeWord.emoji}</div>
-            <div className="text-sm font-semibold text-white">
-              Build the Nepali word for:{' '}
-              <span className="text-amber-300">{activeWord.meaning}</span> ({activeWord.romanized})
-            </div>
-            <button
-              type="button"
-              onClick={() => speakNepaliPhonics(activeWord.word, activeWord.romanized)}
-              className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition"
-            >
-              <Volume2 className="w-3.5 h-3.5" />
-              Hear Target Word ({activeWord.word})
-            </button>
-
-            {/* Assembly Slots */}
-            <div className="flex items-center justify-center gap-3 mt-5">
-              {activeWord.aksharas.map((_, slotIdx) => {
-                const filled = pickedAksharas[slotIdx];
-                const isCorrectSlot = filled === activeWord.aksharas[slotIdx];
-                return (
-                  <div
-                    key={slotIdx}
-                    className={`w-16 h-16 rounded-2xl border-2 flex items-center justify-center text-3xl font-bold transition ${
-                      !filled
-                        ? 'border-dashed border-slate-700 bg-slate-900/50 text-slate-600'
-                        : isCorrectSlot
-                          ? 'border-emerald-400 bg-emerald-500/20 text-emerald-200'
-                          : 'border-red-400 bg-red-500/20 text-red-200'
-                    }`}
-                  >
-                    {filled ?? slotIdx + 1}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Akshara Tile Choices */}
-          <div className="mb-4">
-            <div className="text-xs text-slate-400 mb-2">
-              तलका अक्षरहरू सही क्रममा छान्नुहोस् • Tap Akshara Tiles in Order:
-            </div>
-            <div className="grid grid-cols-5 sm:grid-cols-6 gap-2">
-              {wordTilePool.map((tile) => (
-                <button
-                  key={tile.id}
-                  type="button"
-                  onClick={() => handlePickAkshara(tile.akshara)}
-                  className="py-3 rounded-xl bg-slate-950 border border-slate-700 hover:border-amber-400 text-2xl font-bold text-amber-200 hover:bg-amber-500/10 transition"
-                >
-                  {tile.akshara}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Word Evaluation Feedback */}
-        <div
-          className={`p-3.5 rounded-xl border text-xs ${
-            wordEval.correct
-              ? 'bg-emerald-950/50 border-emerald-500/40 text-emerald-200'
-              : wordEval.complete
-                ? 'bg-red-950/50 border-red-500/40 text-red-200'
-                : 'bg-slate-950/70 border-slate-800 text-slate-300'
-          }`}
-        >
-          <div className="font-semibold">{wordEval.feedbackNepali}</div>
-          <div className="text-slate-400 mt-0.5">{wordEval.feedbackEnglish}</div>
+    <div className="space-y-5">
+      {/* Game switcher */}
+      <div className="flex justify-center">
+        <div className="segmented !p-1.5" role="tablist" aria-label="Word games">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === 'words'}
+            onClick={() => setMode('words')}
+            className={`segment !text-base !px-5 ${mode === 'words' ? 'segment-active' : ''}`}
+          >
+            🧩 शब्द बनाउनुहोस् • Build Words
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === 'sentences'}
+            onClick={() => setMode('sentences')}
+            className={`segment !text-base !px-5 ${mode === 'sentences' ? 'segment-active' : ''}`}
+          >
+            📝 वाक्य बनाउनुहोस् • Make Sentences
+          </button>
         </div>
       </div>
 
-      {/* Right Column: Subject-Object-Verb (SOV) Sentence Unscrambler */}
-      <div className="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between">
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-sky-400">
-              <Sparkles className="w-4 h-4" />
-              भाग २: नेपाली वाक्य संरचना (SOV) • Sentence Unscrambler
-            </span>
-            <button
-              type="button"
-              onClick={() => setPickedTokenIds([])}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 transition"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Reset
-            </button>
-          </div>
+      {mode === 'words' ? (
+        <>
+          <HowToPlay
+            id="words"
+            steps={[
+              { emoji: '🖼️', text: 'Look at the picture' },
+              { emoji: '👂', text: 'Listen to the word' },
+              { emoji: '👆', text: 'Tap the letters in order' },
+            ]}
+          />
 
-          {/* Sentence Selector Pills */}
-          <div className="flex flex-wrap gap-1.5 mb-5">
-            {SENTENCES.map((s, idx) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => handleSelectSentence(idx)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition ${
-                  idx === selectedSentenceIdx
-                    ? 'bg-sky-500/20 border-sky-400 text-sky-200 font-semibold'
-                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                {s.emoji} वाक्य #{idx + 1}
-              </button>
-            ))}
-          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+            {/* Word chooser */}
+            <div className="card lg:col-span-4">
+              <h3 className="section-title mb-3">
+                <span aria-hidden>🗂️</span> Choose a word
+              </h3>
+              <div className="grid grid-cols-3 lg:grid-cols-2 gap-2">
+                {WORDS.map((w, idx) => (
+                  <button
+                    key={w.id}
+                    type="button"
+                    aria-pressed={idx === selectedWordIdx}
+                    aria-label={`${w.meaning} (${w.word})`}
+                    onClick={() => handleSelectWord(idx)}
+                    className={`tile flex flex-col items-center p-2 ${idx === selectedWordIdx ? 'tile-active' : ''}`}
+                  >
+                    <span className="text-3xl" aria-hidden>
+                      {w.emoji}
+                    </span>
+                    <span className="text-xs font-bold text-ink-soft">{w.meaning}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
 
-          {/* English vs Nepali SOV Grammar Prompt */}
-          <div className="rounded-2xl bg-slate-950/80 border border-slate-800 p-5 mb-4">
-            <div className="flex items-center justify-between gap-2">
-              <div>
-                <div className="text-xs uppercase tracking-wider text-slate-400">
-                  Translate &amp; Arrange in Nepali SOV Order:
+            {/* Word Tile Builder */}
+            <div className="card lg:col-span-8 flex flex-col gap-5">
+              <div className="text-center">
+                <div className="text-7xl mb-2 animate-pop" key={activeWord.id} aria-hidden>
+                  {activeWord.emoji}
                 </div>
-                <div className="text-base font-bold text-white mt-0.5">
-                  {activeSentence.emoji} &ldquo;{activeSentence.englishTranslation}&rdquo;
+                <p className="text-lg sm:text-xl font-extrabold text-ink">
+                  Can you build{' '}
+                  <span className="text-amber-600 dark:text-amber-300">“{activeWord.meaning}”</span>
+                  ?
+                </p>
+                <button
+                  type="button"
+                  onClick={() => speakNepaliPhonics(activeWord.word, activeWord.romanized)}
+                  className="btn-go mt-3"
+                >
+                  <Volume2 className="w-5 h-5" aria-hidden />
+                  Hear the word
+                </button>
+              </div>
+
+              {/* Slots */}
+              <div className="flex items-center justify-center gap-3" aria-label="Your word">
+                {activeWord.aksharas.map((_, slotIdx) => {
+                  const filled = pickedAksharas[slotIdx];
+                  const isCorrectSlot = filled === activeWord.aksharas[slotIdx];
+                  return (
+                    <div
+                      key={slotIdx}
+                      className={`w-20 h-20 rounded-3xl border-4 flex items-center justify-center text-4xl font-black transition ${
+                        !filled
+                          ? 'border-dashed border-line bg-sunken text-ink-faint'
+                          : isCorrectSlot
+                            ? 'border-emerald-400 bg-emerald-100 text-emerald-800 dark:bg-emerald-400/15 dark:text-emerald-100 animate-pop'
+                            : 'border-rose-400 bg-rose-100 text-rose-800 dark:bg-rose-400/15 dark:text-rose-100 animate-wiggle'
+                      }`}
+                    >
+                      {filled ?? slotIdx + 1}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Tile choices */}
+              <div>
+                <p className="text-sm font-bold text-ink-soft mb-2 text-center">
+                  अक्षर थिच्नुहोस् • Tap the letters in order:
+                </p>
+                <div className="flex flex-wrap justify-center gap-2.5">
+                  {wordTilePool.map((tile) => (
+                    <button
+                      key={tile.id}
+                      type="button"
+                      onClick={() => handlePickAkshara(tile.akshara)}
+                      className="tile w-16 h-16 text-3xl font-black text-amber-700 dark:text-amber-200"
+                    >
+                      {tile.akshara}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={wordBubble} role="status" aria-live="polite">
+                <span className="text-2xl leading-none" aria-hidden>
+                  {wordEval.correct ? '🎉' : wordEval.complete ? '🤔' : '🦉'}
+                </span>
+                <div className="flex-1">
+                  <div className="font-extrabold">{wordText.ne}</div>
+                  <div className="text-sm opacity-80 mt-0.5">{wordText.en}</div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setPickedAksharas((prev) => prev.slice(0, -1))}
+                  disabled={pickedAksharas.length === 0}
+                  className="btn-soft"
+                >
+                  <Undo2 className="w-5 h-5" aria-hidden />
+                  Undo
+                </button>
+                <button type="button" onClick={() => setPickedAksharas([])} className="btn-soft">
+                  <RotateCcw className="w-5 h-5" aria-hidden />
+                  Reset
+                </button>
+                {wordEval.correct && (
+                  <button
+                    type="button"
+                    onClick={() => handleSelectWord((selectedWordIdx + 1) % WORDS.length)}
+                    className="btn-primary animate-pop"
+                  >
+                    Next word
+                    <ChevronRight className="w-5 h-5" aria-hidden />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <HowToPlay
+            id="sentences"
+            steps={[
+              { emoji: '📖', text: 'Read the English sentence' },
+              { emoji: '🧒', text: 'Nepali puts WHO first…' },
+              { emoji: '📦', text: '…then WHAT…' },
+              { emoji: '🏃', text: '…and the ACTION last!' },
+            ]}
+          />
+
+          <div className="card space-y-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h3 className="section-title">
+                <span aria-hidden>📝</span> Sentence Unscrambler
+              </h3>
+              <div className="flex flex-wrap gap-1.5" role="group" aria-label="Choose a sentence">
+                {SENTENCES.map((s, idx) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    aria-pressed={idx === selectedSentenceIdx}
+                    aria-label={`Sentence ${idx + 1}`}
+                    onClick={() => handleSelectSentence(idx)}
+                    className={`tile min-w-[44px] min-h-[44px] px-2 text-xl ${idx === selectedSentenceIdx ? 'tile-active' : ''}`}
+                  >
+                    {s.emoji}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Prompt */}
+            <div className="rounded-3xl bg-sunken border border-line p-4 sm:p-5 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <div className="text-sm font-bold text-ink-faint">Make this in Nepali:</div>
+                <div className="text-xl sm:text-2xl font-black text-ink mt-0.5">
+                  {activeSentence.emoji} “{activeSentence.englishTranslation}”
+                </div>
+                <div className="text-xs text-ink-faint mt-1">
+                  English order: {activeSentence.englishOrder}
                 </div>
               </div>
               <button
@@ -270,109 +341,120 @@ export function WordSentenceBuilder() {
                 onClick={() =>
                   speakNepaliPhonics(activeSentence.nepaliSentence, activeSentence.romanized)
                 }
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition shrink-0"
+                className="btn-go shrink-0"
               >
-                <Volume2 className="w-3.5 h-3.5" />
+                <Volume2 className="w-5 h-5" aria-hidden />
                 Hear Sentence
               </button>
             </div>
 
-            <div className="mt-3 pt-3 border-t border-slate-800/80 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-              <div className="bg-slate-900/80 p-2 rounded-lg border border-slate-800 text-slate-400">
-                <strong className="text-slate-200">English (SVO):</strong>{' '}
-                {activeSentence.englishOrder}
-              </div>
-              <div className="bg-amber-500/10 p-2 rounded-lg border border-amber-500/20 text-amber-200">
-                <strong className="text-amber-300">Nepali (SOV):</strong> कर्ता (S) ➔ कर्म (O) ➔ क्रिया
-                (V)
-              </div>
-            </div>
-
-            {/* 3 Grammatical SOV Drop Slots */}
-            <div className="grid grid-cols-3 gap-2.5 mt-4">
-              {(['कर्ता (Subject)', 'कर्म (Object)', 'क्रिया (Verb)'] as const).map(
-                (slotLabel, slotIdx) => {
-                  const tokenId = pickedTokenIds[slotIdx];
-                  const token = activeSentence.tokens.find((t) => t.id === tokenId);
-                  return (
-                    <div
-                      key={slotLabel}
-                      className={`p-3 rounded-xl border-2 text-center min-h-[76px] flex flex-col items-center justify-center transition ${
-                        !token
-                          ? 'border-dashed border-slate-700 bg-slate-900/40'
-                          : 'border-sky-400 bg-sky-500/15'
-                      }`}
-                    >
-                      <span className="text-[10px] font-mono uppercase text-slate-400">
-                        {slotIdx + 1}. {slotLabel}
-                      </span>
-                      {token ? (
-                        <div className="mt-1">
-                          <div className="text-lg font-bold text-amber-200">{token.text}</div>
-                          <div className="text-[10px] text-sky-300">
-                            {token.romanized} ({token.gloss})
-                          </div>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-slate-600 mt-1">Empty Slot</span>
-                      )}
-                    </div>
-                  );
-                }
-              )}
-            </div>
-          </div>
-
-          {/* Scrambled Word Token Cards */}
-          <div className="mb-4">
-            <div className="text-xs text-slate-400 mb-2">
-              तलका शब्दहरू नेपाली (SOV) क्रममा छान्नुहोस् • Tap Word Tiles to Arrange:
-            </div>
-            <div className="grid grid-cols-3 gap-2.5">
-              {scrambledSentenceTokens.map((token) => {
-                const isPicked = pickedTokenIds.includes(token.id);
+            {/* Answer slots: one per token. Nepali is verb-final, so the last slot is the verb's. */}
+            <div className="grid gap-2 sm:gap-3" style={sentenceColumns}>
+              {activeSentence.tokens.map((_, slotIdx) => {
+                const tokenId = pickedTokenIds[slotIdx];
+                const token = activeSentence.tokens.find((t) => t.id === tokenId);
+                const isLast = slotIdx === activeSentence.tokens.length - 1;
+                const role = token ? sentenceRoleLabel(token.role) : null;
+                const verbHint = sentenceRoleLabel('verb');
                 return (
-                  <button
-                    key={token.id}
-                    type="button"
-                    onClick={() => handleToggleSentenceToken(token.id)}
-                    className={`p-3 rounded-xl border text-center transition ${
-                      isPicked
-                        ? 'bg-sky-500/20 border-sky-400 text-sky-200 opacity-60'
-                        : 'bg-slate-950 border-slate-700 hover:border-amber-400 text-white'
+                  <div
+                    key={slotIdx}
+                    data-testid="sentence-slot"
+                    className={`rounded-3xl border-4 p-2 sm:p-3 text-center min-h-[110px] flex flex-col items-center justify-center transition ${
+                      !token
+                        ? 'border-dashed border-line bg-sunken'
+                        : 'border-sky-400 bg-sky-50 dark:bg-sky-400/10 animate-pop'
                     }`}
                   >
-                    <div className="text-xl font-bold text-amber-200">{token.text}</div>
-                    <div className="text-xs text-slate-300 mt-0.5">{token.romanized}</div>
-                    <div className="text-[10px] text-slate-400 mt-1">
-                      &ldquo;{token.gloss}&rdquo; • {token.nepaliRole}
-                    </div>
-                  </button>
+                    {role ? (
+                      <span className="text-xs font-black text-ink-faint">
+                        {slotIdx + 1}. {role.emoji} {role.ne} · {role.en}
+                      </span>
+                    ) : (
+                      <span className="text-xs font-black text-ink-faint">
+                        {slotIdx + 1}.{' '}
+                        {isLast ? `${verbHint.emoji} ${verbHint.ne} · goes last` : ''}
+                      </span>
+                    )}
+                    {token ? (
+                      <div className="mt-1">
+                        <div className="text-2xl font-black text-ink">{token.text}</div>
+                        <div className="text-xs text-ink-soft">{token.romanized}</div>
+                      </div>
+                    ) : (
+                      <span className="text-2xl text-ink-faint/50 mt-1" aria-hidden>
+                        ?
+                      </span>
+                    )}
+                  </div>
                 );
               })}
             </div>
-          </div>
-        </div>
 
-        {/* SOV Evaluation Feedback */}
-        <div
-          className={`p-3.5 rounded-xl border text-xs flex items-start gap-2.5 ${
-            sentenceEval.correct
-              ? 'bg-emerald-950/50 border-emerald-500/40 text-emerald-200'
-              : sentenceEval.isSVOConfusion
-                ? 'bg-amber-950/60 border-amber-500/50 text-amber-200'
-                : sentenceEval.complete
-                  ? 'bg-red-950/50 border-red-500/40 text-red-200'
-                  : 'bg-slate-950/70 border-slate-800 text-slate-300'
-          }`}
-        >
-          <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
-          <div>
-            <div className="font-semibold">{sentenceEval.feedbackNepali}</div>
-            <div className="text-slate-400 mt-0.5">{sentenceEval.feedbackEnglish}</div>
+            {/* Token cards */}
+            <div>
+              <p className="text-sm font-bold text-ink-soft mb-2 text-center">
+                शब्द थिच्नुहोस् • Tap the words (tap again to take back):
+              </p>
+              <div className="grid gap-2 sm:gap-3" style={sentenceColumns}>
+                {scrambledSentenceTokens.map((token) => {
+                  const isPicked = pickedTokenIds.includes(token.id);
+                  return (
+                    <button
+                      key={token.id}
+                      type="button"
+                      aria-pressed={isPicked}
+                      onClick={() => handleToggleSentenceToken(token.id)}
+                      className={`tile p-3 text-center ${isPicked ? 'opacity-40 !border-sky-400' : ''}`}
+                    >
+                      <div className="text-2xl font-black text-amber-700 dark:text-amber-200">
+                        {token.text}
+                      </div>
+                      <div className="text-sm font-semibold text-ink-soft">{token.romanized}</div>
+                      <div className="text-xs text-ink-faint mt-0.5">
+                        &ldquo;{token.gloss}&rdquo;
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className={sentenceBubble} role="status" aria-live="polite">
+              <span className="text-2xl leading-none" aria-hidden>
+                {sentenceEval.correct
+                  ? '🎉'
+                  : sentenceEval.isSVOConfusion
+                    ? '💡'
+                    : sentenceEval.complete
+                      ? '🤔'
+                      : '🦉'}
+              </span>
+              <div className="flex-1">
+                <div className="font-extrabold">{sentenceText.ne}</div>
+                <div className="text-sm opacity-80 mt-0.5">{sentenceText.en}</div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-3">
+              <button type="button" onClick={() => setPickedTokenIds([])} className="btn-soft">
+                <RotateCcw className="w-5 h-5" aria-hidden />
+                Reset
+              </button>
+              {sentenceEval.correct && (
+                <button
+                  type="button"
+                  onClick={() => handleSelectSentence((selectedSentenceIdx + 1) % SENTENCES.length)}
+                  className="btn-primary animate-pop"
+                >
+                  Next sentence
+                  <ChevronRight className="w-5 h-5" aria-hidden />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }

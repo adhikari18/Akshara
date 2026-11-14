@@ -23,6 +23,17 @@ describe('Matra Engine, Barakhari Fusion & SOV Sentence Builder', () => {
     expect(kuu.position).toBe('bottom');
   });
 
+  it('throws for an unknown consonant instead of silently borrowing क (M10)', () => {
+    expect(() => fuseConsonantWithMatra('zz', 'i')).toThrow(/Unknown consonant: 'zz'/);
+    expect(() => fuseConsonantWithMatra('Q', 'aa')).toThrow(/Unknown consonant/);
+    expect(() => generateBarakhari('not-a-letter')).toThrow(/Unknown consonant/);
+    // Both lookup forms still work
+    expect(fuseConsonantWithMatra('ga', 'i').compositeAkshara).toBe('गि');
+    expect(fuseConsonantWithMatra('ग', 'i').romanized).toBe('gi');
+    // Unknown matras were already rejected
+    expect(() => fuseConsonantWithMatra('ka', 'zz')).toThrow(/Unknown matra/);
+  });
+
   it('generates the full 13-step Nepali Barakhari table for any consonant', () => {
     const kaBarakhari = generateBarakhari('ka');
     expect(kaBarakhari).toHaveLength(13);
@@ -72,6 +83,6 @@ describe('Matra Engine, Barakhari Fusion & SOV Sentence Builder', () => {
     const englishSVO = evaluateSOVSentence(raamGhar, ['sov-1-s', 'sov-1-v', 'sov-1-o']);
     expect(englishSVO.correct).toBe(false);
     expect(englishSVO.isSVOConfusion).toBe(true);
-    expect(englishSVO.feedbackEnglish).toContain('SVO');
+    expect(englishSVO.feedback.code).toBe('sentence-svo-confusion');
   });
 });

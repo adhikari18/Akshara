@@ -15,6 +15,14 @@
       "types": "./dist/schema-validator.d.ts",
       "import": "./dist/schema-validator.js"
     },
+    "./svg-path": {
+      "types": "./dist/svg-path.d.ts",
+      "import": "./dist/svg-path.js"
+    },
+    "./geometry": {
+      "types": "./dist/geometry.d.ts",
+      "import": "./dist/geometry.js"
+    },
     "./schema/letter.schema.json": "./schema/letter.schema.json",
     "./vowels.json": "./vowels.json",
     "./consonants.json": "./consonants.json",
@@ -23,7 +31,9 @@
     "./strokes/*": "./strokes/*"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "generate": "node scripts/generate-stroke-index.mjs",
+    "check:generated": "node scripts/generate-stroke-index.mjs --check",
+    "build": "npm run generate && tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

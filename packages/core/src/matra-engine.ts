@@ -258,10 +258,18 @@ export function fuseConsonantWithMatra(
       ? CONSONANTS.find((c) => c.id === consonantInput || c.character === consonantInput)
       : consonantInput;
 
-  const baseConsonant = consonantEntry ? consonantEntry.character : String(consonantInput);
-  const consonantId = consonantEntry ? consonantEntry.id : String(consonantInput);
-  const baseRoman = consonantEntry ? stripTrailingVowelA(consonantEntry.romanized) : 'k';
-  const baseIpa = consonantEntry ? stripTrailingIpaSchwa(consonantEntry.ipa) : 'k';
+  // Fail loudly: an unknown consonant is a data or caller bug, and silently borrowing क's
+  // romanization ("k") would teach a wrong sound.
+  if (!consonantEntry) {
+    throw new Error(
+      `Unknown consonant: '${String(consonantInput)}' (expected a CONSONANTS id such as 'ka' or a character such as 'क')`
+    );
+  }
+
+  const baseConsonant = consonantEntry.character;
+  const consonantId = consonantEntry.id;
+  const baseRoman = stripTrailingVowelA(consonantEntry.romanized);
+  const baseIpa = stripTrailingIpaSchwa(consonantEntry.ipa);
 
   const matra = MATRA_DEFINITIONS.find(
     (m) => m.id === matraId || m.matraSign === matraId || m.vowelChar === matraId

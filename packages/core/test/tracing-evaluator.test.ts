@@ -6,6 +6,7 @@ import {
   distanceToSegment,
   euclideanDistance,
   isWithinWaypointTolerance,
+  sampleStrokePath,
   smoothPointerPoint,
   validateStrokeTopology,
 } from '../src/index.js';
@@ -106,7 +107,8 @@ describe('TracingEvaluator & Vector Geometry Engine', () => {
     // If the user instead tries to trace along the top Shirorekha bar at y=75:
     const step1 = evaluator.evaluatePointerSample({ x: 65, y: 75 });
     expect(step1.topologicalViolation).not.toBeNull();
-    expect(step1.topologicalViolation).toContain('शिरोरेखा');
+    expect(step1.topologicalViolation).toBe('shirorekha-before-body');
+    expect(step1.hint).toEqual({ code: 'shirorekha-before-body' });
   });
 
   it('traces simple palatal, labial, and retroflex Swor Varna (इ, ई, उ, ऊ, ऋ) across interpolated pointer trajectories', () => {
@@ -123,19 +125,13 @@ describe('TracingEvaluator & Vector Geometry Engine', () => {
       });
 
       for (const stroke of dataset.strokes) {
-        for (let i = 0; i < stroke.waypoints.length - 1; i++) {
-          const a = stroke.waypoints[i];
-          const b = stroke.waypoints[i + 1];
-          const steps = 6;
-          for (let s = 0; s <= steps; s++) {
-            const t = s / steps;
-            const step = evaluator.evaluatePointerSample({
-              x: a.x + (b.x - a.x) * t,
-              y: a.y + (b.y - a.y) * t,
-            });
-            expect(step.topologicalViolation).toBeNull();
-          }
+        // Follow the authored curve (straight waypoint-to-waypoint lines now count as shortcuts)
+        for (const point of sampleStrokePath(stroke)) {
+          const step = evaluator.evaluatePointerSample(point);
+          expect(step.topologicalViolation).toBeNull();
+          expect(step.cornerCut).toBe(false);
         }
+        evaluator.endGesture();
       }
 
       const progress = evaluator.getProgress();
@@ -160,19 +156,13 @@ describe('TracingEvaluator & Vector Geometry Engine', () => {
       });
 
       for (const stroke of dataset.strokes) {
-        for (let i = 0; i < stroke.waypoints.length - 1; i++) {
-          const a = stroke.waypoints[i];
-          const b = stroke.waypoints[i + 1];
-          const steps = 6;
-          for (let s = 0; s <= steps; s++) {
-            const t = s / steps;
-            const step = evaluator.evaluatePointerSample({
-              x: a.x + (b.x - a.x) * t,
-              y: a.y + (b.y - a.y) * t,
-            });
-            expect(step.topologicalViolation).toBeNull();
-          }
+        // Follow the authored curve (straight waypoint-to-waypoint lines now count as shortcuts)
+        for (const point of sampleStrokePath(stroke)) {
+          const step = evaluator.evaluatePointerSample(point);
+          expect(step.topologicalViolation).toBeNull();
+          expect(step.cornerCut).toBe(false);
         }
+        evaluator.endGesture();
       }
 
       const progress = evaluator.getProgress();
@@ -199,10 +189,13 @@ describe('TracingEvaluator & Vector Geometry Engine', () => {
       });
 
       for (const stroke of dataset.strokes) {
-        for (const wp of stroke.waypoints) {
-          const step = evaluator.evaluatePointerSample({ x: wp.x, y: wp.y });
+        // Follow the authored curve (straight waypoint-to-waypoint lines now count as shortcuts)
+        for (const point of sampleStrokePath(stroke)) {
+          const step = evaluator.evaluatePointerSample(point);
           expect(step.topologicalViolation).toBeNull();
+          expect(step.cornerCut).toBe(false);
         }
+        evaluator.endGesture();
       }
 
       const progress = evaluator.getProgress();

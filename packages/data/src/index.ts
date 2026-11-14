@@ -4,56 +4,6 @@ import consonantsData from '../consonants.json' with { type: 'json' };
 import wordsData from '../words.json' with { type: 'json' };
 import sentencesData from '../sentences.json' with { type: 'json' };
 
-import strokeKa from '../strokes/ka.json' with { type: 'json' };
-import strokeKha from '../strokes/kha.json' with { type: 'json' };
-import strokeGa from '../strokes/ga.json' with { type: 'json' };
-import strokeGha from '../strokes/gha.json' with { type: 'json' };
-import strokeNga from '../strokes/nga.json' with { type: 'json' };
-import strokeCha from '../strokes/cha.json' with { type: 'json' };
-import strokeChha from '../strokes/chha.json' with { type: 'json' };
-import strokeJa from '../strokes/ja.json' with { type: 'json' };
-import strokeJha from '../strokes/jha.json' with { type: 'json' };
-import strokeNya from '../strokes/nya.json' with { type: 'json' };
-import strokeTta from '../strokes/tta.json' with { type: 'json' };
-import strokeTtha from '../strokes/ttha.json' with { type: 'json' };
-import strokeDda from '../strokes/dda.json' with { type: 'json' };
-import strokeDdha from '../strokes/ddha.json' with { type: 'json' };
-import strokeNna from '../strokes/nna.json' with { type: 'json' };
-import strokeTa from '../strokes/ta.json' with { type: 'json' };
-import strokeTha from '../strokes/tha.json' with { type: 'json' };
-import strokeDa from '../strokes/da.json' with { type: 'json' };
-import strokeDha from '../strokes/dha.json' with { type: 'json' };
-import strokeNa from '../strokes/na.json' with { type: 'json' };
-import strokePa from '../strokes/pa.json' with { type: 'json' };
-import strokePha from '../strokes/pha.json' with { type: 'json' };
-import strokeBa from '../strokes/ba.json' with { type: 'json' };
-import strokeBha from '../strokes/bha.json' with { type: 'json' };
-import strokeMa from '../strokes/ma.json' with { type: 'json' };
-import strokeYa from '../strokes/ya.json' with { type: 'json' };
-import strokeRa from '../strokes/ra.json' with { type: 'json' };
-import strokeLa from '../strokes/la.json' with { type: 'json' };
-import strokeWa from '../strokes/wa.json' with { type: 'json' };
-import strokeSha from '../strokes/sha.json' with { type: 'json' };
-import strokeSsha from '../strokes/ssha.json' with { type: 'json' };
-import strokeSa from '../strokes/sa.json' with { type: 'json' };
-import strokeHa from '../strokes/ha.json' with { type: 'json' };
-import strokeKsha from '../strokes/ksha.json' with { type: 'json' };
-import strokeTra from '../strokes/tra.json' with { type: 'json' };
-import strokeGya from '../strokes/gya.json' with { type: 'json' };
-import strokeA from '../strokes/a.json' with { type: 'json' };
-import strokeAa from '../strokes/aa.json' with { type: 'json' };
-import strokeI from '../strokes/i.json' with { type: 'json' };
-import strokeIi from '../strokes/ii.json' with { type: 'json' };
-import strokeU from '../strokes/u.json' with { type: 'json' };
-import strokeUu from '../strokes/uu.json' with { type: 'json' };
-import strokeRi from '../strokes/ri.json' with { type: 'json' };
-import strokeE from '../strokes/e.json' with { type: 'json' };
-import strokeAi from '../strokes/ai.json' with { type: 'json' };
-import strokeO from '../strokes/o.json' with { type: 'json' };
-import strokeAu from '../strokes/au.json' with { type: 'json' };
-import strokeAm from '../strokes/am.json' with { type: 'json' };
-import strokeAha from '../strokes/aha.json' with { type: 'json' };
-
 export type StrokeTopologyType = 'loop' | 'curve' | 'diagonal' | 'stem' | 'shirorekha';
 
 export type DirectionHint =
@@ -184,12 +134,18 @@ export interface WordBuildingEntry {
   phoneticBreakdown: string;
 }
 
+/**
+ * Grammatical role of a sentence token. Time and place adverbials may move within a Nepali
+ * clause (आज म स्कुल जान्छु / म आज स्कुल जान्छु); the verb stays final.
+ */
+export type SentenceRole = 'subject' | 'object' | 'verb' | 'time' | 'place';
+
 export interface SentenceToken {
   id: string;
   text: string;
   romanized: string;
   gloss: string;
-  role: 'subject' | 'object' | 'verb';
+  role: SentenceRole;
   nepaliRole: string;
 }
 
@@ -201,7 +157,13 @@ export interface SentenceEntry {
   englishOrder: string;
   nepaliOrder: string;
   emoji: string;
+  /** Tokens in the canonical (taught) order. The canonical order is always acceptable. */
   tokens: SentenceToken[];
+  /**
+   * Further grammatical orders, as token-id sequences (e.g. a fronted time adverbial).
+   * Every order must be a permutation of `tokens` and keep the verb last.
+   */
+  acceptableOrders?: string[][];
 }
 
 export const LETTER_SCHEMA = letterSchema;
@@ -210,109 +172,49 @@ export const CONSONANTS: ConsonantEntry[] = consonantsData as ConsonantEntry[];
 export const WORDS: WordBuildingEntry[] = wordsData as WordBuildingEntry[];
 export const SENTENCES: SentenceEntry[] = sentencesData as SentenceEntry[];
 
-export const STROKE_DATASETS: Record<string, LetterStrokeDataset> = {
-  ka: strokeKa as LetterStrokeDataset,
-  kha: strokeKha as LetterStrokeDataset,
-  ga: strokeGa as LetterStrokeDataset,
-  gha: strokeGha as LetterStrokeDataset,
-  nga: strokeNga as LetterStrokeDataset,
-  cha: strokeCha as LetterStrokeDataset,
-  chha: strokeChha as LetterStrokeDataset,
-  ja: strokeJa as LetterStrokeDataset,
-  jha: strokeJha as LetterStrokeDataset,
-  nya: strokeNya as LetterStrokeDataset,
-  tta: strokeTta as LetterStrokeDataset,
-  ttha: strokeTtha as LetterStrokeDataset,
-  dda: strokeDda as LetterStrokeDataset,
-  ddha: strokeDdha as LetterStrokeDataset,
-  nna: strokeNna as LetterStrokeDataset,
-  ta: strokeTa as LetterStrokeDataset,
-  tha: strokeTha as LetterStrokeDataset,
-  da: strokeDa as LetterStrokeDataset,
-  dha: strokeDha as LetterStrokeDataset,
-  na: strokeNa as LetterStrokeDataset,
-  pa: strokePa as LetterStrokeDataset,
-  pha: strokePha as LetterStrokeDataset,
-  ba: strokeBa as LetterStrokeDataset,
-  bha: strokeBha as LetterStrokeDataset,
-  ma: strokeMa as LetterStrokeDataset,
-  ya: strokeYa as LetterStrokeDataset,
-  ra: strokeRa as LetterStrokeDataset,
-  la: strokeLa as LetterStrokeDataset,
-  wa: strokeWa as LetterStrokeDataset,
-  sha: strokeSha as LetterStrokeDataset,
-  ssha: strokeSsha as LetterStrokeDataset,
-  sa: strokeSa as LetterStrokeDataset,
-  ha: strokeHa as LetterStrokeDataset,
-  ksha: strokeKsha as LetterStrokeDataset,
-  tra: strokeTra as LetterStrokeDataset,
-  gya: strokeGya as LetterStrokeDataset,
-  a: strokeA as LetterStrokeDataset,
-  aa: strokeAa as LetterStrokeDataset,
-  i: strokeI as LetterStrokeDataset,
-  ii: strokeIi as LetterStrokeDataset,
-  u: strokeU as LetterStrokeDataset,
-  uu: strokeUu as LetterStrokeDataset,
-  ri: strokeRi as LetterStrokeDataset,
-  e: strokeE as LetterStrokeDataset,
-  ai: strokeAi as LetterStrokeDataset,
-  o: strokeO as LetterStrokeDataset,
-  au: strokeAu as LetterStrokeDataset,
-  am: strokeAm as LetterStrokeDataset,
-  aha: strokeAha as LetterStrokeDataset,
-};
+/** Every acceptable token-id order for a sentence, canonical order first. */
+export function getAcceptableOrders(sentence: SentenceEntry): string[][] {
+  return [sentence.tokens.map((t) => t.id), ...(sentence.acceptableOrders ?? [])];
+}
 
-export const STROKE_LIST: LetterStrokeDataset[] = [
-  STROKE_DATASETS.ka,
-  STROKE_DATASETS.kha,
-  STROKE_DATASETS.ga,
-  STROKE_DATASETS.gha,
-  STROKE_DATASETS.nga,
-  STROKE_DATASETS.cha,
-  STROKE_DATASETS.chha,
-  STROKE_DATASETS.ja,
-  STROKE_DATASETS.jha,
-  STROKE_DATASETS.nya,
-  STROKE_DATASETS.tta,
-  STROKE_DATASETS.ttha,
-  STROKE_DATASETS.dda,
-  STROKE_DATASETS.ddha,
-  STROKE_DATASETS.nna,
-  STROKE_DATASETS.ta,
-  STROKE_DATASETS.tha,
-  STROKE_DATASETS.da,
-  STROKE_DATASETS.dha,
-  STROKE_DATASETS.na,
-  STROKE_DATASETS.pa,
-  STROKE_DATASETS.pha,
-  STROKE_DATASETS.ba,
-  STROKE_DATASETS.bha,
-  STROKE_DATASETS.ma,
-  STROKE_DATASETS.ya,
-  STROKE_DATASETS.ra,
-  STROKE_DATASETS.la,
-  STROKE_DATASETS.wa,
-  STROKE_DATASETS.sha,
-  STROKE_DATASETS.ssha,
-  STROKE_DATASETS.sa,
-  STROKE_DATASETS.ha,
-  STROKE_DATASETS.ksha,
-  STROKE_DATASETS.tra,
-  STROKE_DATASETS.gya,
-  STROKE_DATASETS.a,
-  STROKE_DATASETS.aa,
-  STROKE_DATASETS.i,
-  STROKE_DATASETS.ii,
-  STROKE_DATASETS.u,
-  STROKE_DATASETS.uu,
-  STROKE_DATASETS.ri,
-  STROKE_DATASETS.e,
-  STROKE_DATASETS.ai,
-  STROKE_DATASETS.o,
-  STROKE_DATASETS.au,
-  STROKE_DATASETS.am,
-  STROKE_DATASETS.aha,
-];
+/**
+ * Structural checks for a sentence challenge: unique token ids, exactly one verb, and every
+ * acceptable order a distinct, verb-final permutation of the tokens. Returns error messages.
+ */
+export function validateSentenceEntry(sentence: SentenceEntry): string[] {
+  const errors: string[] = [];
+  const ids = sentence.tokens.map((t) => t.id);
+  const idSet = new Set(ids);
+  if (sentence.tokens.length < 2) errors.push('needs at least 2 tokens');
+  if (idSet.size !== ids.length) errors.push('token ids must be unique');
+  const verbs = sentence.tokens.filter((t) => t.role === 'verb');
+  if (verbs.length !== 1) errors.push(`needs exactly one verb token (found ${verbs.length})`);
+  const verbId = verbs[0]?.id;
+
+  const seen = new Set<string>();
+  getAcceptableOrders(sentence).forEach((order, idx) => {
+    const label = idx === 0 ? 'canonical order' : `acceptableOrders[${idx - 1}]`;
+    const isPermutation =
+      order.length === ids.length &&
+      order.every((id) => idSet.has(id)) &&
+      new Set(order).size === order.length;
+    if (!isPermutation) {
+      errors.push(`${label} must use every token id exactly once`);
+      return;
+    }
+    if (verbId && order[order.length - 1] !== verbId) {
+      errors.push(`${label} must end with the verb (Nepali is verb-final)`);
+    }
+    const key = order.join(' ');
+    if (seen.has(key)) errors.push(`${label} duplicates an earlier order`);
+    seen.add(key);
+  });
+  return errors;
+}
+
+// Letter stroke datasets are registered in stroke-manifest.json; the import list, keyed record
+// and ordered list are generated into strokes.generated.ts (see scripts/generate-stroke-index.mjs).
+export { STROKE_DATASETS, STROKE_LIST, STROKE_ORDER } from './strokes.generated.js';
 
 /**
  * Returns the headline spans for a letter: the explicit split segments when

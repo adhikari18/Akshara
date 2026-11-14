@@ -5,7 +5,9 @@ import {
   STROKE_LIST,
   VOWELS,
   WORDS,
+  getAcceptableOrders,
   validateLetterDataset,
+  validateSentenceEntry,
 } from './index.js';
 import { validateAgainstLetterSchema } from './schema-validator.js';
 
@@ -75,7 +77,18 @@ for (const strokeSet of STROKE_LIST) {
 }
 
 console.log(`✅ Word building blocks: ${WORDS.length} words verified.`);
-console.log(`✅ SOV sentence challenges: ${SENTENCES.length} sentences verified.`);
+for (const sentence of SENTENCES) {
+  const errors = validateSentenceEntry(sentence);
+  if (errors.length > 0) {
+    hasError = true;
+    console.error(`❌ Sentence '${sentence.id}' failed validation:`);
+    for (const err of errors) console.error(`   - ${err}`);
+  }
+}
+const orderCount = SENTENCES.reduce((n, s) => n + getAcceptableOrders(s).length, 0);
+console.log(
+  `✅ SOV sentence challenges: ${SENTENCES.length} sentences verified (${orderCount} acceptable orders, all verb-final).`
+);
 
 if (hasError) {
   process.exit(1);

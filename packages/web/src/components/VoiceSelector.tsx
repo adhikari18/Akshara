@@ -17,19 +17,19 @@ const TIER_BADGE: Record<PhonicsVoiceOption['qualityTier'], { label: string; cla
   {
     neural: {
       label: 'Neural / Cloud',
-      className: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+      className: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
     },
     enhanced: {
       label: 'Enhanced',
-      className: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+      className: 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border-sky-500/30',
     },
     standard: {
       label: 'System',
-      className: 'bg-slate-800 text-slate-300 border-slate-700',
+      className: 'bg-sunken text-ink-soft border-line',
     },
     compact: {
       label: 'Compact',
-      className: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+      className: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/30',
     },
   };
 
@@ -94,37 +94,42 @@ export const VoiceSelector: React.FC = () => {
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         title="Configure Phonics Voice, Speed & Pitch"
-        className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold border transition ${
-          isOpen
-            ? 'bg-amber-500/20 text-amber-200 border-amber-500/50'
-            : 'bg-slate-900/90 text-slate-200 border-slate-800 hover:border-amber-500/40 hover:text-white'
-        }`}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
+        aria-label={`Voice settings: ${buttonSummary}`}
+        className={`btn-soft !px-3 !gap-1.5 ${isOpen ? '!border-amber-400' : ''}`}
       >
         {settings.voiceURI === 'chime-only' ? (
-          <VolumeX className="w-3.5 h-3.5 text-slate-400" />
+          <VolumeX className="w-5 h-5 text-ink-faint" aria-hidden />
         ) : (
-          <Volume2 className="w-3.5 h-3.5 text-amber-400" />
+          <Volume2 className="w-5 h-5 text-amber-500" aria-hidden />
         )}
-        <span className="max-w-[150px] truncate">{buttonSummary}</span>
-        <Sliders className="w-3 h-3 text-slate-400" />
+        <span className="hidden sm:inline max-w-[110px] truncate">
+          {settings.voiceURI === 'chime-only' ? 'Muted' : 'Voice'}
+        </span>
+        <Sliders className="w-3.5 h-3.5 text-ink-faint" aria-hidden />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl bg-slate-950/95 border border-slate-800 shadow-2xl shadow-black/70 backdrop-blur-xl p-4 z-50 space-y-3.5">
-          <div className="flex items-center justify-between border-b border-slate-800/80 pb-2.5">
+        <div
+          role="dialog"
+          aria-label="Voice settings"
+          className="fixed inset-x-3 top-20 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-96 rounded-3xl bg-card border border-line shadow-2xl shadow-black/20 dark:shadow-black/60 p-4 z-50 space-y-3.5 max-h-[calc(100vh-6rem)] overflow-y-auto animate-fade-in text-ink"
+        >
+          <div className="flex items-center justify-between border-b border-line pb-2.5">
             <div>
-              <h3 className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 flex items-center gap-1.5">
                 <Volume2 className="w-3.5 h-3.5" />
-                Phonics Voice &amp; Speech Settings
+                Voice Settings
               </h3>
-              <p className="text-[11px] text-slate-400 mt-0.5">
-                Choose a Nepali or Devanagari voice and tune speed &amp; pitch.
+              <p className="text-[11px] text-ink-faint mt-0.5">
+                Pick who reads the letters, and how fast.
               </p>
             </div>
             <button
               type="button"
               onClick={() => speakNepaliPhonics('नमस्ते! क — कपुरी क। कलम।', 'namaste, ka, kalam')}
-              className="px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-amber-500 text-slate-950 hover:bg-amber-400 transition shrink-0"
+              className="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-amber-400 text-amber-950 hover:bg-amber-300 transition shrink-0"
             >
               Test Voice
             </button>
@@ -138,8 +143,8 @@ export const VoiceSelector: React.FC = () => {
               onClick={() => handleSelectVoice('auto')}
               className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left transition ${
                 settings.voiceURI === 'auto'
-                  ? 'bg-amber-500/15 border-amber-500/50 text-white'
-                  : 'bg-slate-900/70 border-slate-800/80 text-slate-300 hover:border-slate-700'
+                  ? 'bg-amber-500/15 border-amber-500/50 text-ink'
+                  : 'bg-sunken border-line text-ink-soft hover:border-amber-400'
               }`}
             >
               <div className="min-w-0 pr-2">
@@ -147,7 +152,7 @@ export const VoiceSelector: React.FC = () => {
                   <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                   <span>Auto (Best Available)</span>
                 </div>
-                <div className="text-[11px] text-slate-400 truncate mt-0.5">
+                <div className="text-[11px] text-ink-faint truncate mt-0.5">
                   {activeOption && settings.voiceURI === 'auto'
                     ? `Using ${activeOption.name} (${activeOption.lang})`
                     : 'Automatically picks highest-quality Nepali/Devanagari voice'}
@@ -161,7 +166,7 @@ export const VoiceSelector: React.FC = () => {
             {/* Devanagari Capable Voices */}
             {devanagariVoices.length > 0 ? (
               <div className="pt-1 space-y-1">
-                <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 px-1">
+                <div className="text-[10px] font-mono uppercase tracking-wider text-ink-faint px-1">
                   Devanagari Voices ({devanagariVoices.length})
                 </div>
                 {devanagariVoices.map((v) => {
@@ -174,14 +179,14 @@ export const VoiceSelector: React.FC = () => {
                       onClick={() => handleSelectVoice(v.voiceURI)}
                       className={`w-full flex items-center justify-between p-2 rounded-xl border text-left transition ${
                         selected
-                          ? 'bg-amber-500/15 border-amber-500/50 text-white'
-                          : 'bg-slate-900/60 border-slate-800/80 text-slate-300 hover:border-slate-700'
+                          ? 'bg-amber-500/15 border-amber-500/50 text-ink'
+                          : 'bg-sunken border-line text-ink-soft hover:border-amber-400'
                       }`}
                     >
                       <div className="min-w-0 pr-2">
                         <div className="text-xs font-semibold flex items-center gap-1.5 flex-wrap">
                           <span className="truncate">{v.name}</span>
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-sky-300">
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sunken text-sky-700 dark:text-sky-300">
                             {v.lang}
                           </span>
                           <span
@@ -197,7 +202,7 @@ export const VoiceSelector: React.FC = () => {
                 })}
               </div>
             ) : (
-              <div className="p-2.5 rounded-xl bg-amber-950/30 border border-amber-500/30 text-[11px] text-amber-200/90">
+              <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-500/30 text-[11px] text-amber-800 dark:text-amber-200/90">
                 No Nepali (`ne-NP`) or Hindi (`hi-IN`) voice detected in this browser.
               </div>
             )}
@@ -208,15 +213,15 @@ export const VoiceSelector: React.FC = () => {
               onClick={() => handleSelectVoice('chime-only')}
               className={`w-full flex items-center justify-between p-2 rounded-xl border text-left transition ${
                 settings.voiceURI === 'chime-only'
-                  ? 'bg-amber-500/15 border-amber-500/50 text-white'
-                  : 'bg-slate-900/60 border-slate-800/80 text-slate-300 hover:border-slate-700'
+                  ? 'bg-amber-500/15 border-amber-500/50 text-ink'
+                  : 'bg-sunken border-line text-ink-soft hover:border-amber-400'
               }`}
             >
               <div className="flex items-center gap-2">
-                <VolumeX className="w-3.5 h-3.5 text-slate-400" />
+                <VolumeX className="w-3.5 h-3.5 text-ink-faint" />
                 <div>
                   <div className="text-xs font-semibold">Chime Only (Mute Speech)</div>
-                  <div className="text-[10px] text-slate-400">
+                  <div className="text-[10px] text-ink-faint">
                     Play musical Pati chimes without synthetic voice
                   </div>
                 </div>
@@ -232,7 +237,7 @@ export const VoiceSelector: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowAllVoices((prev) => !prev)}
-                  className="text-[11px] text-sky-400 hover:text-sky-300 font-medium px-1"
+                  className="text-[11px] text-sky-400 hover:text-sky-700 dark:text-sky-300 font-medium px-1"
                 >
                   {showAllVoices
                     ? 'Hide non-Devanagari system voices'
@@ -249,13 +254,13 @@ export const VoiceSelector: React.FC = () => {
                           onClick={() => handleSelectVoice(v.voiceURI)}
                           className={`w-full flex items-center justify-between p-2 rounded-xl border text-left transition ${
                             selected
-                              ? 'bg-amber-500/15 border-amber-500/50 text-white'
-                              : 'bg-slate-900/40 border-slate-800/60 text-slate-400 hover:border-slate-700'
+                              ? 'bg-amber-500/15 border-amber-500/50 text-ink'
+                              : 'bg-sunken border-line text-ink-faint hover:border-amber-400'
                           }`}
                         >
                           <div className="min-w-0 pr-2 flex items-center gap-1.5">
                             <span className="text-xs truncate">{v.name}</span>
-                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
+                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sunken text-ink-soft">
                               {v.lang}
                             </span>
                           </div>
@@ -270,11 +275,13 @@ export const VoiceSelector: React.FC = () => {
           </div>
 
           {/* Rate & Pitch Sliders */}
-          <div className="pt-2 border-t border-slate-800/80 grid grid-cols-2 gap-3">
+          <div className="pt-2 border-t border-line grid grid-cols-2 gap-3">
             <div>
-              <div className="flex items-center justify-between text-[11px] text-slate-300 mb-1">
-                <span>Speed (Rate)</span>
-                <span className="font-mono text-amber-300">{settings.rate.toFixed(2)}×</span>
+              <div className="flex items-center justify-between text-[11px] text-ink-soft mb-1">
+                <span>🐢 Speed 🐇</span>
+                <span className="font-mono text-amber-700 dark:text-amber-300">
+                  {settings.rate.toFixed(2)}×
+                </span>
               </div>
               <input
                 type="range"
@@ -287,9 +294,11 @@ export const VoiceSelector: React.FC = () => {
               />
             </div>
             <div>
-              <div className="flex items-center justify-between text-[11px] text-slate-300 mb-1">
+              <div className="flex items-center justify-between text-[11px] text-ink-soft mb-1">
                 <span>Pitch</span>
-                <span className="font-mono text-amber-300">{settings.pitch.toFixed(2)}</span>
+                <span className="font-mono text-amber-700 dark:text-amber-300">
+                  {settings.pitch.toFixed(2)}
+                </span>
               </div>
               <input
                 type="range"
@@ -305,14 +314,13 @@ export const VoiceSelector: React.FC = () => {
 
           {/* Helpful tip when only compact voice is present */}
           {activeOption?.qualityTier === 'compact' && (
-            <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
-              <strong className="text-amber-300">Tip for better audio:</strong> macOS&apos;s
-              built-in <code>Lekha</code> voice is a compact synth. For natural neural speech, open
-              in <strong className="text-slate-200">Chrome</strong> (<code>Google हिन्दी</code>) or{' '}
-              <strong className="text-slate-200">Edge</strong> (<code>Microsoft Hemkala ne-NP</code>
-              ), or download <strong className="text-slate-200">
-                Kiyara / Neel (Enhanced)
-              </strong> in{' '}
+            <div className="p-2.5 rounded-xl bg-sunken border border-line text-[11px] text-ink-faint leading-relaxed">
+              <strong className="text-amber-700 dark:text-amber-300">Tip for better audio:</strong>{' '}
+              macOS&apos;s built-in <code>Lekha</code> voice is a compact synth. For natural neural
+              speech, open in <strong className="text-ink">Chrome</strong> (
+              <code>Google हिन्दी</code>) or <strong className="text-ink">Edge</strong> (
+              <code>Microsoft Hemkala ne-NP</code>
+              ), or download <strong className="text-ink">Kiyara / Neel (Enhanced)</strong> in{' '}
               <code>System Settings ➔ Accessibility ➔ Spoken Content ➔ System Voice</code>.
             </div>
           )}

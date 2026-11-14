@@ -11,6 +11,9 @@ claude-hfi/
 # Lockfiles & generated
 package-lock.json
 
+# Generated from stroke-manifest.json (byte-exact output is checked in CI)
+packages/data/src/strokes.generated.ts
+
 # Canonical datasets — hand-tuned JSON layout, validated by schema instead
 packages/data/*.json
 packages/data/strokes/

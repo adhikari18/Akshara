@@ -1,10 +1,18 @@
 import React from 'react';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { STROKE_DATASETS, STROKE_LIST } from '@akshara/data';
 import type { StrokeDefinition } from '@akshara/data';
 import { TracingCanvas } from '@/components/TracingCanvas';
+import * as audio from '@/lib/audio';
+
+vi.mock('@/lib/audio', () => ({
+  playStrokeSuccessSound: vi.fn(),
+  playTopologicalWarningSound: vi.fn(),
+  playWaypointChime: vi.fn(),
+  speakNepaliPhonics: vi.fn(),
+}));
 
 const ka = STROKE_DATASETS.ka;
 
@@ -59,9 +67,16 @@ function traceStroke(canvas: HTMLCanvasElement, stroke: StrokeDefinition): void 
 }
 
 describe('TracingCanvas', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders the full 49-letter deck and the default letter क', () => {
     render(<TracingCanvas />);
-    expect(screen.getByText(`सबै • All (${STROKE_LIST.length})`)).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: `सबै All (${STROKE_LIST.length})` })
+    ).toBeInTheDocument();
+    expect(screen.getAllByTestId('letter-tile')).toHaveLength(STROKE_LIST.length);
     expect(getCanvas()).toBeInTheDocument();
     // Phonetics card for ka
     expect(screen.getByText(ka.phonetics.nepaliName)).toBeInTheDocument();
@@ -71,15 +86,11 @@ describe('TracingCanvas', () => {
     const user = userEvent.setup();
     render(<TracingCanvas />);
 
-    await user.click(screen.getByRole('button', { name: /स्वर वर्ण • Swor/ }));
+    await user.click(screen.getByRole('button', { name: /स्वर Vowels/ }));
 
     const sworCount = STROKE_LIST.filter((l) => l.category === 'swor').length;
     expect(sworCount).toBe(13);
-    // Each deck tile shows "romanized (strokeCount)"; filter-tab labels contain '•'
-    const deckTiles = screen
-      .getAllByRole('button')
-      .filter((b) => /\(\d+\)$/.test(b.textContent?.trim() ?? '') && !b.textContent?.includes('•'));
-    expect(deckTiles).toHaveLength(sworCount);
+    expect(screen.getAllByTestId('letter-tile')).toHaveLength(sworCount);
   });
 
   it('switches the slate when another letter is selected', async () => {
@@ -88,13 +99,27 @@ describe('TracingCanvas', () => {
 
     const kha = STROKE_DATASETS.kha;
     const khaTile = screen
-      .getAllByRole('button')
+      .getAllByTestId('letter-tile')
       .find((b) => b.textContent?.trim().startsWith(kha.character));
     expect(khaTile).toBeDefined();
     await user.click(khaTile!);
+    expect(khaTile).toHaveAttribute('aria-pressed', 'true');
 
     expect(getCanvas()).toHaveAccessibleName(`Pati slate for tracing ${kha.character}`);
     expect(screen.getByText(kha.phonetics.nepaliName)).toBeInTheDocument();
+  });
+
+  it('steps to the next and previous letter with the arrow buttons', async () => {
+    const user = userEvent.setup();
+    render(<TracingCanvas />);
+    const start = STROKE_LIST.findIndex((l) => l.id === 'ka');
+    const next = STROKE_LIST[(start + 1) % STROKE_LIST.length];
+
+    await user.click(screen.getByRole('button', { name: 'Next letter' }));
+    expect(getCanvas()).toHaveAccessibleName(`Pati slate for tracing ${next.character}`);
+
+    await user.click(screen.getByRole('button', { name: 'Previous letter' }));
+    expect(getCanvas()).toHaveAccessibleName(`Pati slate for tracing ${ka.character}`);
   });
 
   it('completes stroke 1 of क when traced along its waypoints', () => {
@@ -114,6 +139,8 @@ describe('TracingCanvas', () => {
 
     expect(screen.getByText(/स्याबास!.*पूरा भयो!/)).toBeInTheDocument();
     expect(screen.getByText(/Accuracy:/)).toBeInTheDocument();
+    // Celebration offers a direct path to the next letter
+    expect(screen.getAllByRole('button', { name: /Next letter/ }).length).toBe(2);
   });
 
   it('warns when the learner draws the Shirorekha headline first', () => {
@@ -125,5 +152,19 @@ describe('TracingCanvas', () => {
     traceStroke(canvas, headline);
 
     expect(screen.getAllByText(/शिरोरेखा.*अन्त्यमा मात्र/).length).toBeGreaterThan(0);
+  });
+
+  it('plays one warning sound per premature-Shirorekha gesture, not one per pointer sample', () => {
+    render(<TracingCanvas />);
+    const canvas = getCanvas();
+    const headline = ka.strokes.find((s) => s.type === 'shirorekha')!;
+
+    // One gesture along the headline produces dozens of pointer samples…
+    traceStroke(canvas, headline);
+    expect(audio.playTopologicalWarningSound).toHaveBeenCalledTimes(1);
+
+    // …and a second, separate attempt is announced again.
+    traceStroke(canvas, headline);
+    expect(audio.playTopologicalWarningSound).toHaveBeenCalledTimes(2);
   });
 });

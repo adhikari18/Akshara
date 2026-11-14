@@ -48,16 +48,17 @@ test('studio loads with the Pati tracing slate active', async ({ page }) => {
 });
 
 test('all four pedagogical tabs render their studios', async ({ page }) => {
-  await page.getByRole('button', { name: /मात्रा र बाह्रखरी/ }).click();
-  await expect(page.getByText(/Step 1: Choose Base Consonant/)).toBeVisible();
+  await page.getByRole('tab', { name: /मात्रा र बाह्रखरी/ }).click();
+  await expect(page.getByRole('heading', { name: /Add a matra sign/ })).toBeVisible();
 
-  await page.getByRole('button', { name: /शब्द र वाक्य/ }).click();
+  await page.getByRole('tab', { name: /शब्द र वाक्य/ }).click();
+  await page.getByRole('tab', { name: /Make Sentences/ }).click();
   await expect(page.getByText(/Sentence Unscrambler/)).toBeVisible();
 
-  await page.getByRole('button', { name: /वर्णमाला/ }).click();
+  await page.getByRole('tab', { name: /वर्णमाला/ }).click();
   await expect(page.getByText(/Swor Varna \(13 Nepali Vowels/)).toBeVisible();
 
-  await page.getByRole('button', { name: /पाटी लेखन/ }).click();
+  await page.getByRole('tab', { name: /पाटी लेखन/ }).click();
   await expect(page.getByRole('img', { name: /Pati slate/ })).toBeVisible();
 });
 
@@ -76,14 +77,15 @@ test('drawing the Shirorekha first triggers the topological guardrail', async ({
 });
 
 test('matra fusion anvil updates when a matra card is tapped', async ({ page }) => {
-  await page.getByRole('button', { name: /मात्रा र बाह्रखरी/ }).click();
+  await page.getByRole('tab', { name: /मात्रा र बाह्रखरी/ }).click();
   // Tap the okar card (◌ो) in the palette
   await page.getByRole('button').filter({ hasText: '◌ो' }).first().click();
   await expect(page.getByRole('button', { name: /Speak[\s\S]*को/ })).toBeVisible();
 });
 
 test('SVO order in the sentence builder surfaces the SOV coaching tip', async ({ page }) => {
-  await page.getByRole('button', { name: /शब्द र वाक्य/ }).click();
+  await page.getByRole('tab', { name: /शब्द र वाक्य/ }).click();
+  await page.getByRole('tab', { name: /Make Sentences/ }).click();
 
   // sov-1: राम (S) घर (O) जान्छ (V) — tap in English SVO order
   const token = (romanized: string, gloss: string) =>
@@ -97,4 +99,27 @@ test('SVO order in the sentence builder surfaces the SOV coaching tip', async ({
   await token('ghar', 'home').click();
 
   await expect(page.getByText(/You used English SVO order/)).toBeVisible();
+});
+
+test('theme toggle switches light/dark and persists across reloads', async ({ page }) => {
+  const html = page.locator('html');
+  await page.getByRole('radio', { name: 'Dark theme' }).click();
+  await expect(html).toHaveClass(/dark/);
+  await page.reload();
+  await expect(html).toHaveClass(/dark/);
+  await expect(page.getByRole('radio', { name: 'Dark theme' })).toHaveAttribute(
+    'aria-checked',
+    'true'
+  );
+
+  await page.getByRole('radio', { name: 'Light theme' }).click();
+  await expect(html).not.toHaveClass(/dark/);
+});
+
+test('auto theme follows the OS color scheme', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.reload();
+  await expect(page.locator('html')).toHaveClass(/dark/);
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expect(page.locator('html')).not.toHaveClass(/dark/);
 });

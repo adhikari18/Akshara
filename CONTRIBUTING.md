@@ -19,7 +19,8 @@ You do not need to write TypeScript to make a lasting impact on Nepali literacy:
    - **Final Step:** Top horizontal headline bar / *Shirorekha* (`"type": "shirorekha"`).
    - **Partial & split headlines:** Follow a standard Devanagari font. If the headline simply stops short (e.g. `थ`, `अ`), set `startX`/`endX` to the partial span. If it has a gap (e.g. `ध`, whose upper-left loop is detached), add `"segments": [{ "startX": …, "endX": … }, …]` to the `shirorekha` block, write the stroke's `svgPath` with one `M … L …` subpath per segment, and place waypoints at both ends of every segment.
    - **Shortcut:** sketch only `type` + `svgPath` per stroke and let `npm run akshara -- compile` generate waypoints and headline metadata (see [`packages/cli`](./packages/cli/README.md)).
-4. Run `npm run validate:data` to verify your JSON against [`packages/data/schema/letter.schema.json`](./packages/data/schema/letter.schema.json).
+4. Register the letter: add its id (the filename without `.json`) to [`packages/data/stroke-manifest.json`](./packages/data/stroke-manifest.json) at its place in the teaching order, then run `npm run generate --workspace=@akshara/data`. This regenerates `src/strokes.generated.ts`, so there is no TypeScript to edit by hand.
+5. Run `npm run validate:data` to verify your JSON against [`packages/data/schema/letter.schema.json`](./packages/data/schema/letter.schema.json).
 
 ### B. Recording Native Nepali Phonics Audio
 - Record crisp, warm, child-friendly pronunciations (`.mp3` or `.ogg`, mono, 44.1kHz) for:

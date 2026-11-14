@@ -27,6 +27,9 @@ jobs:
       - name: Build @akshara/data and @akshara/core
         run: npm run build --workspace=@akshara/data && npm run build --workspace=@akshara/core
 
+      - name: Check generated stroke index is up to date
+        run: npm run check:generated --workspace=@akshara/data
+
       - name: Validate Devanagari JSON schemas & Shirorekha topological invariants
         run: npm run validate:data
 
