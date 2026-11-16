@@ -8,8 +8,9 @@ import { VarnamalaGallery } from '@/components/VarnamalaGallery';
 import { NumberStudio } from '@/components/NumberStudio';
 import { VoiceSelector } from '@/components/VoiceSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { TracingDemoGallery } from '@/components/demo/TracingDemoGallery';
 
-type StudioTab = 'tracing' | 'matra' | 'sentences' | 'varnamala' | 'numbers';
+type StudioTab = 'tracing' | 'matra' | 'sentences' | 'varnamala' | 'numbers' | 'demo';
 
 interface PathStep {
   id: StudioTab;
@@ -81,6 +82,18 @@ const LEARNING_PATH: PathStep[] = [
         'border-violet-400 bg-violet-100 ring-violet-300/50 dark:bg-violet-400/15 dark:border-violet-400/70',
     },
   },
+  {
+    id: 'demo',
+    emoji: '🎬',
+    nepali: 'लेखाइ डेमो',
+    english: 'Tracing Demo',
+    hint: 'Watch every letter',
+    color: {
+      badge: 'bg-teal-500',
+      active:
+        'border-teal-400 bg-teal-100 ring-teal-300/50 dark:bg-teal-400/15 dark:border-teal-400/70',
+    },
+  },
 ];
 
 export default function AksharaStudioPage() {
@@ -123,9 +136,9 @@ export default function AksharaStudioPage() {
       </header>
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-5 space-y-5">
-        {/* Learning path — 4 big, colourful steps */}
+        {/* Learning path — big, colourful steps */}
         <nav aria-label="Learning activities">
-          <div role="tablist" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          <div role="tablist" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
             {LEARNING_PATH.map((step, idx) => {
               const active = activeTab === step.id;
               return (
@@ -175,6 +188,7 @@ export default function AksharaStudioPage() {
           {activeTab === 'sentences' && <WordSentenceBuilder />}
           {activeTab === 'varnamala' && <VarnamalaGallery onTrace={handleOpenInPati} />}
           {activeTab === 'numbers' && <NumberStudio />}
+          {activeTab === 'demo' && <TracingDemoGallery />}
         </section>
       </main>
 
