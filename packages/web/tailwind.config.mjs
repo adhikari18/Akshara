@@ -22,6 +22,8 @@ export default {
       },
       fontFamily: {
         sans: [
+          // Devanagari-only alias for the font chosen in the header (see lib/devanagariFonts.ts)
+          '"Akshara Display Devanagari"',
           'ui-rounded',
           '"SF Pro Rounded"',
           '"Nunito"',

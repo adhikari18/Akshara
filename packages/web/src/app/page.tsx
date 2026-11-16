@@ -8,6 +8,7 @@ import { VarnamalaGallery } from '@/components/VarnamalaGallery';
 import { NumberStudio } from '@/components/NumberStudio';
 import { VoiceSelector } from '@/components/VoiceSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { FontPicker } from '@/components/FontPicker';
 import { TracingDemoGallery } from '@/components/demo/TracingDemoGallery';
 import { TraceTrainer } from '@/components/trainer/TraceTrainer';
 
@@ -141,7 +142,8 @@ export default function AksharaStudioPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <FontPicker />
             <VoiceSelector />
             <ThemeToggle />
           </div>

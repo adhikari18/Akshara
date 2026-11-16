@@ -11,18 +11,40 @@ import {
 import type { Point2D } from '@akshara/core';
 import { DemoCard } from '@/components/demo/TracingDemoGallery';
 import type { GallerySpeed } from '@/components/demo/demoTimeline';
+import { DEVANAGARI_FONTS, getFont, glyphText, loadFont } from '@/lib/devanagariFonts';
+import { buildFontGuide, paintGlyph, placeGlyph, type GlyphPlacement } from './fontGuide';
 import {
   buildCorrectedDataset,
+  buildGlyphGuide,
   fitStrokePath,
   gestureLength,
   guessStrokeType,
+  TAP_SNAP_DISTANCE,
+  snapToGuide,
   type DrawnStroke,
+  type GlyphGuide,
+  type InputMode,
 } from './traceFit';
 
 const STROKE_TYPES: StrokeTopologyType[] = ['curve', 'loop', 'diagonal', 'stem', 'shirorekha'];
 const COLOURS = ['#fbbf24', '#38bdf8', '#34d399', '#f472b6', '#a78bfa', '#fb923c', '#f87171'];
 const colourOf = (i: number) => COLOURS[i % COLOURS.length]!;
 const STORAGE_KEY = 'akshara.trace-trainer.drafts';
+const FONT_CHOICE_KEY = 'akshara.trace-trainer.fonts';
+/** Reference "font" meaning: the letter's current stroke data. */
+const CURRENT_DATA = 'current';
+
+function loadFontChoices(): Record<string, string> {
+  if (typeof window === 'undefined') return {};
+  try {
+    return JSON.parse(window.localStorage.getItem(FONT_CHOICE_KEY) ?? '{}') as Record<
+      string,
+      string
+    >;
+  } catch {
+    return {};
+  }
+}
 /** Taps and tiny slips are not strokes. */
 const MIN_STROKE_LENGTH = 12;
 
@@ -48,6 +70,10 @@ export function TraceTrainer() {
   const [glyphId, setGlyphId] = useState<string>(NUMERAL_LIST[0]!.id);
   const [drafts, setDrafts] = useState<Drafts>(() => loadDrafts());
   const [showGhost, setShowGhost] = useState(true);
+  const [snap, setSnap] = useState(true);
+  const [mode, setMode] = useState<InputMode>('points');
+  /** Points placed so far for the stroke being built in point mode. */
+  const [pending, setPending] = useState<Point2D[]>([]);
   const [speed, setSpeed] = useState<GallerySpeed>(1);
   const [copied, setCopied] = useState(false);
 
@@ -56,6 +82,70 @@ export function TraceTrainer() {
     () => [...NUMERAL_LIST, ...STROKE_LIST].find((d) => d.id === glyphId) ?? NUMERAL_LIST[0]!,
     [glyphId]
   );
+  const strokeGuide = useMemo(() => buildGlyphGuide(dataset), [dataset]);
+  // Which font's version of each letter is the reference for training (per letter, remembered)
+  const [fontChoices, setFontChoices] = useState<Record<string, string>>(() => loadFontChoices());
+  const fontId = fontChoices[glyphId] ?? CURRENT_DATA;
+  const [fontsReady, setFontsReady] = useState(0);
+  const [fontRef, setFontRef] = useState<{
+    key: string;
+    placement: GlyphPlacement;
+    guide: GlyphGuide | null;
+  } | null>(null);
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(FONT_CHOICE_KEY, JSON.stringify(fontChoices));
+    } catch {
+      /* storage unavailable */
+    }
+  }, [fontChoices]);
+  // Load every candidate font once so the comparison strip renders each glyph in its own font
+  useEffect(() => {
+    let alive = true;
+    Promise.all(DEVANAGARI_FONTS.map((f) => loadFont(f))).then(() => {
+      if (alive) setFontsReady((n) => n + 1);
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+  // The chosen font's glyph: where it sits on the slate, and its centreline as the snap guide
+  useEffect(() => {
+    if (fontId === CURRENT_DATA) return;
+    let alive = true;
+    const font = getFont(fontId);
+    loadFont(font).then(() => {
+      if (!alive) return;
+      const probe = document.createElement('canvas').getContext('2d');
+      const placement = probe ? placeGlyph(probe, font, dataset) : null;
+      setFontRef(
+        placement
+          ? { key: `${fontId}:${dataset.id}`, placement, guide: buildFontGuide(placement) }
+          : null
+      );
+    });
+    return () => {
+      alive = false;
+    };
+  }, [fontId, dataset, fontsReady]);
+  const activeFontRef =
+    fontId !== CURRENT_DATA && fontRef?.key === `${fontId}:${dataset.id}` ? fontRef : null;
+  const guide = activeFontRef?.guide ?? strokeGuide;
+  const chooseFont = (id: string) => {
+    setFontChoices((all) => ({ ...all, [glyphId]: id }));
+    setPending([]);
+  };
+  const downloadFontChoices = () => {
+    const blob = new Blob([JSON.stringify(fontChoices, null, 2) + '\n'], {
+      type: 'application/json',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'akshara-font-choices.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
   const drawn = useMemo(() => drafts[glyphId] ?? NO_STROKES, [drafts, glyphId]);
   const setDrawn = useCallback(
     (update: (prev: DrawnStroke[]) => DrawnStroke[]) =>
@@ -74,19 +164,20 @@ export function TraceTrainer() {
   const corrected = useMemo(() => {
     if (drawn.length === 0) return null;
     try {
-      return buildCorrectedDataset(dataset, drawn);
+      return buildCorrectedDataset(dataset, drawn, guide);
     } catch {
       return null;
     }
-  }, [dataset, drawn]);
+  }, [dataset, drawn, guide]);
   const validation = useMemo(
     () => (corrected ? validateLetterDataset(corrected) : null),
     [corrected]
   );
   const json = useMemo(() => (corrected ? JSON.stringify(corrected, null, 2) : ''), [corrected]);
 
-  const addStroke = (points: Point2D[]) => {
-    if (gestureLength(points) < MIN_STROKE_LENGTH) return;
+  const addStroke = (points: Point2D[], strokeMode: InputMode) => {
+    if (strokeMode === 'draw' && gestureLength(points) < MIN_STROKE_LENGTH) return;
+    if (strokeMode === 'points' && points.length < 2) return;
     setDrawn((prev) => {
       const index = prev.length;
       const type = guessStrokeType(points, dataset);
@@ -96,12 +187,23 @@ export function TraceTrainer() {
         {
           points,
           type,
+          mode: strokeMode,
+          snap,
           label: sameSlot?.label ?? `Stroke ${index + 1}`,
           nepaliInstruction: sameSlot?.nepaliInstruction ?? '',
           englishInstruction: sameSlot?.englishInstruction ?? '',
         },
       ];
     });
+  };
+  const placePoint = (p: Point2D) => {
+    // In point mode a click adds the next numbered point; snapping pulls it onto the glyph.
+    const snapped = snap ? (snapToGuide(guide, p, TAP_SNAP_DISTANCE)?.point ?? p) : p;
+    setPending((prev) => [...prev, snapped]);
+  };
+  const finishPoints = () => {
+    addStroke(pending, 'points');
+    setPending([]);
   };
   const updateStroke = (i: number, patch: Partial<DrawnStroke>) =>
     setDrawn((prev) => prev.map((s, k) => (k === i ? { ...s, ...patch } : s)));
@@ -165,6 +267,7 @@ export function TraceTrainer() {
                 onClick={() => {
                   setGroup(id);
                   setGlyphId((id === 'numbers' ? NUMERAL_LIST : STROKE_LIST)[0]!.id);
+                  setPending([]);
                 }}
                 className={`btn ${group === id ? 'bg-amber-400 text-slate-900' : 'bg-sunken text-ink-soft'}`}
               >
@@ -187,7 +290,10 @@ export function TraceTrainer() {
                 role="radio"
                 aria-checked={glyphId === d.id}
                 aria-label={`Train ${d.character}`}
-                onClick={() => setGlyphId(d.id)}
+                onClick={() => {
+                  setGlyphId(d.id);
+                  setPending([]);
+                }}
                 className={`relative min-w-[44px] min-h-[44px] rounded-2xl border-2 px-2 text-2xl font-black ${
                   glyphId === d.id
                     ? 'border-amber-400 bg-amber-100 dark:bg-amber-400/20 text-ink'
@@ -207,6 +313,57 @@ export function TraceTrainer() {
         </div>
       </div>
 
+      <section
+        className="rounded-3xl border-2 border-line bg-card p-4 space-y-2"
+        aria-labelledby="font-pick-heading"
+      >
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h3 id="font-pick-heading" className="font-bold text-ink">
+            फन्ट छान्नुहोस् • Which font&apos;s {dataset.character} to train from
+          </h3>
+          <button
+            type="button"
+            className="btn bg-sunken text-ink-soft"
+            onClick={downloadFontChoices}
+            disabled={Object.keys(fontChoices).length === 0}
+          >
+            ⬇ Download font choices
+          </button>
+        </div>
+        <p className="text-xs text-ink-soft">
+          Pick the version of {dataset.character} that is written best. It becomes the faint letter
+          you trace over (and snap to) on the slate. The choice is remembered for each letter.
+        </p>
+        <div
+          role="radiogroup"
+          aria-label={`Reference font for ${dataset.character}`}
+          className="flex flex-wrap gap-2"
+        >
+          <FontTile
+            label="Current stroke data"
+            sample={dataset.character}
+            family={undefined}
+            checked={fontId === CURRENT_DATA}
+            onChoose={() => chooseFont(CURRENT_DATA)}
+          />
+          {DEVANAGARI_FONTS.map((font) => {
+            const text = glyphText(font, dataset.id, dataset.character);
+            if (!text) return null;
+            return (
+              <FontTile
+                key={font.id}
+                label={font.name}
+                hint={font.style}
+                sample={text}
+                family={font.source === 'system' ? undefined : `"${font.family}", sans-serif`}
+                checked={fontId === font.id}
+                onChoose={() => chooseFont(font.id)}
+              />
+            );
+          })}
+        </div>
+      </section>
+
       <div className="grid gap-4 lg:grid-cols-3">
         {/* 1. Current trace */}
         <section className="space-y-2" aria-labelledby="current-trace-heading">
@@ -225,12 +382,69 @@ export function TraceTrainer() {
           <h3 id="draw-heading" className="font-bold text-ink">
             2 • सही तरिकाले लेख्नुहोस् • Write {dataset.character} the correct way
           </h3>
+          <div role="radiogroup" aria-label="Input method" className="flex gap-2">
+            {(
+              [
+                ['points', '🔢 Place numbered points'],
+                ['draw', '✍️ Draw by hand'],
+              ] as const
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                role="radio"
+                aria-checked={mode === id}
+                onClick={() => {
+                  setMode(id);
+                  setPending([]);
+                }}
+                className={`btn flex-1 ${mode === id ? 'bg-sky-500 text-white' : 'bg-sunken text-ink-soft'}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-ink-soft">
+            {mode === 'points'
+              ? 'Tap the points of one stroke in writing order (1, 2, 3…): where it starts, where it bends, where it ends. The trace follows the faint letter between your points. Then press “Finish stroke”.'
+              : 'Write one stroke with your finger or mouse; lift to finish it. The line is smoothed and, with snapping on, pulled onto the faint letter.'}
+          </p>
           <TrainerSlate
             dataset={dataset}
+            guide={guide}
+            fontPlacement={activeFontRef?.placement ?? null}
             drawn={drawn}
+            pending={pending}
+            mode={mode}
             showGhost={showGhost}
-            onStroke={addStroke}
+            onStroke={(pts) => addStroke(pts, 'draw')}
+            onPoint={placePoint}
           />
+          {mode === 'points' && (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-bold text-ink-soft">
+                {pending.length === 0
+                  ? `Stroke ${drawn.length + 1}: tap its first point`
+                  : `Stroke ${drawn.length + 1}: ${pending.length} ${pending.length === 1 ? 'point' : 'points'} placed`}
+              </span>
+              <button
+                type="button"
+                className="btn bg-emerald-500 text-white"
+                onClick={finishPoints}
+                disabled={pending.length < 2}
+              >
+                ✓ Finish stroke
+              </button>
+              <button
+                type="button"
+                className="btn bg-sunken text-ink-soft"
+                onClick={() => setPending((prev) => prev.slice(0, -1))}
+                disabled={pending.length === 0}
+              >
+                ↩ Undo point
+              </button>
+            </div>
+          )}
           <div className="flex flex-wrap items-center gap-2">
             <label className="flex items-center gap-2 text-sm font-bold text-ink-soft">
               <input
@@ -238,7 +452,11 @@ export function TraceTrainer() {
                 checked={showGhost}
                 onChange={(e) => setShowGhost(e.target.checked)}
               />
-              Show faint {dataset.character} to write over
+              Show faint {dataset.character}
+            </label>
+            <label className="flex items-center gap-2 text-sm font-bold text-ink-soft">
+              <input type="checkbox" checked={snap} onChange={(e) => setSnap(e.target.checked)} />
+              Snap to the faint {dataset.character}
             </label>
             <button
               type="button"
@@ -406,15 +624,67 @@ export function TraceTrainer() {
   );
 }
 
-interface TrainerSlateProps {
-  dataset: LetterStrokeDataset;
-  drawn: DrawnStroke[];
-  showGhost: boolean;
-  onStroke: (points: Point2D[]) => void;
+interface FontTileProps {
+  label: string;
+  hint?: string;
+  sample: string;
+  family: string | undefined;
+  checked: boolean;
+  onChoose: () => void;
 }
 
-/** The drawing surface: 300 × 300 logical units, pointer gestures become strokes. */
-function TrainerSlate({ dataset, drawn, showGhost, onStroke }: TrainerSlateProps) {
+/** One font in the comparison strip: the letter drawn in that font. */
+function FontTile({ label, hint, sample, family, checked, onChoose }: FontTileProps) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={checked}
+      aria-label={label}
+      title={hint ? `${label} — ${hint}` : label}
+      onClick={onChoose}
+      className={`flex w-24 flex-col items-center gap-1 rounded-2xl border-2 p-2 ${
+        checked ? 'border-amber-400 bg-amber-100 dark:bg-amber-400/20' : 'border-line bg-sunken'
+      }`}
+    >
+      <span
+        className="text-4xl leading-tight text-ink"
+        style={family ? { fontFamily: family } : undefined}
+      >
+        {sample}
+      </span>
+      <span className="text-[10px] font-bold leading-tight text-ink-soft text-center">{label}</span>
+    </button>
+  );
+}
+
+interface TrainerSlateProps {
+  dataset: LetterStrokeDataset;
+  guide: GlyphGuide;
+  fontPlacement: GlyphPlacement | null;
+  drawn: DrawnStroke[];
+  pending: Point2D[];
+  mode: InputMode;
+  showGhost: boolean;
+  onStroke: (points: Point2D[]) => void;
+  onPoint: (point: Point2D) => void;
+}
+
+/**
+ * The drawing surface: 300 × 300 logical units. In draw mode a pointer gesture becomes a stroke;
+ * in point mode each tap places the next numbered point of the stroke being built.
+ */
+function TrainerSlate({
+  dataset,
+  guide,
+  fontPlacement,
+  drawn,
+  pending,
+  mode,
+  showGhost,
+  onStroke,
+  onPoint,
+}: TrainerSlateProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const live = useRef<Point2D[] | null>(null);
   const [, bump] = useState(0);
@@ -432,7 +702,7 @@ function TrainerSlate({ dataset, drawn, showGhost, onStroke }: TrainerSlateProps
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    paintTrainer(canvas, dataset, drawn, live.current, showGhost);
+    paintTrainer(canvas, dataset, guide, fontPlacement, drawn, live.current, pending, showGhost);
   });
 
   return (
@@ -444,6 +714,10 @@ function TrainerSlate({ dataset, drawn, showGhost, onStroke }: TrainerSlateProps
       aria-label={`Writing slate for ${dataset.character}`}
       className="w-full aspect-square rounded-2xl bg-slate-800 touch-none select-none cursor-crosshair"
       onPointerDown={(e) => {
+        if (mode === 'points') {
+          onPoint(toLogical(e));
+          return;
+        }
         e.currentTarget.setPointerCapture?.(e.pointerId);
         live.current = [toLogical(e)];
         bump((n) => n + 1);
@@ -470,8 +744,11 @@ function TrainerSlate({ dataset, drawn, showGhost, onStroke }: TrainerSlateProps
 function paintTrainer(
   canvas: HTMLCanvasElement,
   dataset: LetterStrokeDataset,
+  guide: GlyphGuide,
+  fontPlacement: GlyphPlacement | null,
   drawn: DrawnStroke[],
   live: Point2D[] | null,
+  pending: Point2D[],
   showGhost: boolean
 ): void {
   const ctx = canvas.getContext('2d');
@@ -499,7 +776,21 @@ function paintTrainer(
   ctx.stroke();
   ctx.restore();
 
-  if (showGhost) {
+  if (showGhost && fontPlacement) {
+    // The chosen font's glyph, plus its centreline (what taps and drawings snap to)
+    paintGlyph(ctx, fontPlacement, 'rgba(226, 232, 240, 0.16)');
+    ctx.save();
+    ctx.setLineDash([3, 4]);
+    ctx.strokeStyle = 'rgba(226, 232, 240, 0.35)';
+    ctx.lineWidth = 1.2;
+    for (const t of guide.tracks) {
+      ctx.beginPath();
+      ctx.moveTo(t.points[0]!.x, t.points[0]!.y);
+      for (const q of t.points.slice(1)) ctx.lineTo(q.x, q.y);
+      ctx.stroke();
+    }
+    ctx.restore();
+  } else if (showGhost) {
     ctx.strokeStyle = 'rgba(226, 232, 240, 0.14)';
     ctx.lineWidth = 18;
     for (const s of dataset.strokes) ctx.stroke(new Path2D(s.svgPath));
@@ -510,7 +801,7 @@ function paintTrainer(
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   drawn.forEach((s, i) => {
-    const path = fitStrokePath(s.points, s.type);
+    const path = fitStrokePath(s, guide);
     if (!path) return;
     ctx.strokeStyle = colourOf(i);
     ctx.lineWidth = 7;
@@ -532,5 +823,41 @@ function paintTrainer(
     ctx.moveTo(live[0]!.x, live[0]!.y);
     for (const p of live.slice(1)) ctx.lineTo(p.x, p.y);
     ctx.stroke();
+  }
+
+  // Point mode: the stroke being built — its route so far plus its numbered points
+  if (pending.length > 0) {
+    const preview = fitStrokePath(
+      {
+        points: pending,
+        type: 'curve',
+        label: '',
+        nepaliInstruction: '',
+        englishInstruction: '',
+        mode: 'points',
+        snap: true,
+      },
+      guide
+    );
+    if (pending.length >= 2 && preview) {
+      ctx.save();
+      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+      ctx.lineWidth = 5;
+      ctx.stroke(new Path2D(preview));
+      ctx.restore();
+    }
+    ctx.font = 'bold 11px system-ui, sans-serif';
+    pending.forEach((p, i) => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 9, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = colourOf(drawn.length);
+      ctx.stroke();
+      ctx.fillStyle = '#0f172a';
+      ctx.fillText(String(i + 1), p.x, p.y + 0.5);
+    });
   }
 }
