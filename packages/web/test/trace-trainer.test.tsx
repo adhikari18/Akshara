@@ -355,3 +355,47 @@ describe('TraceTrainer', () => {
     ).toHaveLength(1);
   });
 });
+
+describe('preview of an unfinished letter', () => {
+  it('builds a draft preview (and says why it cannot be exported) when the headline is missing', async () => {
+    const { STROKE_DATASETS } = await import('@akshara/data');
+    const { buildPreviewDataset } = await import('@/components/trainer/traceFit');
+    const bha = STROKE_DATASETS.bha!;
+    const loop = sampleStrokePath(bha.strokes[0]!, 3);
+    const { dataset, problem } = buildPreviewDataset(bha, [
+      {
+        points: [loop[0]!, loop[Math.floor(loop.length / 2)]!, loop[loop.length - 1]!],
+        type: 'curve',
+        mode: 'points',
+        snap: true,
+        label: '',
+        nepaliInstruction: '',
+        englishInstruction: '',
+      },
+    ]);
+    expect(problem).toMatch(/at least 2 strokes/);
+    expect(dataset.category).toBe('vyanjan');
+    expect(dataset.strokes).toHaveLength(1);
+    expect(dataset.strokes[0]!.waypoints.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('shows the draft preview in the trainer and holds back the export', async () => {
+    const user = userEvent.setup();
+    render(<TraceTrainer />);
+    await user.click(screen.getByRole('tab', { name: /अक्षर • Letters/ }));
+    await user.click(screen.getByRole('radio', { name: 'Train भ' }));
+    const slate = screen.getByRole('img', { name: 'Writing slate for भ' });
+    for (const p of [
+      { x: 72, y: 80 },
+      { x: 110, y: 120 },
+      { x: 113, y: 148 },
+    ]) {
+      fireEvent.pointerDown(slate, { pointerId: 1, clientX: p.x, clientY: p.y });
+      fireEvent.pointerUp(slate, { pointerId: 1, clientX: p.x, clientY: p.y });
+    }
+    await user.click(screen.getByRole('button', { name: /Finish stroke/ }));
+    expect(screen.getAllByRole('img', { name: 'Tracing demo for भ' })).toHaveLength(2);
+    expect(screen.getByText(/Not ready to export yet/)).toHaveTextContent(/Shirorekha/);
+    expect(screen.getByRole('button', { name: /Download bha.json/ })).toBeDisabled();
+  });
+});

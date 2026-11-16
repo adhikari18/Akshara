@@ -1,9 +1,8 @@
 import React from 'react';
 import { describe, expect, it } from 'vitest';
-import { act, render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NUMERAL_LIST, STROKE_DATASETS, STROKE_LIST } from '@akshara/data';
-import AksharaStudioPage from '@/app/page';
 import { TracingDemoGallery } from '@/components/demo/TracingDemoGallery';
 import { buildDemoTimeline, demoFrameAt } from '@/components/demo/demoTimeline';
 
@@ -96,10 +95,9 @@ describe('TracingDemoGallery', () => {
     expect(screen.getByRole('combobox', { name: 'Speed for ख' })).toHaveValue('global');
   });
 
-  it('is reachable from the learning path', async () => {
-    const user = userEvent.setup();
-    render(<AksharaStudioPage />);
-    await act(() => user.click(screen.getByRole('tab', { name: /लेखाइ डेमो/ })));
-    expect(screen.getByRole('heading', { name: /Tracing Demo/ })).toBeInTheDocument();
+  it('is linked from the student and admin navigation', async () => {
+    const { STUDENT_NAV, ADMIN_NAV } = await import('@/components/shell/nav');
+    expect(STUDENT_NAV.map((n) => n.href)).toContain('/student/watch/');
+    expect(ADMIN_NAV.map((n) => n.href)).toContain('/admin/demo/');
   });
 });

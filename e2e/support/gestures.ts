@@ -87,7 +87,7 @@ const toDevanagari = (n: number) =>
 
 /** Open the fixture's letter (tracing studio) or number (number studio) and set its level. */
 export async function openTarget(page: Page, fixture: GestureFixture): Promise<void> {
-  await page.goto('/');
+  await page.goto(fixture.target.kind === 'letter' ? '/student/trace/' : '/student/numbers/');
   if (fixture.target.kind === 'letter') {
     const letter = loadStrokeJson(fixture.target.id);
     await page
@@ -100,7 +100,6 @@ export async function openTarget(page: Page, fixture: GestureFixture): Promise<v
       page.getByRole('img', { name: `Pati slate for tracing ${letter.character}` })
     ).toBeVisible();
   } else {
-    await page.getByRole('tab', { name: /अङ्क/ }).click();
     const v = fixture.target.value;
     await page.getByRole('button', { name: new RegExp(`^${toDevanagari(v)} \\(${v}\\)`) }).click();
   }

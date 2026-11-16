@@ -41,7 +41,7 @@ test.describe('renderer pixel probes', () => {
   const ka = loadStrokeJson('ka');
 
   test('Stroke order guide paints each stroke in its own colour', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/student/trace/');
     await page.getByRole('switch', { name: /Stroke order guide/ }).click();
     // क's stem (stroke 2) is emerald, the Shirorekha (stroke 4) amber — probe away from badges,
     // waypoint rings and the text label
@@ -63,7 +63,7 @@ test.describe('renderer pixel probes', () => {
   test('"Show me" draws teacher chalk along the curve without touching learner progress', async ({
     page,
   }) => {
-    await page.goto('/');
+    await page.goto('/student/trace/');
     await page.getByRole('button', { name: /Show me/ }).click();
     await page.waitForTimeout(1500);
     await page.getByRole('button', { name: /Pause/ }).click();
@@ -75,7 +75,7 @@ test.describe('renderer pixel probes', () => {
   });
 
   test('a new letter repaints the slate (StrictMode frame-loop regression)', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/student/trace/');
     await page.getByRole('switch', { name: /Stroke order guide/ }).click();
     const kaStem = (await curvePoints(page, ka.strokes[1]!.svgPath)).filter((p) => p.y > 200);
     expect(colorDistance((await readSlatePixels(page, kaStem))[0]!, '#34d399')).toBeLessThan(90);

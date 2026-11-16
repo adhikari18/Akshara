@@ -75,6 +75,31 @@ export function paintGlyph(
   ctx.restore();
 }
 
+/**
+ * Paint the glyph faintly as one layer. Legacy fonts build some letters from two overlapping
+ * keys (आ = अ + ा); filling those with a translucent colour would darken the overlap.
+ */
+export function paintGlyphFaint(
+  ctx: CanvasRenderingContext2D,
+  placement: GlyphPlacement,
+  colour: string,
+  alpha: number
+): void {
+  if (typeof document === 'undefined') return;
+  const off = document.createElement('canvas');
+  off.width = ctx.canvas.width;
+  off.height = ctx.canvas.height;
+  const octx = off.getContext('2d');
+  if (!octx) return;
+  octx.setTransform(ctx.getTransform());
+  paintGlyph(octx, placement, colour);
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.globalAlpha = alpha;
+  ctx.drawImage(off, 0, 0);
+  ctx.restore();
+}
+
 /** Rasterise the glyph into a 300 × 300 ink mask (1 = ink). Null where canvases are unavailable. */
 export function glyphMask(placement: GlyphPlacement): Uint8Array | null {
   if (typeof document === 'undefined') return null;
@@ -90,42 +115,54 @@ export function glyphMask(placement: GlyphPlacement): Uint8Array | null {
   return mask;
 }
 
-/** Zhang–Suen thinning: reduce the ink to a one-pixel-wide centreline. */
+/**
+ * Zhang–Suen thinning: reduce the ink to a one-pixel-wide centreline. Only the shrinking set of
+ * ink pixels is revisited each pass, so high-resolution masks stay fast.
+ */
 export function skeletonize(mask: Uint8Array, size = SIZE): Uint8Array {
   const img = mask.slice();
-  const at = (x: number, y: number) =>
+  let active: number[] = [];
+  for (let i = 0; i < img.length; i++) if (img[i]) active.push(i);
+  const px = (x: number, y: number) =>
     x < 0 || y < 0 || x >= size || y >= size ? 0 : img[y * size + x]!;
   let changed = true;
   while (changed) {
     changed = false;
     for (const pass of [0, 1]) {
       const remove: number[] = [];
-      for (let y = 0; y < size; y++) {
-        for (let x = 0; x < size; x++) {
-          if (!img[y * size + x]) continue;
-          const p = [
-            at(x, y - 1),
-            at(x + 1, y - 1),
-            at(x + 1, y),
-            at(x + 1, y + 1),
-            at(x, y + 1),
-            at(x - 1, y + 1),
-            at(x - 1, y),
-            at(x - 1, y - 1),
-          ];
-          const b = p.reduce((a, v) => a + v, 0);
-          if (b < 2 || b > 6) continue;
-          let a = 0;
-          for (let k = 0; k < 8; k++) if (p[k] === 0 && p[(k + 1) % 8] === 1) a++;
-          if (a !== 1) continue;
-          if (pass === 0) {
-            if (p[0]! * p[2]! * p[4]! !== 0 || p[2]! * p[4]! * p[6]! !== 0) continue;
-          } else if (p[0]! * p[2]! * p[6]! !== 0 || p[0]! * p[4]! * p[6]! !== 0) continue;
-          remove.push(y * size + x);
-        }
+      for (const i of active) {
+        const x = i % size;
+        const y = (i - x) / size;
+        const p0 = px(x, y - 1);
+        const p1 = px(x + 1, y - 1);
+        const p2 = px(x + 1, y);
+        const p3 = px(x + 1, y + 1);
+        const p4 = px(x, y + 1);
+        const p5 = px(x - 1, y + 1);
+        const p6 = px(x - 1, y);
+        const p7 = px(x - 1, y - 1);
+        const b = p0 + p1 + p2 + p3 + p4 + p5 + p6 + p7;
+        if (b < 2 || b > 6) continue;
+        const a =
+          (p0 === 0 && p1 === 1 ? 1 : 0) +
+          (p1 === 0 && p2 === 1 ? 1 : 0) +
+          (p2 === 0 && p3 === 1 ? 1 : 0) +
+          (p3 === 0 && p4 === 1 ? 1 : 0) +
+          (p4 === 0 && p5 === 1 ? 1 : 0) +
+          (p5 === 0 && p6 === 1 ? 1 : 0) +
+          (p6 === 0 && p7 === 1 ? 1 : 0) +
+          (p7 === 0 && p0 === 1 ? 1 : 0);
+        if (a !== 1) continue;
+        if (pass === 0) {
+          if (p0 * p2 * p4 !== 0 || p2 * p4 * p6 !== 0) continue;
+        } else if (p0 * p2 * p6 !== 0 || p0 * p4 * p6 !== 0) continue;
+        remove.push(i);
       }
       for (const i of remove) img[i] = 0;
-      if (remove.length) changed = true;
+      if (remove.length) {
+        changed = true;
+        active = active.filter((i) => img[i] === 1);
+      }
     }
   }
   return img;
@@ -146,7 +183,12 @@ const NEIGHBOURS = [
  * Split a skeleton into chains between its end / junction pixels, each a smoothed polyline — the
  * same "track" shape the stroke-data guide uses, so snapping and routing work unchanged.
  */
-export function skeletonTracks(skel: Uint8Array, size = SIZE, minLength = 6): GuideTrack[] {
+export function skeletonTracks(
+  skel: Uint8Array,
+  size = SIZE,
+  minLength = 6,
+  smoothRadius = 3
+): GuideTrack[] {
   const on = (x: number, y: number) =>
     x >= 0 && y >= 0 && x < size && y < size && skel[y * size + x] === 1;
   const neighbours = (i: number) => {
@@ -193,7 +235,7 @@ export function skeletonTracks(skel: Uint8Array, size = SIZE, minLength = 6): Gu
     )
   );
   return polylines
-    .map((pts) => smoothChain(pts))
+    .map((pts) => smoothChain(pts, smoothRadius))
     .filter((pts) => pts.length >= 2 && polylineLength(pts) >= minLength)
     .map((points) => {
       const cumulative = [0];
@@ -204,7 +246,11 @@ export function skeletonTracks(skel: Uint8Array, size = SIZE, minLength = 6): Gu
         );
       const first = points[0]!;
       const last = points[points.length - 1]!;
-      return { points, cumulative, closed: Math.hypot(first.x - last.x, first.y - last.y) < 3 };
+      return {
+        points,
+        cumulative,
+        closed: Math.hypot(first.x - last.x, first.y - last.y) < smoothRadius + 1,
+      };
     });
 }
 
@@ -271,10 +317,76 @@ function smoothChain(pts: Point2D[], radius = 3): Point2D[] {
   });
 }
 
+/**
+ * Supersampling for the centreline: handwriting fonts have small closed knots (the bottom-left
+ * loop of भ, the curl of ६) whose holes are only a few units wide. At 1 px per unit those holes
+ * fill in and thinning collapses the knot into a stub; at 4× they stay open.
+ */
+export const GUIDE_SUPERSAMPLE = 4;
+
+/** Rasterise the glyph at `scale` px per unit, cropped (with a margin) to its ink. */
+export function glyphMaskHiRes(
+  placement: GlyphPlacement,
+  scale = GUIDE_SUPERSAMPLE
+): { mask: Uint8Array; size: number; offsetX: number; offsetY: number } | null {
+  if (typeof document === 'undefined') return null;
+  const full = SIZE * scale;
+  const canvas = document.createElement('canvas');
+  canvas.width = full;
+  canvas.height = full;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  if (!ctx) return null;
+  ctx.setTransform(scale, 0, 0, scale, 0, 0);
+  paintGlyph(ctx, placement, '#000');
+  const { data } = ctx.getImageData(0, 0, full, full);
+  let minX = full;
+  let minY = full;
+  let maxX = -1;
+  let maxY = -1;
+  for (let y = 0; y < full; y++) {
+    for (let x = 0; x < full; x++) {
+      if (data[(y * full + x) * 4 + 3]! > 128) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+  if (maxX < 0) return null;
+  const pad = 2;
+  const offsetX = Math.max(0, minX - pad);
+  const offsetY = Math.max(0, minY - pad);
+  const size = Math.max(maxX - minX, maxY - minY) + 2 * pad + 1;
+  const mask = new Uint8Array(size * size);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const sx = x + offsetX;
+      const sy = y + offsetY;
+      if (sx < full && sy < full && data[(sy * full + sx) * 4 + 3]! > 128) mask[y * size + x] = 1;
+    }
+  }
+  return { mask, size, offsetX, offsetY };
+}
+
 /** The font glyph's centreline as a snapping / routing guide, or null if it cannot be computed. */
 export function buildFontGuide(placement: GlyphPlacement): GlyphGuide | null {
-  const mask = glyphMask(placement);
-  if (!mask || !mask.some((v) => v)) return null;
-  const tracks = skeletonTracks(skeletonize(mask));
+  const scale = GUIDE_SUPERSAMPLE;
+  const hi = glyphMaskHiRes(placement, scale);
+  if (!hi) {
+    const mask = glyphMask(placement);
+    if (!mask || !mask.some((v) => v)) return null;
+    const tracks = skeletonTracks(skeletonize(mask));
+    return tracks.length ? { tracks } : null;
+  }
+  const tracks = skeletonTracks(skeletonize(hi.mask, hi.size), hi.size, 6 * scale, 3 * scale).map(
+    (t) => {
+      const points = t.points.map((p) => ({
+        x: (p.x + hi.offsetX) / scale,
+        y: (p.y + hi.offsetY) / scale,
+      }));
+      return { points, cumulative: t.cumulative.map((c) => c / scale), closed: t.closed };
+    }
+  );
   return tracks.length ? { tracks } : null;
 }

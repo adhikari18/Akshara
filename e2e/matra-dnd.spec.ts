@@ -5,8 +5,7 @@
 import { expect, test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('tab', { name: /मात्रा र बाह्रखरी/ }).click();
+  await page.goto('/student/matras/');
 });
 
 const card = (page: import('@playwright/test').Page, id: string) =>

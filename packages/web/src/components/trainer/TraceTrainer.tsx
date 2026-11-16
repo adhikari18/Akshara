@@ -12,9 +12,9 @@ import type { Point2D } from '@akshara/core';
 import { DemoCard } from '@/components/demo/TracingDemoGallery';
 import type { GallerySpeed } from '@/components/demo/demoTimeline';
 import { DEVANAGARI_FONTS, getFont, glyphText, loadFont } from '@/lib/devanagariFonts';
-import { buildFontGuide, paintGlyph, placeGlyph, type GlyphPlacement } from './fontGuide';
+import { buildFontGuide, paintGlyphFaint, placeGlyph, type GlyphPlacement } from './fontGuide';
 import {
-  buildCorrectedDataset,
+  buildPreviewDataset,
   buildGlyphGuide,
   fitStrokePath,
   gestureLength,
@@ -161,12 +161,17 @@ export function TraceTrainer() {
     }
   }, [drafts]);
 
-  const corrected = useMemo(() => {
-    if (drawn.length === 0) return null;
+  const [corrected, draftProblem, buildError] = useMemo((): [
+    LetterStrokeDataset | null,
+    string | null,
+    string | null,
+  ] => {
+    if (drawn.length === 0) return [null, null, null];
     try {
-      return buildCorrectedDataset(dataset, drawn, guide);
-    } catch {
-      return null;
+      const { dataset: built, problem } = buildPreviewDataset(dataset, drawn, guide);
+      return [built, problem, null];
+    } catch (e) {
+      return [null, null, e instanceof Error ? e.message : String(e)];
     }
   }, [dataset, drawn, guide]);
   const validation = useMemo(
@@ -563,7 +568,15 @@ export function TraceTrainer() {
           {corrected ? (
             <>
               <DemoCard key={json} dataset={corrected} command={command} globalSpeed={speed} />
-              {validation && !validation.valid && (
+              {draftProblem && (
+                <p
+                  role="status"
+                  className="rounded-2xl border border-amber-300 bg-amber-50 p-2 text-xs text-amber-800 dark:bg-amber-400/10 dark:text-amber-200"
+                >
+                  Preview of your draft. Not ready to export yet: {friendlyProblem(draftProblem)}
+                </p>
+              )}
+              {!draftProblem && validation && !validation.valid && (
                 <ul
                   role="alert"
                   className="rounded-2xl border border-rose-300 bg-rose-50 p-2 text-xs text-rose-700 dark:bg-rose-500/10 dark:text-rose-300"
@@ -573,16 +586,26 @@ export function TraceTrainer() {
                   ))}
                 </ul>
               )}
-              {validation?.valid && (
+              {!draftProblem && validation?.valid && (
                 <p className="text-xs font-bold text-emerald-600">
                   ✓ Valid stroke data — ready to export.
                 </p>
               )}
               <div className="flex flex-wrap gap-2">
-                <button type="button" className="btn bg-emerald-500 text-white" onClick={download}>
+                <button
+                  type="button"
+                  className="btn bg-emerald-500 text-white"
+                  onClick={download}
+                  disabled={!!draftProblem}
+                >
                   ⬇ Download {dataset.id}.json
                 </button>
-                <button type="button" className="btn bg-sky-500 text-white" onClick={copy}>
+                <button
+                  type="button"
+                  className="btn bg-sky-500 text-white"
+                  onClick={copy}
+                  disabled={!!draftProblem}
+                >
                   {copied ? '✓ Copied' : '⧉ Copy JSON'}
                 </button>
               </div>
@@ -600,7 +623,13 @@ export function TraceTrainer() {
             </>
           ) : (
             <div className="rounded-3xl border-2 border-dashed border-line p-6 text-center text-sm text-ink-faint">
-              Draw the first stroke on the slate to see your version here.
+              {buildError ? (
+                <span role="alert" className="text-rose-600">
+                  Could not build the preview: {buildError}
+                </span>
+              ) : (
+                'Draw the first stroke on the slate to see your version here.'
+              )}
             </div>
           )}
           <label className="flex items-center gap-2 text-xs font-bold text-ink-soft">
@@ -624,6 +653,15 @@ export function TraceTrainer() {
   );
 }
 
+/** The compiler's reasons, in words for the author. */
+function friendlyProblem(message: string): string {
+  if (/needs at least 2 strokes|must be last|shirorekha/i.test(message)) {
+    return 'letters end with the Shirorekha (headline) as their last stroke — draw it last and set its type to “shirorekha”.';
+  }
+  if (/multiple subpaths/i.test(message)) return 'each stroke must be one continuous line.';
+  return message;
+}
+
 interface FontTileProps {
   label: string;
   hint?: string;
@@ -632,7 +670,6 @@ interface FontTileProps {
   checked: boolean;
   onChoose: () => void;
 }
-
 /** One font in the comparison strip: the letter drawn in that font. */
 function FontTile({ label, hint, sample, family, checked, onChoose }: FontTileProps) {
   return (
@@ -778,7 +815,7 @@ function paintTrainer(
 
   if (showGhost && fontPlacement) {
     // The chosen font's glyph, plus its centreline (what taps and drawings snap to)
-    paintGlyph(ctx, fontPlacement, 'rgba(226, 232, 240, 0.16)');
+    paintGlyphFaint(ctx, fontPlacement, 'rgb(226, 232, 240)', 0.16);
     ctx.save();
     ctx.setLineDash([3, 4]);
     ctx.strokeStyle = 'rgba(226, 232, 240, 0.35)';

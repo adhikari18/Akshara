@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { recordActivity } from '@/lib/progress';
 import type { LetterStrokeDataset, StrokeDefinition } from '@akshara/data';
 import {
   CHALK_BASE_WIDTH,
@@ -287,6 +288,13 @@ export function useTracingSession(
         if (announceCompletion) {
           speakNepaliPhonics(dataset.phonetics.audioPrompt, dataset.phonetics.romanized);
         }
+        recordActivity({
+          kind: dataset.category === 'numeral' ? 'numeral' : 'letter',
+          itemId: dataset.id,
+          stars: progress.stars,
+          accuracy: progress.accuracyScore,
+          mistakes: progress.mistakeCount,
+        });
         onLetterCompleteRef.current?.(progress);
       } else if (step.strokeCompleted) {
         scene.penDown = false;

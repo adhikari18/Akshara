@@ -557,3 +557,40 @@ export function buildCorrectedDataset(
   };
   return compileGlyph(spec as never) as unknown as LetterStrokeDataset;
 }
+
+/**
+ * Like `buildCorrectedDataset`, but always produces something to preview. A letter that is not
+ * finished yet (no Shirorekha as its last stroke, a headline in the middle, …) cannot be compiled
+ * as export-ready data; it is then built as a draft — same stroke geometry, checkpoints and
+ * metadata — and `problem` says what is still missing before it can be exported.
+ */
+export function buildPreviewDataset(
+  original: LetterStrokeDataset,
+  drawn: DrawnStroke[],
+  guide: GlyphGuide = buildGlyphGuide(original)
+): { dataset: LetterStrokeDataset; problem: string | null } {
+  try {
+    return { dataset: buildCorrectedDataset(original, drawn, guide), problem: null };
+  } catch (e) {
+    const problem = e instanceof Error ? e.message : String(e);
+    const { strokes: _old, shirorekha: _sh, ...meta } = original;
+    // Compile as a headline-free glyph (no stroke-count / headline rules), then restore the
+    // real category and stroke types.
+    const draft = compileGlyph({
+      ...meta,
+      category: 'numeral',
+      strokes: drawn.map((s, i) => ({
+        type: s.type === 'shirorekha' ? 'curve' : s.type,
+        svgPath: fitStrokePath(s, guide),
+        label: s.label || `Stroke ${i + 1}`,
+        nepaliInstruction: s.nepaliInstruction || `चरण ${i + 1}`,
+        englishInstruction: s.englishInstruction || `Stroke ${i + 1}`,
+      })),
+    } as never) as unknown as LetterStrokeDataset;
+    draft.category = original.category;
+    draft.strokes.forEach((s, i) => {
+      s.type = drawn[i]!.type;
+    });
+    return { dataset: draft, problem };
+  }
+}

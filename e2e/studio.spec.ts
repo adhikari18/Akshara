@@ -40,28 +40,46 @@ async function traceStroke(page: Page, waypoints: Waypoint[]): Promise<void> {
 }
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/student/trace/');
 });
 
-test('studio loads with the Pati tracing slate active', async ({ page }) => {
+test('the student slate loads with the Pati tracing slate active', async ({ page }) => {
   await expect(page).toHaveTitle(/Akshara/);
-  await expect(page.getByRole('heading', { name: /Akshara/ })).toBeVisible();
   await expect(page.getByRole('img', { name: /Pati slate/ })).toBeVisible();
 });
 
-test('all four pedagogical tabs render their studios', async ({ page }) => {
-  await page.getByRole('tab', { name: /मात्रा र बाह्रखरी/ }).click();
+test('the role chooser leads to the three experiences', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /Student/ }).click();
+  await expect(page.getByRole('navigation', { name: 'Student doors' })).toBeVisible();
+  await page.getByRole('link', { name: /Akshara home/ }).click();
+  await page.getByRole('link', { name: /Parent/ }).click();
+  await expect(page.getByText(/Grown-ups only/)).toBeVisible();
+});
+
+test('every student activity page renders its studio', async ({ page }) => {
+  await page.goto('/student/matras/');
   await expect(page.getByRole('heading', { name: /Add a matra sign/ })).toBeVisible();
 
-  await page.getByRole('tab', { name: /शब्द र वाक्य/ }).click();
+  await page.goto('/student/words/');
   await page.getByRole('tab', { name: /Make Sentences/ }).click();
   await expect(page.getByText(/Sentence Unscrambler/)).toBeVisible();
 
-  await page.getByRole('tab', { name: /वर्णमाला/ }).click();
+  await page.goto('/student/alphabet/');
   await expect(page.getByText(/Swor Varna \(13 Nepali Vowels/)).toBeVisible();
 
-  await page.getByRole('tab', { name: /पाटी लेखन/ }).click();
-  await expect(page.getByRole('img', { name: /Pati slate/ })).toBeVisible();
+  await page.goto('/student/quiz/');
+  await expect(page.getByRole('heading', { name: /Letter quiz/ })).toBeVisible();
+
+  // The student home guides: one "next" card and three doors
+  await page.goto('/student/');
+  await expect(page.getByRole('link', { name: /^Next: write/ })).toBeVisible();
+  const doors = page.getByRole('navigation', { name: 'Student doors' });
+  await doors.getByRole('link', { name: /Write/ }).click();
+  await expect(page.getByRole('list', { name: 'Lesson map' })).toBeVisible();
+  await page.getByRole('link', { name: /^Vowels/ }).click();
+  await page.getByRole('link', { name: 'Write अ', exact: true }).click();
+  await expect(page.getByRole('img', { name: 'Pati slate for tracing अ' })).toBeVisible();
 });
 
 test('learner can trace क stroke by stroke to the celebration overlay', async ({ page }) => {
@@ -79,14 +97,14 @@ test('drawing the Shirorekha first triggers the topological guardrail', async ({
 });
 
 test('matra fusion anvil updates when a matra card is tapped', async ({ page }) => {
-  await page.getByRole('tab', { name: /मात्रा र बाह्रखरी/ }).click();
+  await page.goto('/student/matras/');
   // Tap the okar card (◌ो) in the palette
   await page.getByRole('button').filter({ hasText: '◌ो' }).first().click();
   await expect(page.getByRole('button', { name: /Speak[\s\S]*को/ })).toBeVisible();
 });
 
 test('SVO order in the sentence builder surfaces the SOV coaching tip', async ({ page }) => {
-  await page.getByRole('tab', { name: /शब्द र वाक्य/ }).click();
+  await page.goto('/student/words/');
   await page.getByRole('tab', { name: /Make Sentences/ }).click();
 
   // sov-1: राम (S) घर (O) जान्छ (V) — tap in English SVO order
@@ -154,7 +172,7 @@ async function curvePoints(page: Page, svgPath: string, spacing = 6): Promise<Wa
 }
 
 test('numbers: a learner traces ४२ digit by digit and hears its name', async ({ page }) => {
-  await page.getByRole('tab', { name: /अङ्क/ }).click();
+  await page.goto('/student/numbers/');
   await page.getByRole('button', { name: /^४२ \(42\)/ }).click();
   await expect(page.getByRole('heading', { name: 'बयालीस' })).toBeVisible();
   await expect(page.getByRole('img', { name: 'Pati slate for tracing ४' })).toBeVisible();
