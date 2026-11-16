@@ -11,7 +11,7 @@ describe('AksharaStudioPage', () => {
     expect(screen.getByRole('img', { name: /Pati slate/ })).toBeInTheDocument();
   });
 
-  it('navigates across all four pedagogical tabs', async () => {
+  it('navigates across all five learning tabs', async () => {
     const user = userEvent.setup();
     render(<AksharaStudioPage />);
 
@@ -26,6 +26,10 @@ describe('AksharaStudioPage', () => {
 
     await user.click(screen.getByRole('tab', { name: /वर्णमाला/ }));
     expect(screen.getByText(/Swor Varna \(13 Nepali Vowels/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('tab', { name: /अङ्क/ }));
+    expect(screen.getByRole('heading', { name: /Pick a number/ })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Pati slate for tracing १' })).toBeInTheDocument();
 
     await user.click(screen.getByRole('tab', { name: /पाटी लेखन/ }));
     expect(screen.getByRole('img', { name: /Pati slate/ })).toBeInTheDocument();

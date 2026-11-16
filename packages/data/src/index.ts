@@ -3,6 +3,7 @@ import vowelsData from '../vowels.json' with { type: 'json' };
 import consonantsData from '../consonants.json' with { type: 'json' };
 import wordsData from '../words.json' with { type: 'json' };
 import sentencesData from '../sentences.json' with { type: 'json' };
+import numbersData from '../numbers.json' with { type: 'json' };
 
 export type StrokeTopologyType = 'loop' | 'curve' | 'diagonal' | 'stem' | 'shirorekha';
 
@@ -61,7 +62,8 @@ export interface LetterStrokeDataset {
   id: string;
   character: string;
   unicode: string;
-  category: 'swor' | 'vyanjan' | 'samyukta';
+  /** 'numeral' = Devanagari digit (अङ्क ० – ९), written without a Shirorekha. */
+  category: 'swor' | 'vyanjan' | 'samyukta' | 'numeral';
   varga?: string;
   phonetics: {
     romanized: string;
@@ -76,7 +78,8 @@ export interface LetterStrokeDataset {
     shirorekhaY: number;
     baselineY: number;
   };
-  shirorekha: ShirorekhaDefinition;
+  /** The headline bar. Present for every letter; absent for numerals, which have none. */
+  shirorekha?: ShirorekhaDefinition;
   strokes: StrokeDefinition[];
   vocabulary: Array<{
     word: string;
@@ -172,6 +175,61 @@ export const CONSONANTS: ConsonantEntry[] = consonantsData as ConsonantEntry[];
 export const WORDS: WordBuildingEntry[] = wordsData as WordBuildingEntry[];
 export const SENTENCES: SentenceEntry[] = sentencesData as SentenceEntry[];
 
+/** A whole number with its Devanagari numerals and Nepali name (e.g. 42 → ४२, बयालीस). */
+export interface NumberEntry {
+  value: number;
+  /** The number written in Devanagari digits. */
+  devanagari: string;
+  /** The Nepali number word. Names from 11 to 99 are irregular and must be learnt, not derived. */
+  nepaliName: string;
+  /** A common alternative name (e.g. सुन्ना for शून्य). */
+  alsoCalled?: string;
+}
+
+/** Nepali numbers 0 – 100, indexed by value (`NUMBERS[42].nepaliName === 'बयालीस'`). */
+export const NUMBERS: NumberEntry[] = numbersData as NumberEntry[];
+
+const DEVANAGARI_DIGITS = '०१२३४५६७८९';
+
+/** Write a non-negative integer in Devanagari numerals: 42 → '४२'. */
+export function toDevanagariNumerals(value: number): string {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error(`Expected a non-negative integer, got ${value}`);
+  }
+  return String(value)
+    .split('')
+    .map((d) => DEVANAGARI_DIGITS[Number(d)])
+    .join('');
+}
+
+/** The digits of a non-negative integer, most significant first: 42 → [4, 2]. */
+export function digitsOf(value: number): number[] {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error(`Expected a non-negative integer, got ${value}`);
+  }
+  return String(value).split('').map(Number);
+}
+
+/** Structural checks for the numbers table: 0 – 100 in order, correct numerals, unique names. */
+export function validateNumbers(entries: NumberEntry[] = NUMBERS): string[] {
+  const errors: string[] = [];
+  if (entries.length !== 101)
+    errors.push(`expected 101 entries (0 – 100), found ${entries.length}`);
+  const names = new Set<string>();
+  entries.forEach((entry, idx) => {
+    if (entry.value !== idx) errors.push(`entry ${idx} has value ${entry.value}`);
+    else if (entry.devanagari !== toDevanagariNumerals(idx)) {
+      errors.push(
+        `${idx} is written '${entry.devanagari}', expected '${toDevanagariNumerals(idx)}'`
+      );
+    }
+    if (!entry.nepaliName.trim()) errors.push(`${idx} has no Nepali name`);
+    else if (names.has(entry.nepaliName)) errors.push(`name '${entry.nepaliName}' is used twice`);
+    names.add(entry.nepaliName);
+  });
+  return errors;
+}
+
 /** Every acceptable token-id order for a sentence, canonical order first. */
 export function getAcceptableOrders(sentence: SentenceEntry): string[][] {
   return [sentence.tokens.map((t) => t.id), ...(sentence.acceptableOrders ?? [])];
@@ -214,7 +272,14 @@ export function validateSentenceEntry(sentence: SentenceEntry): string[] {
 
 // Letter stroke datasets are registered in stroke-manifest.json; the import list, keyed record
 // and ordered list are generated into strokes.generated.ts (see scripts/generate-stroke-index.mjs).
-export { STROKE_DATASETS, STROKE_LIST, STROKE_ORDER } from './strokes.generated.js';
+export {
+  NUMERAL_DATASETS,
+  NUMERAL_LIST,
+  NUMERAL_ORDER,
+  STROKE_DATASETS,
+  STROKE_LIST,
+  STROKE_ORDER,
+} from './strokes.generated.js';
 
 /**
  * Returns the headline spans for a letter: the explicit split segments when
@@ -224,6 +289,7 @@ export function getShirorekhaSegments(
   dataset: Pick<LetterStrokeDataset, 'shirorekha'>
 ): ShirorekhaSegment[] {
   const { shirorekha } = dataset;
+  if (!shirorekha) return [];
   if (shirorekha.segments && shirorekha.segments.length > 0) {
     return shirorekha.segments.map((s) => ({ startX: s.startX, endX: s.endX }));
   }
@@ -232,7 +298,7 @@ export function getShirorekhaSegments(
 
 /** True when the letter's Shirorekha is split into two or more spans with gaps. */
 export function hasSplitShirorekha(dataset: Pick<LetterStrokeDataset, 'shirorekha'>): boolean {
-  return (dataset.shirorekha.segments?.length ?? 0) > 1;
+  return (dataset.shirorekha?.segments?.length ?? 0) > 1;
 }
 
 export const TOPOLOGY_PRIORITY: Record<StrokeTopologyType, number> = {
@@ -255,15 +321,27 @@ export const TOPOLOGY_PRIORITY: Record<StrokeTopologyType, number> = {
  */
 export function validateStrokeTopology(
   strokes: StrokeDefinition[],
-  headlineY?: number
+  headlineY?: number,
+  options: {
+    /**
+     * Letters must end with the Shirorekha (default). Numerals have no headline, so for them
+     * a single stroke is fine and no stroke may be a Shirorekha.
+     */
+    requireShirorekha?: boolean;
+  } = {}
 ): {
   valid: boolean;
   violations: string[];
 } {
   const violations: string[] = [];
+  const requireShirorekha = options.requireShirorekha ?? true;
 
-  if (strokes.length < 2) {
-    violations.push('A Devanagari character definition must contain at least 2 strokes.');
+  if (strokes.length < (requireShirorekha ? 2 : 1)) {
+    violations.push(
+      requireShirorekha
+        ? 'A Devanagari character definition must contain at least 2 strokes.'
+        : 'A numeral definition must contain at least 1 stroke.'
+    );
     return { valid: false, violations };
   }
 
@@ -300,12 +378,16 @@ export function validateStrokeTopology(
         `Stroke ${stroke.order} ('${stroke.id}', type '${stroke.type}') violates Devanagari topological order by appearing after a higher-priority stroke stage.`
       );
     }
-    if (stroke.type === 'shirorekha' && !isLast) {
+    if (!requireShirorekha && stroke.type === 'shirorekha') {
+      violations.push(
+        `Stroke ${stroke.order} ('${stroke.id}') is a Shirorekha, but numerals are written without one.`
+      );
+    } else if (stroke.type === 'shirorekha' && !isLast) {
       violations.push(
         `Stroke ${stroke.order} ('${stroke.id}') is a Shirorekha top bar but is not the final stroke.`
       );
     }
-    if (isLast && stroke.type !== 'shirorekha') {
+    if (requireShirorekha && isLast && stroke.type !== 'shirorekha') {
       violations.push(
         `Final stroke ${stroke.order} ('${stroke.id}') has type '${stroke.type}'; the Shirorekha top bar must be strictly last.`
       );
@@ -345,7 +427,16 @@ export function validateLetterDataset(dataset: LetterStrokeDataset): DatasetVali
       `Invalid viewBox (${dataset.viewBox.width}x${dataset.viewBox.height}); expected 300x300.`
     );
   }
-  if (!dataset.shirorekha.enforcedLast) {
+  const isNumeral = dataset.category === 'numeral';
+  if (isNumeral) {
+    if (dataset.shirorekha) {
+      errors.push(
+        `Numeral '${dataset.id}' must not define a shirorekha (numerals have no headline).`
+      );
+    }
+  } else if (!dataset.shirorekha) {
+    errors.push(`Letter '${dataset.id}' must define a shirorekha.`);
+  } else if (!dataset.shirorekha.enforcedLast) {
     errors.push(`Letter '${dataset.id}' must enforce shirorekha.enforcedLast = true.`);
   }
 
@@ -369,9 +460,11 @@ export function validateLetterDataset(dataset: LetterStrokeDataset): DatasetVali
     });
   });
 
-  const topology = validateStrokeTopology(dataset.strokes, dataset.viewBox.shirorekhaY);
+  const topology = validateStrokeTopology(dataset.strokes, dataset.viewBox.shirorekhaY, {
+    requireShirorekha: !isNumeral,
+  });
   errors.push(...topology.violations.map((v) => `Topological violation in '${dataset.id}': ${v}`));
-  errors.push(...validateShirorekhaGeometry(dataset));
+  if (!isNumeral) errors.push(...validateShirorekhaGeometry(dataset));
 
   return {
     valid: errors.length === 0,
@@ -397,6 +490,9 @@ export function validateShirorekhaGeometry(dataset: LetterStrokeDataset): string
   const errors: string[] = [];
   const { shirorekha } = dataset;
   const id = dataset.id;
+  if (!shirorekha) {
+    return dataset.category === 'numeral' ? [] : [`Letter '${id}' must define a shirorekha.`];
+  }
 
   if (shirorekha.startX >= shirorekha.endX) {
     errors.push(

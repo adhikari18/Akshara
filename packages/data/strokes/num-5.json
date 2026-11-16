@@ -1,0 +1,108 @@
+{
+  "id": "num-5",
+  "character": "५",
+  "unicode": "U+096B",
+  "category": "numeral",
+  "phonetics": {
+    "romanized": "paanch",
+    "ipa": "/pãts/",
+    "nepaliName": "पाँच",
+    "audioPrompt": "पाँच",
+    "articulationTip": "Say 'paa(n)ts': a long nasal 'aa' (the ँ), ending in 'ts'."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "strokes": [
+    {
+      "id": "num-5-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Left Hook, Small Loop & Tail (बायाँ घुमाउरो, सानो घेरा र पुच्छर)",
+      "nepaliInstruction": "माथिबाट बायाँतिर घुमाउँदै तल आउनुहोस्, दायाँतिर सानो घेरा बनाएर पुच्छर तल तान्नुहोस्।",
+      "englishInstruction": "Curve down from the top on the left, make a small loop on the right, then pull the tail down.",
+      "svgPath": "M 102 68 C 84 90, 80 125, 102 150 C 120 168, 142 172, 157 168 C 157 135, 162 112, 184 112 C 202 112, 212 128, 207 142 C 202 158, 184 168, 170 175 C 182 205, 197 235, 214 262",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 102,
+          "y": 68,
+          "label": "Curve Start"
+        },
+        {
+          "index": 1,
+          "x": 87.1,
+          "y": 105.8,
+          "label": "Upper Left Arc 1"
+        },
+        {
+          "index": 2,
+          "x": 97.9,
+          "y": 144.7,
+          "label": "Upper Left Arc 2"
+        },
+        {
+          "index": 3,
+          "x": 131.4,
+          "y": 167.5,
+          "label": "Left Arc"
+        },
+        {
+          "index": 4,
+          "x": 157.5,
+          "y": 152.7,
+          "label": "Center Point"
+        },
+        {
+          "index": 5,
+          "x": 171.5,
+          "y": 115.4,
+          "label": "Upper Right Arc 1"
+        },
+        {
+          "index": 6,
+          "x": 206.5,
+          "y": 126,
+          "label": "Upper Right Arc 2"
+        },
+        {
+          "index": 7,
+          "x": 192.3,
+          "y": 161.5,
+          "label": "Right Arc"
+        },
+        {
+          "index": 8,
+          "x": 175.8,
+          "y": 189,
+          "label": "Lower Right Arc 1"
+        },
+        {
+          "index": 9,
+          "x": 193.5,
+          "y": 226.2,
+          "label": "Lower Right Arc 2"
+        },
+        {
+          "index": 10,
+          "x": 214,
+          "y": 262,
+          "label": "Curve Tip"
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "पाँच",
+      "romanized": "paanch",
+      "meaning": "five",
+      "emoji": "🍎🍎🍎🍎🍎"
+    }
+  ]
+}

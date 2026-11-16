@@ -1,0 +1,84 @@
+{
+  "id": "num-8",
+  "character": "८",
+  "unicode": "U+096E",
+  "category": "numeral",
+  "phonetics": {
+    "romanized": "aath",
+    "ipa": "/atʰ/",
+    "nepaliName": "आठ",
+    "audioPrompt": "आठ",
+    "articulationTip": "Say 'aath': a long 'aa', then a breathy 'th' made with the tongue curled back."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "strokes": [
+    {
+      "id": "num-8-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Slide & Bottom Curve (तिरछो धर्को र तलको घुमाउरो)",
+      "nepaliInstruction": "माथि दायाँबाट तल बायाँतिर झर्नुहोस्, अनि घुमाउँदै दायाँतिर माथि ल्याउनुहोस्।",
+      "englishInstruction": "Slide down from the top right to the left, then curve round the bottom and up to the right.",
+      "svgPath": "M 194 82 C 162 115, 132 135, 114 160 C 97 185, 102 230, 142 242 C 164 248, 184 236, 197 220",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 194,
+          "y": 82,
+          "label": "Curve Start"
+        },
+        {
+          "index": 1,
+          "x": 160.6,
+          "y": 113.5,
+          "label": "Upper Right Arc"
+        },
+        {
+          "index": 2,
+          "x": 126.9,
+          "y": 144.7,
+          "label": "Upper Left Arc"
+        },
+        {
+          "index": 3,
+          "x": 105.2,
+          "y": 184.1,
+          "label": "Lower Left Arc 1"
+        },
+        {
+          "index": 4,
+          "x": 117.7,
+          "y": 226.9,
+          "label": "Lower Left Arc 2"
+        },
+        {
+          "index": 5,
+          "x": 158.7,
+          "y": 243.3,
+          "label": "Lower Arc"
+        },
+        {
+          "index": 6,
+          "x": 197,
+          "y": 220,
+          "label": "Curve Tip"
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "आठ",
+      "romanized": "aath",
+      "meaning": "eight",
+      "emoji": "🍎🍎🍎🍎🍎🍎🍎🍎"
+    }
+  ]
+}

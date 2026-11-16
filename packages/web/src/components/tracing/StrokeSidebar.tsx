@@ -1,15 +1,20 @@
 'use client';
 
 import React from 'react';
-import type { LetterStrokeDataset, StrokeDefinition } from '@akshara/data';
+import {
+  toDevanagariNumerals,
+  type LetterStrokeDataset,
+  type StrokeDefinition,
+} from '@akshara/data';
 import {
   MODE_MULTIPLIERS,
   type LearnerToleranceMode,
   type StrokeStepEvaluation,
   type TracingProgressSummary,
 } from '@akshara/core';
-import { Award, GraduationCap } from 'lucide-react';
+import { Award, GraduationCap, Play } from 'lucide-react';
 import { speakNepaliPhonics } from '@/lib/audio';
+import { strokeGuideColor } from './strokeGuide';
 
 const LEVELS: Array<{ mode: LearnerToleranceMode; emoji: string; label: string }> = [
   { mode: 'child', emoji: '🐣', label: 'Easy' },
@@ -30,6 +35,10 @@ interface StrokeSidebarProps {
   progress: TracingProgressSummary;
   lastEval: StrokeStepEvaluation | null;
   currentStroke: StrokeDefinition | null;
+  /** Tap a stroke in the order list to have "Show me" demonstrate it. */
+  onPickStroke?: (index: number) => void;
+  /** Stroke the demo is currently on, if any. */
+  demoStrokeIndex?: number | null;
 }
 
 /**
@@ -43,9 +52,69 @@ export function StrokeSidebar({
   progress,
   lastEval,
   currentStroke,
+  onPickStroke,
+  demoStrokeIndex = null,
 }: StrokeSidebarProps) {
+  const completed = progress.completedStrokeIds.length;
   return (
     <>
+      {/* Stroke order, in both languages, colour-matched to the slate's guide */}
+      <div className="card">
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <h3 className="section-title">
+            <span aria-hidden>🧭</span> लेख्ने क्रम • Stroke order
+          </h3>
+          <span className="text-xs font-mono text-ink-faint">
+            {completed}/{dataset.strokes.length}
+          </span>
+        </div>
+        <ol className="space-y-2" aria-label="Stroke order">
+          {dataset.strokes.map((stroke, idx) => {
+            const isDone = idx < completed;
+            const isCurrent = !progress.isLetterComplete && idx === progress.currentStrokeIndex;
+            const isDemo = demoStrokeIndex === idx;
+            const color = strokeGuideColor(dataset, idx);
+            return (
+              <li key={stroke.id}>
+                <button
+                  type="button"
+                  onClick={() => onPickStroke?.(idx)}
+                  aria-label={`Show stroke ${stroke.order}: ${stroke.englishInstruction}`}
+                  aria-current={isCurrent ? 'step' : undefined}
+                  className={`group w-full text-left rounded-2xl border-2 p-2.5 flex items-start gap-3 transition hover:border-sky-400 ${
+                    isDemo
+                      ? 'border-sky-400 bg-sky-50 dark:bg-sky-400/10'
+                      : isCurrent
+                        ? 'border-amber-300 bg-amber-50 dark:border-amber-400/50 dark:bg-amber-400/10'
+                        : 'border-line bg-sunken'
+                  } ${isDone ? 'opacity-70' : ''}`}
+                >
+                  <span
+                    className={`step-badge mt-0.5 ${color.badge}`}
+                    style={{ boxShadow: `0 0 0 2px ${color.hex}55` }}
+                    aria-hidden
+                  >
+                    {isDone ? '✓' : toDevanagariNumerals(stroke.order)}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-extrabold text-ink leading-snug">
+                      {stroke.nepaliInstruction}
+                    </span>
+                    <span className="block text-xs text-ink-soft mt-0.5">
+                      {stroke.englishInstruction}
+                    </span>
+                  </span>
+                  <Play
+                    className="w-4 h-4 mt-1 shrink-0 text-ink-faint group-hover:text-sky-500"
+                    aria-hidden
+                  />
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+
       {/* Difficulty level */}
       <div className="card">
         <h3 className="section-title mb-3">
@@ -123,23 +192,19 @@ export function StrokeSidebar({
               </span>
             </div>
             <ol className="space-y-1.5">
-              {dataset.strokes.map((stroke, idx) => {
-                const isDone = idx < progress.completedStrokeIds.length;
-                return (
-                  <li
-                    key={stroke.id}
-                    className="flex items-center justify-between gap-2 rounded-xl bg-sunken border border-line p-2"
-                  >
-                    <span>
-                      <strong className="text-ink">
-                        {isDone ? '✓' : stroke.order}. {stroke.label}
-                      </strong>{' '}
-                      — {stroke.englishInstruction}
-                    </span>
-                    <span className="text-[10px] font-mono uppercase">{stroke.type}</span>
-                  </li>
-                );
-              })}
+              {dataset.strokes.map((stroke) => (
+                <li
+                  key={stroke.id}
+                  className="flex items-center justify-between gap-2 rounded-xl bg-sunken border border-line p-2"
+                >
+                  <span>
+                    <strong className="text-ink">
+                      {stroke.order}. {stroke.label}
+                    </strong>
+                  </span>
+                  <span className="text-[10px] font-mono uppercase">{stroke.type}</span>
+                </li>
+              ))}
             </ol>
           </div>
 
@@ -148,7 +213,7 @@ export function StrokeSidebar({
               <Award className="w-4 h-4 text-amber-500" aria-hidden />
               Evaluator (score {progress.accuracyScore}%)
             </h4>
-            <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
               <div className="rounded-xl bg-sunken border border-line p-2">
                 <div className="text-[10px] uppercase">Distance</div>
                 <div className="font-mono font-bold text-ink">
@@ -170,6 +235,17 @@ export function StrokeSidebar({
                   {progress.totalWaypointsInCurrentStroke}
                 </div>
               </div>
+              <div
+                className="rounded-xl bg-sunken border border-line p-2"
+                title="Discrete Fréchet distance between the traced line and the letter's curve, averaged over finished lines (lower is better)"
+              >
+                <div className="text-[10px] uppercase">Curve fit</div>
+                <div className="font-mono font-bold text-ink">
+                  {progress.strokeFidelities.length > 0
+                    ? `${progress.meanFrechetDistance.toFixed(1)}px`
+                    : '—'}
+                </div>
+              </div>
             </div>
             <p className="text-xs mt-2">
               Mistakes so far: <strong className="text-ink">{progress.mistakeCount}</strong>. Each
@@ -177,10 +253,22 @@ export function StrokeSidebar({
               once, however long it lasts — so a mouse, finger, or 120 Hz stylus is scored the same.
             </p>
             <p className="text-xs mt-1">
+              <strong className="text-ink">Curve fit</strong> is the Fréchet distance between each
+              finished line and the letter&apos;s real curve — how far apart two walkers must stay
+              while following both lines from start to end. Unlike checking dots, it notices
+              doubling back or skipping a bend. Only the part beyond the path tolerance costs
+              points.
+            </p>
+            <p className="text-xs mt-1">
               A dot unlocks only after the curve leading to it has been followed within{' '}
               {lastEval ? `${lastEval.pathTolerance.toFixed(0)} px` : 'half the width of its ring'}.
               The शिरोरेखा (headline) is always drawn last. {LEVEL_SCALE_SUMMARY.labels} scale the
               touch tolerance by {LEVEL_SCALE_SUMMARY.factors}.
+            </p>
+            <p className="text-xs mt-1">
+              Hand wobble is smoothed with a velocity-adaptive 1€ filter: steady where the finger
+              moves slowly, quick to follow a confident stroke. With a stylus, pressing harder or
+              tilting the pen draws thicker chalk.
             </p>
           </div>
         </div>

@@ -1,0 +1,96 @@
+{
+  "id": "num-4",
+  "character": "४",
+  "unicode": "U+096A",
+  "category": "numeral",
+  "phonetics": {
+    "romanized": "chaar",
+    "ipa": "/tsar/",
+    "nepaliName": "चार",
+    "audioPrompt": "चार",
+    "articulationTip": "Say 'tsaar': Nepali च sounds like 'ts', followed by a long 'aa'."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "strokes": [
+    {
+      "id": "num-4-stroke-1",
+      "order": 1,
+      "type": "loop",
+      "label": "Cross & Bottom Loop (काटिएको धर्को र तलको घेरा)",
+      "nepaliInstruction": "माथि बायाँबाट तल झर्दै गोलो घेरा बनाउनुहोस्, अनि माथि दायाँतिर तान्नुहोस्।",
+      "englishInstruction": "Slide down from the top left, swing round the bottom loop, then go up to the top right.",
+      "svgPath": "M 80 86 L 142 128 C 168 146, 186 172, 184 194 C 182 214, 166 226, 147 226 C 126 226, 110 212, 112 192 C 114 166, 130 146, 142 128 L 206 84",
+      "directionHint": "clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 80,
+          "y": 86,
+          "label": "Loop Start"
+        },
+        {
+          "index": 1,
+          "x": 123,
+          "y": 115.1,
+          "label": "Upper Left Arc"
+        },
+        {
+          "index": 2,
+          "x": 163.7,
+          "y": 146.9,
+          "label": "Right Arc"
+        },
+        {
+          "index": 3,
+          "x": 184.1,
+          "y": 193.3,
+          "label": "Lower Right Arc"
+        },
+        {
+          "index": 4,
+          "x": 149.8,
+          "y": 225.9,
+          "label": "Lower Arc"
+        },
+        {
+          "index": 5,
+          "x": 112,
+          "y": 198.4,
+          "label": "Lower Left Arc"
+        },
+        {
+          "index": 6,
+          "x": 127.5,
+          "y": 149.7,
+          "label": "Left Arc"
+        },
+        {
+          "index": 7,
+          "x": 163.2,
+          "y": 113.4,
+          "label": "Upper Right Arc"
+        },
+        {
+          "index": 8,
+          "x": 206,
+          "y": 84,
+          "label": "Loop Closure"
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "चार",
+      "romanized": "chaar",
+      "meaning": "four",
+      "emoji": "🍎🍎🍎🍎"
+    }
+  ]
+}

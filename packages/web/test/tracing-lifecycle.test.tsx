@@ -7,7 +7,6 @@ import { TracingCanvas } from '@/components/TracingCanvas';
 import * as audio from '@/lib/audio';
 import { filterDeck, stepThroughDeck } from '@/components/tracing/LetterDeck';
 import { advanceDust, type PatiScene } from '@/components/tracing/useTracingSession';
-import { AUTO_DEMO_TICK_MS } from '@/components/tracing/useAutoDemo';
 
 vi.mock('@/lib/audio', () => ({
   playStrokeSuccessSound: vi.fn(),
@@ -34,7 +33,7 @@ beforeAll(() => {
 });
 
 const canvas = () => screen.getByRole('img', { name: /Pati slate/ });
-const showMe = () => screen.getByRole('button', { name: /Show me|Watching/ });
+const showMe = () => screen.getByRole('button', { name: /Show me|Pause/ });
 const strokeDots = () => screen.getByRole('list', { name: 'Lines to draw' });
 
 function trace(stroke: StrokeDefinition) {
@@ -62,65 +61,117 @@ describe('"Show me" auto-demo (useAutoDemo)', () => {
   afterEach(() => vi.useRealTimers());
 
   const advance = (ms: number) => act(() => void vi.advanceTimersByTime(ms));
+  const demoStatus = () => screen.queryByText(/stroke \d+ of \d+/);
 
-  it('traces the whole letter to the celebration, then re-enables the button', () => {
+  it("replays the whole letter as an overlay without touching the learner's progress", () => {
     render(<TracingCanvas />);
     fireEvent.click(showMe());
-    expect(showMe()).toBeDisabled();
-    expect(showMe()).toHaveTextContent('Watching…');
+    expect(showMe()).toHaveTextContent('Pause');
+    expect(demoStatus()).toHaveTextContent('Watch: stroke 1 of 4');
 
     advance(60_000);
-    expect(screen.getByText(/स्याबास!.*पूरा भयो!/)).toBeInTheDocument();
-    expect(screen.getByText(/Accuracy:/)).toHaveTextContent('100%');
-    expect(showMe()).toBeEnabled();
+    // The hand has finished: button offers "Show me" again, slate ends on the last stroke…
+    expect(showMe()).toHaveTextContent('Show me');
+    expect(demoStatus()).toHaveTextContent('Paused at stroke 4 of 4');
+    // …and the learner has drawn nothing: no line is done, no celebration
+    expect(doneStrokes()).toBe(0);
+    expect(screen.queryByText(/स्याबास!.*पूरा भयो!/)).not.toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(`चरण 1/${ka.strokes.length}`);
   });
 
-  it('ignores learner input while the demo is drawing', () => {
+  it('starts on the stroke the learner is working on', () => {
+    render(<TracingCanvas />);
+    trace(ka.strokes[0]!);
+    expect(doneStrokes()).toBe(1);
+    fireEvent.click(showMe());
+    expect(demoStatus()).toHaveTextContent('stroke 2 of 4');
+    // Learner's finished line stays finished while the teacher draws
+    advance(2_000);
+    expect(doneStrokes()).toBe(1);
+  });
+
+  it('pauses when the learner touches the slate, and resumes from where it stopped', () => {
     render(<TracingCanvas />);
     fireEvent.click(showMe());
-    advance(AUTO_DEMO_TICK_MS * 3);
-    const before = screen.getByRole('status').textContent;
-    // A learner jab at the far corner must not register as a sample
-    fireEvent.pointerDown(canvas(), { pointerId: 1, clientX: 290, clientY: 290 });
+    advance(500);
+    const start = ka.strokes[0]!.waypoints[0]!;
+    fireEvent.pointerDown(canvas(), { pointerId: 1, clientX: start.x, clientY: start.y });
+    expect(showMe()).toHaveTextContent('Show me');
+    expect(demoStatus()).toHaveTextContent('Paused at stroke 1 of 4');
     fireEvent.pointerUp(canvas(), { pointerId: 1 });
-    expect(screen.getByRole('status').textContent).toBe(before);
+    fireEvent.click(showMe());
+    expect(demoStatus()).toHaveTextContent('Watch: stroke 1 of 4');
   });
 
-  it('stops as soon as the learner switches letter, leaving the new letter untouched', () => {
+  it('steps stroke by stroke with the previous / next buttons', () => {
+    render(<TracingCanvas />);
+    const next = () => fireEvent.click(screen.getByRole('button', { name: 'Next stroke' }));
+    const prev = () => fireEvent.click(screen.getByRole('button', { name: 'Previous stroke' }));
+    expect(screen.getByRole('button', { name: 'Previous stroke' })).toBeDisabled();
+    next();
+    expect(demoStatus()).toHaveTextContent('Paused at stroke 1 of 4');
+    next();
+    next();
+    next();
+    expect(demoStatus()).toHaveTextContent('stroke 4 of 4');
+    expect(screen.getByRole('button', { name: 'Next stroke' })).toBeDisabled();
+    prev();
+    expect(demoStatus()).toHaveTextContent('stroke 3 of 4');
+    // Stepping never draws for the learner
+    expect(doneStrokes()).toBe(0);
+  });
+
+  it('runs twice as fast at 2× and half as fast at 0.5×', () => {
+    const timeToFinish = (speed: '0.5×' | '1×' | '2×') => {
+      const view = render(<TracingCanvas />);
+      fireEvent.click(screen.getByRole('radio', { name: speed }));
+      fireEvent.click(showMe());
+      let elapsed = 0;
+      while (showMe().textContent?.includes('Pause') && elapsed < 120_000) {
+        advance(250);
+        elapsed += 250;
+      }
+      view.unmount();
+      return elapsed;
+    };
+    const normal = timeToFinish('1×');
+    const fast = timeToFinish('2×');
+    const slow = timeToFinish('0.5×');
+    expect(fast).toBeLessThan(normal * 0.7);
+    expect(slow).toBeGreaterThan(normal * 1.5);
+  });
+
+  it('jumps to a stroke tapped in the stroke-order list', () => {
+    render(<TracingCanvas />);
+    fireEvent.click(screen.getByRole('button', { name: /^Show stroke 3:/ }));
+    expect(demoStatus()).toHaveTextContent('Watch: stroke 3 of 4');
+    expect(showMe()).toHaveTextContent('Pause');
+  });
+
+  it('is cleared when the learner switches letter, leaving no timers or sounds behind', () => {
     render(<TracingCanvas />);
     fireEvent.click(showMe());
-    advance(1_500); // part-way through क
-    expect(doneStrokes()).toBeGreaterThan(0);
-
+    advance(1_500);
     fireEvent.click(screen.getByRole('button', { name: 'Next letter' }));
-    expect(showMe()).toBeEnabled();
-    const next = stepThroughDeck(STROKE_LIST, 'ka', 1)!;
-    expect(canvas()).toHaveAccessibleName(`Pati slate for tracing ${next.character}`);
-
-    // The old demo must be fully torn down: no timer left driving the old letter's
-    // evaluator, and so no chimes or speech for a letter that is no longer on screen.
-    advance(50); // let the one pending paint frame run (fresh slate has no dust → loop stops)
+    expect(showMe()).toHaveTextContent('Show me');
+    expect(demoStatus()).toBeNull();
+    advance(50); // one pending paint frame; nothing should re-arm
     expect(vi.getTimerCount()).toBe(0);
     vi.clearAllMocks();
     advance(60_000);
     expect(soundsPlayed()).toBe(0);
     expect(doneStrokes()).toBe(0);
-    expect(screen.queryByText(/स्याबास!/)).not.toBeInTheDocument();
   });
 
-  it('stops when the slate is wiped', () => {
+  it('is cleared when the slate is wiped', () => {
     render(<TracingCanvas />);
     fireEvent.click(showMe());
     advance(1_500);
     fireEvent.click(screen.getByRole('button', { name: /पुछ्नुहोस्/ }));
-    expect(showMe()).toBeEnabled();
-    expect(doneStrokes()).toBe(0);
-    advance(50); // one pending paint frame; wiping cleared the dust so the loop stops
+    expect(showMe()).toHaveTextContent('Show me');
+    expect(demoStatus()).toBeNull();
+    advance(50);
     expect(vi.getTimerCount()).toBe(0);
-    vi.clearAllMocks();
-    advance(60_000);
-    expect(soundsPlayed()).toBe(0);
-    expect(doneStrokes()).toBe(0);
   });
 });
 
@@ -235,6 +286,31 @@ describe('render & paint budget (M2)', () => {
     advance(17);
     expect(getContext).toHaveBeenCalledTimes(1);
     fireEvent.pointerUp(canvas(), { pointerId: 1 });
+    getContext.mockRestore();
+  });
+});
+
+describe('repaints after React-driven changes, even under StrictMode', () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+  const advance = (ms: number) => act(() => void vi.advanceTimersByTime(ms));
+
+  // StrictMode mounts, unmounts and remounts effects in development. The unmount used to cancel
+  // the pending frame but keep its id, so the renderer believed a frame was still queued and
+  // never painted a new letter again.
+  it('paints the next letter on the following frame', () => {
+    const getContext = vi.spyOn(HTMLCanvasElement.prototype, 'getContext');
+    render(
+      <React.StrictMode>
+        <TracingCanvas />
+      </React.StrictMode>
+    );
+    advance(50);
+    getContext.mockClear();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Next letter' }));
+    advance(17);
+    expect(getContext).toHaveBeenCalled();
     getContext.mockRestore();
   });
 });

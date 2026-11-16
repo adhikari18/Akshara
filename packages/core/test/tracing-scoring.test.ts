@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { STROKE_DATASETS } from '@akshara/data';
 import {
   HEADLINE_DETECTION_GEOMETRY,
+  ONE_EURO_PROFILES,
   TracingEvaluator,
   rateNormalizedAlpha,
   sampleStrokePath,
@@ -228,31 +229,44 @@ describe('cutting corners between waypoints', () => {
 });
 
 describe('setMode() switches every mode-derived parameter (M6)', () => {
-  it('re-derives the smoothing alpha unless it was given explicitly', () => {
+  it('re-derives the smoothing profile unless it was given explicitly', () => {
     const evaluator = new TracingEvaluator(ka, { mode: 'child' });
-    expect(evaluator.getSmoothingAlpha()).toBe(0.6);
+    expect(evaluator.getSmoothing()).toEqual({
+      kind: 'one-euro',
+      profile: ONE_EURO_PROFILES.child,
+    });
     evaluator.setMode('strict');
     expect(evaluator.getMode()).toBe('strict');
-    expect(evaluator.getSmoothingAlpha()).toBe(0.85);
+    expect(evaluator.getSmoothing()).toEqual({
+      kind: 'one-euro',
+      profile: ONE_EURO_PROFILES.strict,
+    });
 
-    const pinned = new TracingEvaluator(ka, { mode: 'child', smoothingAlpha: 1 });
-    pinned.setMode('strict');
-    expect(pinned.getSmoothingAlpha()).toBe(1);
+    const custom = { minCutoff: 3, beta: 0.1, dCutoff: 1 };
+    const pinnedProfile = new TracingEvaluator(ka, { mode: 'child', oneEuro: custom });
+    pinnedProfile.setMode('strict');
+    expect(pinnedProfile.getSmoothing()).toEqual({ kind: 'one-euro', profile: custom });
+
+    const legacy = new TracingEvaluator(ka, { mode: 'child', smoothingAlpha: 1 });
+    legacy.setMode('strict');
+    expect(legacy.getSmoothing()).toEqual({ kind: 'ema', alpha: 1 });
+    expect(legacy.getSmoothingAlpha()).toBe(1);
   });
 
   it('applies the new smoothing to the very next sample', () => {
     const evaluator = new TracingEvaluator(ka, { mode: 'child' });
     evaluator.evaluatePointerSample({ x: 150, y: 125 });
     const childStep = evaluator.evaluatePointerSample({ x: 160, y: 125 });
-    // alpha 0.6 → moves 60% of the way
-    expect(childStep.smoothedPoint.x).toBeCloseTo(156, 5);
+    // Child profile (1 Hz at rest) smooths a sudden 10 px jump heavily…
+    expect(childStep.smoothedPoint.x).toBeGreaterThan(150);
+    expect(childStep.smoothedPoint.x).toBeLessThan(156);
 
     evaluator.setMode('strict');
     evaluator.endGesture();
     evaluator.evaluatePointerSample({ x: 150, y: 125 });
     const strictStep = evaluator.evaluatePointerSample({ x: 160, y: 125 });
-    // alpha 0.85 → moves 85% of the way
-    expect(strictStep.smoothedPoint.x).toBeCloseTo(158.5, 5);
+    // …while the strict profile (2.5 Hz) follows it more closely
+    expect(strictStep.smoothedPoint.x).toBeGreaterThan(childStep.smoothedPoint.x);
     expect(evaluator.getPathTolerance()).toBeLessThan(new TracingEvaluator(ka).getPathTolerance());
   });
 });
@@ -296,5 +310,98 @@ describe('headline detection geometry scales with the viewBox (M5)', () => {
     expect(large.evaluatePointerSample({ x: 130, y: 150 + 40 }).topologicalViolation).toBe(
       'shirorekha-before-body'
     );
+  });
+});
+
+describe('curve fidelity (discrete Fréchet distance) alongside waypoint unlocks', () => {
+  const faithfully = (mode: 'child' | 'standard' | 'strict' = 'standard') => {
+    const evaluator = new TracingEvaluator(ka, { mode, smoothingAlpha: 1 });
+    const steps = [];
+    for (const stroke of ka.strokes) {
+      for (const p of sampleStrokePath(stroke, 2)) {
+        const step = evaluator.evaluatePointerSample(p);
+        steps.push(step);
+        if (step.strokeCompleted) break;
+      }
+      evaluator.endGesture();
+    }
+    return { evaluator, steps, progress: evaluator.getProgress() };
+  };
+
+  it('grades each stroke once, on the sample that completes it', () => {
+    const { steps, progress } = faithfully();
+    const graded = steps.filter((s) => s.strokeFidelity !== null);
+    expect(graded).toHaveLength(ka.strokes.length);
+    expect(graded.every((s) => s.strokeCompleted)).toBe(true);
+    expect(progress.strokeFidelities.map((f) => f.strokeId)).toEqual(ka.strokes.map((s) => s.id));
+    // A trace along the curve itself is within a couple of px of it
+    for (const f of progress.strokeFidelities) {
+      expect(f.frechetDistance).toBeLessThan(3);
+      expect(f.excess).toBe(0);
+    }
+    expect(progress.meanFrechetDistance).toBeLessThan(3);
+    expect(progress.accuracyScore).toBe(100);
+  });
+
+  it('catches doubling back along the curve, which nearest-point deviation cannot see', () => {
+    const evaluator = new TracingEvaluator(ka, { mode: 'standard', smoothingAlpha: 1 });
+    const path = sampleStrokePath(kaLoop, 2);
+    const a = Math.floor(path.length * 0.3);
+    const b = Math.floor(path.length * 0.6);
+    // Forward to 60 %, back to 30 %, forward to the end — every point lies ON the curve
+    const doubledBack = [...path.slice(0, b), ...path.slice(a, b).reverse(), ...path.slice(a)];
+    let fidelity = null;
+    for (const p of doubledBack) {
+      const step = evaluator.evaluatePointerSample(p);
+      expect(step.isOffTrack).toBe(false);
+      expect(step.cornerCut).toBe(false);
+      if (step.strokeCompleted) {
+        fidelity = step.strokeFidelity;
+        break;
+      }
+    }
+    expect(fidelity).not.toBeNull();
+    // Nearest-point metrics see nothing wrong…
+    const progress = evaluator.getProgress();
+    expect(progress.mistakeCount).toBe(0);
+    // …but the Fréchet leash has to span the backtrack
+    expect(fidelity!.frechetDistance).toBeGreaterThan(fidelity!.pathTolerance);
+    expect(fidelity!.excess).toBeGreaterThan(0);
+    expect(progress.accuracyScore).toBeLessThan(100);
+  });
+
+  it('does not charge for starting inside the first ring or stopping inside the last', () => {
+    const evaluator = new TracingEvaluator(ka, { mode: 'child', smoothingAlpha: 1 });
+    const path = sampleStrokePath(kaLoop, 2);
+    const start = path[0]!;
+    const end = path[path.length - 1]!;
+    // Touch down 25 px to the side of dot 1 (inside its 40 px ring), walk onto the line, trace,
+    // and lift as soon as the stroke completes inside the final ring.
+    const approach = Array.from({ length: 6 }, (_, i) => ({
+      x: start.x - 25 + (25 * i) / 5,
+      y: start.y - 25 + (25 * i) / 5,
+    }));
+    let fidelity = null;
+    for (const p of [...approach, ...path]) {
+      const step = evaluator.evaluatePointerSample(p);
+      if (step.strokeCompleted) {
+        fidelity = step.strokeFidelity;
+        break;
+      }
+    }
+    expect(fidelity).not.toBeNull();
+    expect(fidelity!.excess).toBe(0);
+    expect(Math.hypot(start.x - end.x, start.y - end.y)).toBeGreaterThan(0); // sanity: open loop
+  });
+
+  it('is independent of pointer sample rate', () => {
+    const path = sampleStrokePath(kaLoop, 1);
+    const grades = [60, 120, 240].map((hz) => scoreStroke(atRate(path, hz)).progress);
+    for (const g of grades) {
+      expect(g.strokeFidelities).toHaveLength(1);
+      expect(g.strokeFidelities[0]!.excess).toBe(0);
+      // the 1€ filter trades a few px of lag for jitter removal; far inside the 14 px tolerance
+      expect(g.strokeFidelities[0]!.frechetDistance).toBeLessThan(6);
+    }
   });
 });

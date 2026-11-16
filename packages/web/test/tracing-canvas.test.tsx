@@ -3,6 +3,7 @@ import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { STROKE_DATASETS, STROKE_LIST } from '@akshara/data';
+import { sampleStrokePath, sampleStrokeSubpaths } from '@akshara/core';
 import type { StrokeDefinition } from '@akshara/data';
 import { TracingCanvas } from '@/components/TracingCanvas';
 import * as audio from '@/lib/audio';
@@ -139,6 +140,9 @@ describe('TracingCanvas', () => {
 
     expect(screen.getByText(/स्याबास!.*पूरा भयो!/)).toBeInTheDocument();
     expect(screen.getByText(/Accuracy:/)).toBeInTheDocument();
+    // Grown-ups panel reports the Fréchet "curve fit" once lines have been finished
+    const curveFit = screen.getByText('Curve fit', { selector: 'div' }).nextElementSibling;
+    expect(curveFit?.textContent).toMatch(/^\d+(\.\d)?px$/);
     // Celebration offers a direct path to the next letter
     expect(screen.getAllByRole('button', { name: /Next letter/ }).length).toBe(2);
   });
@@ -166,5 +170,68 @@ describe('TracingCanvas', () => {
     // …and a second, separate attempt is announced again.
     traceStroke(canvas, headline);
     expect(audio.playTopologicalWarningSound).toHaveBeenCalledTimes(2);
+  });
+
+  it('warns once, in words a child can follow, when a loop is traced the wrong way round', () => {
+    render(<TracingCanvas />);
+    const canvas = getCanvas();
+    // Start where क's loop ends (inside dot 1's ring in Easy mode) and go round backwards
+    const backward = [...sampleStrokePath(ka.strokes[0]!, 3)].reverse();
+    fireEvent.pointerDown(canvas, {
+      pointerId: 1,
+      clientX: backward[0]!.x,
+      clientY: backward[0]!.y,
+    });
+    for (const p of backward.slice(1)) {
+      fireEvent.pointerMove(canvas, { pointerId: 1, clientX: p.x, clientY: p.y });
+    }
+
+    expect(screen.getByText(/Wrong way round! .* going anticlockwise ↺/)).toBeInTheDocument();
+    expect(screen.getByText(/उल्टो दिशामा घुम्यो!/)).toBeInTheDocument();
+    expect(audio.playTopologicalWarningSound).toHaveBeenCalledTimes(1);
+    // No line was finished by going the wrong way
+    expect(screen.getByRole('list', { name: 'Lines to draw' }).textContent).not.toContain('✓');
+
+    // Lift, then trace it the right way: the line completes
+    fireEvent.pointerUp(canvas, { pointerId: 1 });
+    traceStroke(canvas, ka.strokes[0]!);
+    expect(screen.getByText(/राम्रो! अब चरण 2/)).toBeInTheDocument();
+  });
+
+  it("asks the learner to lift the pen over the gap in ध's split headline", () => {
+    render(<TracingCanvas initialLetterId="dha" />);
+    const canvas = getCanvas();
+    const dha = STROKE_DATASETS.dha!;
+    // Draw the body strokes faithfully (lifting between any subpaths)…
+    for (const stroke of dha.strokes.slice(0, -1)) {
+      for (const gesture of sampleStrokeSubpaths(stroke, 3)) {
+        fireEvent.pointerDown(canvas, {
+          pointerId: 1,
+          clientX: gesture[0]!.x,
+          clientY: gesture[0]!.y,
+        });
+        for (const p of gesture.slice(1))
+          fireEvent.pointerMove(canvas, { pointerId: 1, clientX: p.x, clientY: p.y });
+        fireEvent.pointerUp(canvas, { pointerId: 1 });
+      }
+    }
+    vi.mocked(audio.playTopologicalWarningSound).mockClear();
+    // …then drag one line straight across the headline, gap included
+    fireEvent.pointerDown(canvas, { pointerId: 1, clientX: 62, clientY: 75 });
+    for (let x = 65; x <= 237; x += 3)
+      fireEvent.pointerMove(canvas, { pointerId: 1, clientX: x, clientY: 75 });
+
+    expect(screen.getByText(/The headline has a gap! Lift your finger/)).toBeInTheDocument();
+    expect(screen.getByText(/शिरोरेखाको बीचमा खाली ठाउँ छ!/)).toBeInTheDocument();
+    expect(audio.playTopologicalWarningSound).toHaveBeenCalledTimes(1);
+    expect(screen.queryByText(/स्याबास!.*पूरा भयो!/)).not.toBeInTheDocument();
+
+    // Lift, then draw just the second span: the letter completes
+    fireEvent.pointerUp(canvas, { pointerId: 1 });
+    fireEvent.pointerDown(canvas, { pointerId: 1, clientX: 165, clientY: 75 });
+    for (let x = 168; x <= 237; x += 3)
+      fireEvent.pointerMove(canvas, { pointerId: 1, clientX: x, clientY: 75 });
+    fireEvent.pointerUp(canvas, { pointerId: 1 });
+    expect(screen.getByText(/स्याबास!.*पूरा भयो!/)).toBeInTheDocument();
   });
 });

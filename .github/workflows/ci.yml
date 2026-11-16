@@ -67,16 +67,25 @@ jobs:
       - name: Build @akshara/data and @akshara/core
         run: npm run build --workspace=@akshara/data && npm run build --workspace=@akshara/core
 
+      - name: Build static export of @akshara/web
+        run: npm run build --workspace=@akshara/web
+
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright E2E suite
+      # Gesture-fixture replays, canvas ink probes, layout-stability and drag-and-drop checks,
+      # served from the prebuilt static export (no on-demand compilation races).
+      - name: Run Playwright regression harness
         run: npm run test:e2e
+        env:
+          E2E_SERVER: static
 
-      - name: Upload Playwright report on failure
+      - name: Upload Playwright report and traces on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
-          path: playwright-report/
+          path: |
+            playwright-report/
+            test-results/
           retention-days: 7

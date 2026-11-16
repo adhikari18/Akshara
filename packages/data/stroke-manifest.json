@@ -1,5 +1,5 @@
 {
-  "$comment": "Teaching order of the Pati tracing deck. Every file in strokes/ must be listed exactly once. After editing, run `npm run generate --workspace=@akshara/data` (the data build does this automatically).",
+  "$comment": "Teaching order of the Pati tracing decks. `order` lists the letters, `numerals` the Devanagari digits (० – ९). Every file in strokes/ must be listed exactly once across both. After editing, run `npm run generate --workspace=@akshara/data` (the data build does this automatically).",
   "order": [
     "ka",
     "kha",
@@ -50,5 +50,17 @@
     "au",
     "am",
     "aha"
+  ],
+  "numerals": [
+    "num-0",
+    "num-1",
+    "num-2",
+    "num-3",
+    "num-4",
+    "num-5",
+    "num-6",
+    "num-7",
+    "num-8",
+    "num-9"
   ]
 }

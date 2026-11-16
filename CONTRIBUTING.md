@@ -20,7 +20,14 @@ You do not need to write TypeScript to make a lasting impact on Nepali literacy:
    - **Partial & split headlines:** Follow a standard Devanagari font. If the headline simply stops short (e.g. `थ`, `अ`), set `startX`/`endX` to the partial span. If it has a gap (e.g. `ध`, whose upper-left loop is detached), add `"segments": [{ "startX": …, "endX": … }, …]` to the `shirorekha` block, write the stroke's `svgPath` with one `M … L …` subpath per segment, and place waypoints at both ends of every segment.
    - **Shortcut:** sketch only `type` + `svgPath` per stroke and let `npm run akshara -- compile` generate waypoints and headline metadata (see [`packages/cli`](./packages/cli/README.md)).
 4. Register the letter: add its id (the filename without `.json`) to [`packages/data/stroke-manifest.json`](./packages/data/stroke-manifest.json) at its place in the teaching order, then run `npm run generate --workspace=@akshara/data`. This regenerates `src/strokes.generated.ts`, so there is no TypeScript to edit by hand.
+   - **Numerals** (`०`–`९`) use `"category": "numeral"`, have **no** `shirorekha` block or headline stroke, may be a single stroke, and are listed under `numerals` (not `order`) in the manifest. Their Nepali names for 0 – 100 live in [`packages/data/numbers.json`](./packages/data/numbers.json).
 5. Run `npm run validate:data` to verify your JSON against [`packages/data/schema/letter.schema.json`](./packages/data/schema/letter.schema.json).
+
+### Canvas regression fixtures (Playwright)
+Every file in [`e2e/fixtures/gestures/`](./e2e/fixtures/gestures/) is a recorded pointer gesture plus the outcome it must produce, and is replayed on the real slate in CI (`e2e/canvas-regression.spec.ts`). To add one:
+- **Record a real stroke:** start the studio (`npm run dev`), then `npm run e2e:record -- my-fixture --letter ka` (or `--number 42`, `--level Medium`). Draw on the slate in the browser that opens, press Enter in the terminal, and the outcome on screen (strokes done, celebration, hint) is saved as the fixture's expectation. Works with a stylus too: pressure and tilt are recorded.
+- **Or generate one** in [`e2e/support/generate-fixtures.mjs`](./e2e/support/generate-fixtures.mjs) and run `npm run e2e:fixtures`.
+- Run the harness locally with `npm run test:e2e` (dev server) or `npm run test:e2e:static` (same as CI).
 
 ### B. Recording Native Nepali Phonics Audio
 - Record crisp, warm, child-friendly pronunciations (`.mp3` or `.ogg`, mono, 44.1kHz) for:

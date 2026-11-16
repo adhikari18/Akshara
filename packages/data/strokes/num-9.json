@@ -1,0 +1,90 @@
+{
+  "id": "num-9",
+  "character": "९",
+  "unicode": "U+096F",
+  "category": "numeral",
+  "phonetics": {
+    "romanized": "nau",
+    "ipa": "/nʌu/",
+    "nepaliName": "नौ",
+    "audioPrompt": "नौ",
+    "articulationTip": "Say 'now' — rhymes with the English word 'cow'."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "strokes": [
+    {
+      "id": "num-9-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Head Loop & Curly Tail (सानो घेरा र घुमाउरो पुच्छर)",
+      "nepaliInstruction": "माथि सानो घेरा बनाउनुहोस्, अनि तल दायाँतिर झर्दै पुच्छर घुमाउनुहोस्।",
+      "englishInstruction": "Make the small loop at the top, then slide down to the right and curl the tail.",
+      "svgPath": "M 114 116 C 129 128, 164 128, 174 104 C 180 86, 164 74, 140 74 C 116 74, 100 90, 102 112 C 104 140, 144 165, 169 190 C 189 210, 194 240, 169 258",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 114,
+          "y": 116,
+          "label": "Curve Start"
+        },
+        {
+          "index": 1,
+          "x": 163.6,
+          "y": 117,
+          "label": "Upper Right Arc 1"
+        },
+        {
+          "index": 2,
+          "x": 158.1,
+          "y": 76.7,
+          "label": "Upper Right Arc 2"
+        },
+        {
+          "index": 3,
+          "x": 109.4,
+          "y": 86.8,
+          "label": "Upper Left Arc 1"
+        },
+        {
+          "index": 4,
+          "x": 111.8,
+          "y": 135.3,
+          "label": "Upper Left Arc 2"
+        },
+        {
+          "index": 5,
+          "x": 149.2,
+          "y": 172,
+          "label": "Center Point"
+        },
+        {
+          "index": 6,
+          "x": 183.1,
+          "y": 211.5,
+          "label": "Lower Right Arc"
+        },
+        {
+          "index": 7,
+          "x": 169,
+          "y": 258,
+          "label": "Curve Tip"
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "नौ",
+      "romanized": "nau",
+      "meaning": "nine",
+      "emoji": "🍎🍎🍎🍎🍎🍎🍎🍎🍎"
+    }
+  ]
+}

@@ -11,7 +11,6 @@
     "category",
     "phonetics",
     "viewBox",
-    "shirorekha",
     "strokes",
     "vocabulary"
   ],
@@ -35,8 +34,13 @@
     },
     "category": {
       "type": "string",
-      "enum": ["swor", "vyanjan", "samyukta"],
-      "description": "Devanagari character class: 'swor' (vowel), 'vyanjan' (consonant), or 'samyukta' (conjunct)."
+      "enum": [
+        "swor",
+        "vyanjan",
+        "samyukta",
+        "numeral"
+      ],
+      "description": "Devanagari character class: 'swor' (vowel), 'vyanjan' (consonant), 'samyukta' (conjunct), or 'numeral' (अङ्क ० – ९, written without a Shirorekha)."
     },
     "varga": {
       "type": "string",
@@ -44,7 +48,13 @@
     },
     "phonetics": {
       "type": "object",
-      "required": ["romanized", "ipa", "nepaliName", "audioPrompt", "articulationTip"],
+      "required": [
+        "romanized",
+        "ipa",
+        "nepaliName",
+        "audioPrompt",
+        "articulationTip"
+      ],
       "additionalProperties": false,
       "properties": {
         "romanized": {
@@ -71,7 +81,12 @@
     },
     "viewBox": {
       "type": "object",
-      "required": ["width", "height", "shirorekhaY", "baselineY"],
+      "required": [
+        "width",
+        "height",
+        "shirorekhaY",
+        "baselineY"
+      ],
       "additionalProperties": false,
       "properties": {
         "width": {
@@ -100,7 +115,12 @@
     },
     "shirorekha": {
       "type": "object",
-      "required": ["enforcedLast", "startX", "endX", "y"],
+      "required": [
+        "enforcedLast",
+        "startX",
+        "endX",
+        "y"
+      ],
       "additionalProperties": false,
       "properties": {
         "enforcedLast": {
@@ -116,18 +136,31 @@
           "type": "number",
           "description": "Right-most X of the headline (end of the last segment when split)."
         },
-        "y": { "type": "number" },
+        "y": {
+          "type": "number"
+        },
         "segments": {
           "type": "array",
           "minItems": 2,
           "description": "Optional split/partial headline spans, ordered left to right. Used by letters whose upper-left element is detached from the headline (e.g. ध) so the glyph is not confused with another letter (ध vs घ). Letters whose headline simply stops short (e.g. थ, भ) need no segments: set startX/endX to the partial span. Omit for a single continuous bar from startX to endX. The first segment must start at startX, the last must end at endX, and the Shirorekha stroke's svgPath must contain one subpath (M ...) per segment.",
           "items": {
             "type": "object",
-            "required": ["startX", "endX"],
+            "required": [
+              "startX",
+              "endX"
+            ],
             "additionalProperties": false,
             "properties": {
-              "startX": { "type": "number", "minimum": 0, "maximum": 300 },
-              "endX": { "type": "number", "minimum": 0, "maximum": 300 }
+              "startX": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 300
+              },
+              "endX": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 300
+              }
             }
           }
         }
@@ -135,7 +168,7 @@
     },
     "strokes": {
       "type": "array",
-      "minItems": 2,
+      "minItems": 1,
       "description": "Ordered sequence of vector strokes required to construct the glyph.",
       "items": {
         "type": "object",
@@ -164,7 +197,13 @@
           },
           "type": {
             "type": "string",
-            "enum": ["loop", "curve", "diagonal", "stem", "shirorekha"],
+            "enum": [
+              "loop",
+              "curve",
+              "diagonal",
+              "stem",
+              "shirorekha"
+            ],
             "description": "Topological stroke classification: body/loop components first, vertical stem (Khadi Pai) second, Shirorekha strictly last."
           },
           "label": {
@@ -208,7 +247,11 @@
             "description": "Ordered sequence of checkpoints (x, y) the pointer must traverse in order.",
             "items": {
               "type": "object",
-              "required": ["index", "x", "y"],
+              "required": [
+                "index",
+                "x",
+                "y"
+              ],
               "additionalProperties": false,
               "properties": {
                 "index": {
@@ -239,16 +282,75 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["word", "romanized", "meaning", "emoji"],
+        "required": [
+          "word",
+          "romanized",
+          "meaning",
+          "emoji"
+        ],
         "additionalProperties": false,
         "properties": {
-          "word": { "type": "string" },
-          "romanized": { "type": "string" },
-          "meaning": { "type": "string" },
-          "emoji": { "type": "string" }
+          "word": {
+            "type": "string"
+          },
+          "romanized": {
+            "type": "string"
+          },
+          "meaning": {
+            "type": "string"
+          },
+          "emoji": {
+            "type": "string"
+          }
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "category": {
+            "const": "numeral"
+          }
+        },
+        "required": [
+          "category"
+        ]
+      },
+      "then": {
+        "description": "Numerals (अङ्क) are written without a Shirorekha: no headline block and no headline stroke; a single stroke is allowed.",
+        "properties": {
+          "shirorekha": false,
+          "strokes": {
+            "items": {
+              "properties": {
+                "type": {
+                  "not": {
+                    "const": "shirorekha"
+                  },
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        }
+      },
+      "else": {
+        "description": "Letters must define their Shirorekha headline and have at least two strokes.",
+        "required": [
+          "shirorekha"
+        ],
+        "properties": {
+          "shirorekha": true,
+          "strokes": {
+            "minItems": 2,
+            "type": "array"
+          }
+        }
+      }
+    }
+  ]
 }
-

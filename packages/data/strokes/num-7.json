@@ -1,0 +1,108 @@
+{
+  "id": "num-7",
+  "character": "७",
+  "unicode": "U+096D",
+  "category": "numeral",
+  "phonetics": {
+    "romanized": "saat",
+    "ipa": "/sat/",
+    "nepaliName": "सात",
+    "audioPrompt": "सात",
+    "articulationTip": "Say 'saat' with a long 'aa' and a soft, dental 't'."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "strokes": [
+    {
+      "id": "num-7-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Big Swing & Inner Loop (ठूलो घुमाउरो र भित्री घेरा)",
+      "nepaliInstruction": "माथि बायाँबाट तल झर्दै दायाँतिर माथि घुमाउनुहोस्, अनि भित्रतिर सानो घेरा बनाउनुहोस्।",
+      "englishInstruction": "Slide down from the top left, swing up the right side, then curl into a small loop inside.",
+      "svgPath": "M 72 80 C 86 160, 114 232, 169 232 C 209 232, 230 200, 230 150 C 230 115, 214 94, 192 94 C 172 94, 159 112, 161 135 C 164 160, 184 180, 214 170",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 72,
+          "y": 80,
+          "label": "Curve Start"
+        },
+        {
+          "index": 1,
+          "x": 83.3,
+          "y": 130.5,
+          "label": "Upper Left Arc"
+        },
+        {
+          "index": 2,
+          "x": 101.4,
+          "y": 178.9,
+          "label": "Lower Left Arc 1"
+        },
+        {
+          "index": 3,
+          "x": 132.7,
+          "y": 219.6,
+          "label": "Lower Left Arc 2"
+        },
+        {
+          "index": 4,
+          "x": 181.6,
+          "y": 230.8,
+          "label": "Lower Right Arc 1"
+        },
+        {
+          "index": 5,
+          "x": 220.4,
+          "y": 199.7,
+          "label": "Lower Right Arc 2"
+        },
+        {
+          "index": 6,
+          "x": 230,
+          "y": 149.2,
+          "label": "Right Arc 1"
+        },
+        {
+          "index": 7,
+          "x": 213,
+          "y": 101.9,
+          "label": "Upper Right Arc 1"
+        },
+        {
+          "index": 8,
+          "x": 167.5,
+          "y": 106.9,
+          "label": "Upper Right Arc 2"
+        },
+        {
+          "index": 9,
+          "x": 168.4,
+          "y": 155.9,
+          "label": "Right Arc 2"
+        },
+        {
+          "index": 10,
+          "x": 214,
+          "y": 170,
+          "label": "Curve Tip"
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "सात",
+      "romanized": "saat",
+      "meaning": "seven",
+      "emoji": "🍎🍎🍎🍎🍎🍎🍎"
+    }
+  ]
+}

@@ -1,4 +1,9 @@
-import type { LetterStrokeDataset, SentenceRole, StrokeDefinition } from '@akshara/data';
+import type {
+  LetterStrokeDataset,
+  NumberEntry,
+  SentenceRole,
+  StrokeDefinition,
+} from '@akshara/data';
 import type { SentenceFeedback, TracingHint, WordFeedback } from '@akshara/core';
 
 /**
@@ -58,6 +63,23 @@ export function tracingHintText(hint: TracingHint, ctx: TracingHintContext): Bil
       return {
         ne: `छोटो बाटो नलिनुहोस् — थोप्ला ${hint.backToDot} मा फर्केर घुमाउरो धर्को पछ्याउनुहोस्।`,
         en: `Don't cut the corner — go back to dot ${hint.backToDot} and follow the curved line to dot ${hint.nextDot}.`,
+      };
+    case 'wrong-direction': {
+      const clockwise = hint.expected === 'clockwise';
+      const arrow = clockwise ? '↻' : '↺';
+      return {
+        ne: `उल्टो दिशामा घुम्यो! औंला उठाएर थोप्ला १ बाट फेरि सुरु गर्नुहोस् — ${
+          clockwise ? 'घडीको सुई घुम्ने दिशामा' : 'घडीको सुईको उल्टो दिशामा'
+        } घुमाउनुहोस् ${arrow}`,
+        en: `Wrong way round! Lift your finger and start again at dot 1, going ${
+          clockwise ? 'clockwise' : 'anticlockwise'
+        } ${arrow}`,
+      };
+    }
+    case 'lift-over-gap':
+      return {
+        ne: 'शिरोरेखाको बीचमा खाली ठाउँ छ! त्यहाँ औंला उठाउनुहोस्, अनि अर्को भागबाट फेरि सुरु गर्नुहोस्।',
+        en: 'The headline has a gap! Lift your finger over it, then carry on from the other side.',
       };
     case 'shirorekha-before-body':
       return {
@@ -138,4 +160,32 @@ const SENTENCE_ROLE_LABELS: Record<SentenceRole, Bilingual & { emoji: string }> 
 /** Kid-friendly label for a sentence token's grammatical role. */
 export function sentenceRoleLabel(role: SentenceRole): Bilingual & { emoji: string } {
   return SENTENCE_ROLE_LABELS[role];
+}
+
+/** Shown between the digits of a multi-digit number (e.g. after ४ in ४२). */
+export function digitDoneText(nextDigit: string): Bilingual {
+  return {
+    ne: `राम्रो! अब ${nextDigit} लेख्नुहोस्।`,
+    en: `Great! Now write ${nextDigit}.`,
+  };
+}
+
+/** Celebration once every digit of a number has been traced. */
+export function numberCompleteText(entry: NumberEntry): Bilingual {
+  return {
+    ne: `स्याबास! तपाईंले ${entry.devanagari} (${entry.nepaliName}) लेख्नुभयो!`,
+    en: `Well done! You wrote ${entry.value} — ${entry.nepaliName}.`,
+  };
+}
+
+/** Place value in words: 42 → "४ दश + २ एकाइ" / "4 tens + 2 ones". */
+export function placeValueText(value: number, toDevanagari: (n: number) => string): Bilingual {
+  if (value === 100) return { ne: '१ सय', en: '1 hundred' };
+  const tens = Math.floor(value / 10);
+  const ones = value % 10;
+  const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+  return {
+    ne: `${toDevanagari(tens)} दश + ${toDevanagari(ones)} एकाइ`,
+    en: `${plural(tens, 'ten')} + ${plural(ones, 'one')}`,
+  };
 }

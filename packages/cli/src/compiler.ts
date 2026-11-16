@@ -26,7 +26,7 @@ export interface GlyphSpec {
   id: string;
   character: string;
   unicode: string;
-  category: 'swor' | 'vyanjan' | 'samyukta';
+  category: 'swor' | 'vyanjan' | 'samyukta' | 'numeral';
   strokes: StrokeSpec[];
   viewBox?: { width: 300; height: 300; shirorekhaY: number; baselineY: number };
   shirorekha?: {
@@ -50,15 +50,24 @@ export interface CompileOptions {
 
 const round = (n: number) => Math.round(n * 10) / 10;
 
-/** Signed shoelace area of a polyline closed back to its start (screen coordinates, y down). */
-function signedArea(pts: Point[]): number {
-  let sum = 0;
-  for (let i = 0; i < pts.length; i++) {
-    const a = pts[i]!;
-    const b = pts[(i + 1) % pts.length]!;
-    sum += a.x * b.y - b.x * a.y;
+/** Σ Δθ along sampled points (radians, y-down: positive = clockwise on screen). */
+function turningAngle(pts: Point[]): number {
+  let total = 0;
+  let prev: number | null = null;
+  for (let i = 1; i < pts.length; i++) {
+    const dx = pts[i]!.x - pts[i - 1]!.x;
+    const dy = pts[i]!.y - pts[i - 1]!.y;
+    if (dx === 0 && dy === 0) continue;
+    const heading = Math.atan2(dy, dx);
+    if (prev !== null) {
+      let d = heading - prev;
+      while (d > Math.PI) d -= 2 * Math.PI;
+      while (d <= -Math.PI) d += 2 * Math.PI;
+      if (Math.abs(d) < (150 * Math.PI) / 180) total += d; // skip cusps / retraces
+    }
+    prev = heading;
   }
-  return sum / 2;
+  return total;
 }
 
 /** Infer a direction hint from stroke type and sampled geometry. */
@@ -71,8 +80,10 @@ export function inferDirectionHint(type: StrokeType, pts: Point[]): DirectionHin
     case 'stem':
       return 'top-to-bottom';
     case 'loop':
-      // In y-down screen space a negative shoelace area is a counter-clockwise visual winding.
-      return signedArea(pts) <= 0 ? 'counter-clockwise-loop' : 'clockwise-loop';
+      // Summed turning angle, not shoelace area: an open loop (a stem that curls at its foot,
+      // like ग) can enclose a "negative" area while still being drawn clockwise. In y-down
+      // screen space a positive total turn is a clockwise visual winding.
+      return turningAngle(pts) > 0 ? 'clockwise-loop' : 'counter-clockwise-loop';
     case 'diagonal':
       return last.x >= first.x ? 'diagonal-down-right' : 'diagonal-down-left';
     case 'curve':
@@ -203,7 +214,15 @@ export function compileGlyph(
   options: CompileOptions = {}
 ): Record<string, unknown> {
   const spacing = options.spacing ?? 45;
-  if (spec.strokes.length < 2) throw new Error(`Glyph '${spec.id}' needs at least 2 strokes.`);
+  const isNumeral = spec.category === 'numeral';
+  // Letters end with their Shirorekha (so ≥ 2 strokes); headline-free numerals may be one stroke.
+  const minStrokes = isNumeral ? 1 : 2;
+  if (spec.strokes.length < minStrokes) {
+    throw new Error(`Glyph '${spec.id}' needs at least ${minStrokes} strokes.`);
+  }
+  if (isNumeral && spec.strokes.some((s) => s.type === 'shirorekha')) {
+    throw new Error(`Glyph '${spec.id}': numerals are written without a shirorekha stroke.`);
+  }
 
   const lastIdx = spec.strokes.length - 1;
   spec.strokes.forEach((s, i) => {

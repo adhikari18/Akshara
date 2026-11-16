@@ -5,10 +5,11 @@ import { TracingCanvas } from '@/components/TracingCanvas';
 import { MatraBuilder } from '@/components/MatraBuilder';
 import { WordSentenceBuilder } from '@/components/WordSentenceBuilder';
 import { VarnamalaGallery } from '@/components/VarnamalaGallery';
+import { NumberStudio } from '@/components/NumberStudio';
 import { VoiceSelector } from '@/components/VoiceSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
-type StudioTab = 'tracing' | 'matra' | 'sentences' | 'varnamala';
+type StudioTab = 'tracing' | 'matra' | 'sentences' | 'varnamala' | 'numbers';
 
 interface PathStep {
   id: StudioTab;
@@ -68,6 +69,18 @@ const LEARNING_PATH: PathStep[] = [
         'border-pink-400 bg-pink-100 ring-pink-300/50 dark:bg-pink-400/15 dark:border-pink-400/70',
     },
   },
+  {
+    id: 'numbers',
+    emoji: '🔢',
+    nepali: 'अङ्क',
+    english: 'Numbers',
+    hint: 'Trace ० to १००',
+    color: {
+      badge: 'bg-violet-500',
+      active:
+        'border-violet-400 bg-violet-100 ring-violet-300/50 dark:bg-violet-400/15 dark:border-violet-400/70',
+    },
+  },
 ];
 
 export default function AksharaStudioPage() {
@@ -112,7 +125,7 @@ export default function AksharaStudioPage() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-5 space-y-5">
         {/* Learning path — 4 big, colourful steps */}
         <nav aria-label="Learning activities">
-          <div role="tablist" className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div role="tablist" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
             {LEARNING_PATH.map((step, idx) => {
               const active = activeTab === step.id;
               return (
@@ -161,6 +174,7 @@ export default function AksharaStudioPage() {
           {activeTab === 'matra' && <MatraBuilder />}
           {activeTab === 'sentences' && <WordSentenceBuilder />}
           {activeTab === 'varnamala' && <VarnamalaGallery onTrace={handleOpenInPati} />}
+          {activeTab === 'numbers' && <NumberStudio />}
         </section>
       </main>
 

@@ -32,7 +32,7 @@
       "nepaliInstruction": "माथिबाट तल झरेर बायाँतिर सानो गोलो गाँठो बनाउनुहोस्।",
       "englishInstruction": "Drop down from the headline and curl counter-clockwise into the left terminal loop.",
       "svgPath": "M 120 75 L 120 170 C 120 205, 80 205, 80 175 C 80 150, 120 155, 130 165",
-      "directionHint": "counter-clockwise-loop",
+      "directionHint": "clockwise-loop",
       "toleranceRadius": 28,
       "waypoints": [
         { "index": 0, "x": 120, "y": 75, "label": "Left Hanging Start" },

@@ -121,6 +121,8 @@ export function MatraBuilder() {
                     type="button"
                     draggable
                     aria-pressed={active}
+                    data-testid="matra-card"
+                    data-matra-id={m.id}
                     onDragStart={(e) => handleDragStart(e, m)}
                     onClick={() => handleApplyMatra(m.id)}
                     className={`tile p-2.5 flex flex-col items-center text-center cursor-grab active:cursor-grabbing ${
@@ -144,6 +146,10 @@ export function MatraBuilder() {
         {/* Step 3: result "magic box" (drop target) */}
         <div className="lg:col-span-5">
           <div
+            role="region"
+            aria-label="Matra drop zone"
+            data-testid="matra-anvil"
+            data-drag-over={isDragOver ? 'true' : 'false'}
             onDragOver={(e) => {
               e.preventDefault();
               setIsDragOver(true);

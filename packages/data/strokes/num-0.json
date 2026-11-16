@@ -1,0 +1,84 @@
+{
+  "id": "num-0",
+  "character": "०",
+  "unicode": "U+0966",
+  "category": "numeral",
+  "phonetics": {
+    "romanized": "shunya",
+    "ipa": "/sunjʌ/",
+    "nepaliName": "शून्य",
+    "audioPrompt": "शून्य",
+    "articulationTip": "Say 'shoon-ya': a long 'oo', then a soft 'ya'. Children also say सुन्ना (sunna)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "strokes": [
+    {
+      "id": "num-0-stroke-1",
+      "order": 1,
+      "type": "loop",
+      "label": "Round Zero (गोलो शून्य)",
+      "nepaliInstruction": "माथिको थोप्लाबाट सुरु गरी बायाँतिर घुमाउँदै गोलो पूरा गर्नुहोस्।",
+      "englishInstruction": "Start at the top dot and go round to the left until the circle closes.",
+      "svgPath": "M 150 108 C 122 108, 102 128, 102 156 C 102 184, 122 204, 150 204 C 178 204, 198 184, 198 156 C 198 128, 178 108, 150 108",
+      "directionHint": "counter-clockwise-loop",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 150,
+          "y": 108,
+          "label": "Loop Start"
+        },
+        {
+          "index": 1,
+          "x": 107.9,
+          "y": 131.6,
+          "label": "Upper Left Arc"
+        },
+        {
+          "index": 2,
+          "x": 107.9,
+          "y": 180.4,
+          "label": "Lower Left Arc"
+        },
+        {
+          "index": 3,
+          "x": 150,
+          "y": 204,
+          "label": "Lower Arc"
+        },
+        {
+          "index": 4,
+          "x": 192.1,
+          "y": 180.4,
+          "label": "Lower Right Arc"
+        },
+        {
+          "index": 5,
+          "x": 192.1,
+          "y": 131.6,
+          "label": "Upper Right Arc"
+        },
+        {
+          "index": 6,
+          "x": 150,
+          "y": 108,
+          "label": "Loop Closure"
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "शून्य",
+      "romanized": "shunya",
+      "meaning": "zero",
+      "emoji": "⭕"
+    }
+  ]
+}

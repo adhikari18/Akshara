@@ -1,9 +1,11 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import type { LetterStrokeDataset, StrokeDefinition } from '@akshara/data';
 import {
+  CHALK_BASE_WIDTH,
   TracingEvaluator,
+  chalkWidthFor,
   type LearnerToleranceMode,
   type Point2D,
   type StrokeStepEvaluation,
@@ -84,6 +86,8 @@ function meaningfulDigest(
     step ? JSON.stringify(step.hint) : '',
     step?.isOffTrack ?? false,
     step?.cornerCut ?? false,
+    step?.wrongDirection ?? false,
+    step?.gapBridged ?? false,
     step?.topologicalViolation ?? '',
     progress.currentStrokeIndex,
     progress.unlockedWaypointsInCurrentStroke,
@@ -111,6 +115,8 @@ export interface TracingSession {
   getScene: () => PatiScene;
   /** Subscribe to every scene mutation (fires per pointer sample; renderer coalesces to rAF). */
   subscribe: (listener: () => void) => () => void;
+  /** Ask the renderer to repaint (for overlays such as the demo that live outside the scene). */
+  requestRepaint: () => void;
   /** Last committed evaluator output (React state: updates only on meaningful changes). */
   lastEval: StrokeStepEvaluation | null;
   /** Last committed progress (React state: updates only on meaningful changes). */
@@ -123,7 +129,7 @@ export interface TracingSession {
   penMove: (point: Point2D) => void;
   /** Learner lifts the pen (ignored unless a gesture is in progress). */
   penUp: () => void;
-  /** Feed one sample directly, bypassing gesture tracking (used by the auto-demo). */
+  /** Feed one sample directly, bypassing gesture tracking. */
   feed: (point: Point2D) => StrokeStepEvaluation;
   /** Lift the chalk unconditionally: ends the evaluator gesture and clears the live trail. */
   endGesture: () => void;
@@ -160,7 +166,8 @@ function sprinkleDust(scene: PatiScene, at: Point2D): void {
       vx: (Math.random() - 0.5) * 0.6,
       vy: Math.random() * 0.8,
       alpha: 0.55,
-      radius: 1 + Math.random() * 1.5,
+      // Harder pressure / a flatter stylus sheds more chalk
+      radius: (1 + Math.random() * 1.5) * (chalkWidthFor(at) / CHALK_BASE_WIDTH),
     });
   }
   if (scene.dust.length > MAX_DUST) scene.dust.splice(0, scene.dust.length - MAX_DUST);
@@ -171,11 +178,33 @@ function sprinkleDust(scene: PatiScene, at: Point2D): void {
  * the chalk on the slate, pen state, and the feedback sounds. Knows nothing about canvases,
  * DOM events, or timers. Switching letter or level starts a fresh session.
  */
+export interface TracingSessionOptions {
+  /**
+   * Speak the glyph's name when it is completed (default true). The number studio turns this
+   * off for the last digit of a number so it can announce the whole number instead.
+   */
+  announceCompletion?: boolean;
+  /**
+   * Extra identity for the session: changing it starts a fresh session even for the same glyph
+   * (e.g. the two १s of ११ are separate tracing tasks).
+   */
+  resetKey?: string;
+  /** Called once when the whole glyph is completed (from the pointer event, not an effect). */
+  onLetterComplete?: (progress: TracingProgressSummary) => void;
+}
+
 export function useTracingSession(
   dataset: LetterStrokeDataset,
-  mode: LearnerToleranceMode
+  mode: LearnerToleranceMode,
+  { announceCompletion = true, resetKey = '', onLetterComplete }: TracingSessionOptions = {}
 ): TracingSession {
-  const key = `${dataset.id}:${mode}`;
+  const key = `${dataset.id}:${mode}:${resetKey}`;
+
+  // Latest completion callback, reachable from long-lived closures (e.g. a running demo).
+  const onLetterCompleteRef = useRef(onLetterComplete);
+  useLayoutEffect(() => {
+    onLetterCompleteRef.current = onLetterComplete;
+  });
   const [state, setState] = useState<SessionState>(() => createSession(key, dataset, mode));
 
   // New letter or level → new evaluator. Done during render (React's recommended pattern for
@@ -244,13 +273,21 @@ export function useTracingSession(
       if (step.warningOnset) {
         // Once per mistake (premature Shirorekha or a cut corner), not once per pointer sample
         playTopologicalWarningSound();
-      } else if (step.topologicalViolation || step.cornerCut) {
+      } else if (
+        step.topologicalViolation ||
+        step.cornerCut ||
+        step.wrongDirection ||
+        step.gapBridged
+      ) {
         // Same mistake still in progress — keep the hint on screen, but stay quiet
       } else if (step.letterCompleted) {
         scene.penDown = false;
         scene.trail = [];
         playStrokeSuccessSound(true);
-        speakNepaliPhonics(dataset.phonetics.audioPrompt, dataset.phonetics.romanized);
+        if (announceCompletion) {
+          speakNepaliPhonics(dataset.phonetics.audioPrompt, dataset.phonetics.romanized);
+        }
+        onLetterCompleteRef.current?.(progress);
       } else if (step.strokeCompleted) {
         scene.penDown = false;
         scene.trail = [];
@@ -262,7 +299,7 @@ export function useTracingSession(
       publish(step);
       return step;
     },
-    [evaluator, getScene, dataset, publish]
+    [evaluator, getScene, dataset, publish, announceCompletion]
   );
 
   const penDown = useCallback(
@@ -316,6 +353,7 @@ export function useTracingSession(
     evaluator,
     getScene,
     subscribe,
+    requestRepaint: notify,
     lastEval: session.lastEval,
     progress,
     currentStroke: progress.isLetterComplete

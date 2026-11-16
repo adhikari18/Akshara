@@ -1,7 +1,10 @@
 'use client';
 
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import { computeAdaptiveTolerance, type Point2D } from '@akshara/core';
+import { getShirorekhaSegments } from '@akshara/data';
+import { chalkWidthFor, computeAdaptiveTolerance, type Point2D } from '@akshara/core';
+import { buildStrokeGuide } from './strokeGuide';
+import type { DemoFrame } from './useAutoDemo';
 import { advanceDust, type TracingSession } from './useTracingSession';
 
 /**
@@ -15,20 +18,176 @@ const MAX_BACKING_PX = 2048;
 export interface PatiRenderOptions {
   showGhostGuide: boolean;
   showWaypoints: boolean;
+  /** Full-letter Stroke Order Guide: colour-coded strokes, numbered start badges, arrows. */
+  showStrokeGuide?: boolean;
+  /** Live "Show me" replay frame (teacher chalk), painted above everything else. */
+  demoFrame?: React.RefObject<DemoFrame | null>;
+}
+
+/** Teacher chalk used by the "Show me" replay. */
+const DEMO_CHALK = '#7dd3fc';
+const DEMO_CHALK_GLOW = 'rgba(125, 211, 252, 0.35)';
+
+/** Small arrowhead at (x, y) pointing along `angle`. */
+function drawArrowhead(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  angle: number,
+  size: number
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+  ctx.beginPath();
+  ctx.moveTo(size, 0);
+  ctx.lineTo(-size * 0.7, size * 0.65);
+  ctx.lineTo(-size * 0.3, 0);
+  ctx.lineTo(-size * 0.7, -size * 0.65);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+/**
+ * Stroke Order Guide overlay: every stroke in its own colour with tangent arrows showing the
+ * direction of travel and a numbered badge (१, २, ३ …) at its start. Strokes already drawn by
+ * the learner are dimmed so the next one stands out.
+ */
+function drawStrokeGuide(
+  ctx: CanvasRenderingContext2D,
+  dataset: TracingSession['dataset'],
+  completedCount: number
+) {
+  const guide = buildStrokeGuide(dataset);
+  for (const entry of guide) {
+    const done = entry.index < completedCount;
+    ctx.save();
+    ctx.globalAlpha = done ? 0.28 : 0.95;
+    ctx.strokeStyle = entry.color.hex;
+    ctx.fillStyle = entry.color.hex;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 3;
+    for (const line of entry.polylines) {
+      ctx.beginPath();
+      ctx.moveTo(line[0]!.x, line[0]!.y);
+      for (let i = 1; i < line.length; i++) ctx.lineTo(line[i]!.x, line[i]!.y);
+      ctx.stroke();
+    }
+    for (const arrow of entry.arrows) drawArrowhead(ctx, arrow.x, arrow.y, arrow.angle, 5);
+    ctx.restore();
+  }
+  // Badges last, so they sit above every line
+  for (const entry of guide) {
+    const done = entry.index < completedCount;
+    ctx.save();
+    ctx.globalAlpha = done ? 0.45 : 1;
+    const bx = entry.start.x - 13;
+    const by = entry.start.y - 13;
+    ctx.beginPath();
+    ctx.arc(bx, by, 9, 0, Math.PI * 2);
+    ctx.fillStyle = entry.color.hex;
+    ctx.fill();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(15, 23, 42, 0.9)';
+    ctx.stroke();
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(entry.badge, bx, by + 0.5);
+    ctx.restore();
+  }
+}
+
+/** "Show me" replay: strokes already shown in full, the stroke being drawn, and the chalk tip. */
+function drawDemo(
+  ctx: CanvasRenderingContext2D,
+  frame: DemoFrame,
+  dataset: TracingSession['dataset']
+) {
+  const guide = buildStrokeGuide(dataset);
+  ctx.save();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  const strokePolyline = (line: Point2D[], width: number, color: string) => {
+    if (line.length < 2) return;
+    ctx.beginPath();
+    ctx.moveTo(line[0]!.x, line[0]!.y);
+    for (let i = 1; i < line.length; i++) ctx.lineTo(line[i]!.x, line[i]!.y);
+    ctx.lineWidth = width;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+  };
+  for (const idx of frame.replayed) {
+    for (const line of guide[idx]?.polylines ?? []) strokePolyline(line, 11, DEMO_CHALK);
+  }
+  for (const line of frame.drawn) {
+    strokePolyline(line, 15, DEMO_CHALK_GLOW);
+    strokePolyline(line, 11, DEMO_CHALK);
+  }
+  if (frame.pen) {
+    // Chalk tip: a bright dot with a soft halo, like a piece of chalk pressed to the slate
+    ctx.beginPath();
+    ctx.arc(frame.pen.x, frame.pen.y, 12, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(frame.pen.x, frame.pen.y, 6, 0, Math.PI * 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = DEMO_CHALK;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/** The parts of a PointerEvent the slate reads. */
+export interface PointerSampleSource {
+  clientX: number;
+  clientY: number;
+  pressure?: number;
+  tiltX?: number;
+  tiltY?: number;
+  pointerType?: string;
+}
+
+/**
+ * Map a pointer event onto the 300×300 logical slate, carrying stylus pressure and tilt so the
+ * chalk width can follow them. Tilt is only meaningful for pens; mice and fingers report 0.
+ */
+export function pointerEventToLogical(
+  e: PointerSampleSource,
+  rect: Pick<DOMRect, 'left' | 'top' | 'width' | 'height'>,
+  timestamp: number
+): Point2D {
+  const point: Point2D = {
+    x: Math.max(0, Math.min(LOGICAL_SIZE, ((e.clientX - rect.left) * LOGICAL_SIZE) / rect.width)),
+    y: Math.max(0, Math.min(LOGICAL_SIZE, ((e.clientY - rect.top) * LOGICAL_SIZE) / rect.height)),
+    timestamp,
+  };
+  if (e.pressure !== undefined && e.pressure > 0) point.pressure = e.pressure;
+  if (e.pointerType === 'pen') {
+    if (e.tiltX) point.tiltX = e.tiltX;
+    if (e.tiltY) point.tiltY = e.tiltY;
+  }
+  return point;
 }
 
 export interface PatiRenderer {
   /** Attach to the slate's <canvas>. */
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
-  /** Map a pointer event's client coordinates into the 300×300 logical space. */
-  toLogicalPoint: (clientX: number, clientY: number) => Point2D;
+  /** Map a pointer event into the 300×300 logical space (with pressure & tilt). */
+  toLogicalPoint: (e: PointerSampleSource) => Point2D;
 }
 
 /** Paint the whole Pati slate for the session's current state (stateless; safe to call anytime). */
 function drawPati(
   canvas: HTMLCanvasElement,
   session: TracingSession,
-  { showGhostGuide, showWaypoints }: PatiRenderOptions
+  { showGhostGuide, showWaypoints, showStrokeGuide = false, demoFrame }: PatiRenderOptions
 ): void {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -67,15 +226,44 @@ function drawPati(
     ctx.stroke();
   }
 
-  // 2. Canonical Shirorekha headline & Baseline guide rails
+  // 2. Canonical Shirorekha headline & Baseline guide rails. Numerals have no headline, so
+  //    they only get the baseline.
+  const hasHeadline = Boolean(dataset.shirorekha);
   ctx.save();
   ctx.setLineDash([5, 5]);
-  ctx.strokeStyle = 'rgba(251, 191, 36, 0.28)';
   ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(25, dataset.viewBox.shirorekhaY);
-  ctx.lineTo(275, dataset.viewBox.shirorekhaY);
-  ctx.stroke();
+  if (hasHeadline) {
+    // The guide rail follows the letter's real headline: partial for थ/भ, split for ध.
+    const y = dataset.viewBox.shirorekhaY;
+    const spans = getShirorekhaSegments(dataset);
+    ctx.strokeStyle = 'rgba(251, 191, 36, 0.28)';
+    for (const span of spans) {
+      ctx.beginPath();
+      ctx.moveTo(span.startX, y);
+      ctx.lineTo(span.endX, y);
+      ctx.stroke();
+    }
+    // Over each gap: a dotted hop with pen-lift rings at both span ends.
+    for (let i = 0; i + 1 < spans.length; i++) {
+      const from = spans[i]!.endX;
+      const to = spans[i + 1]!.startX;
+      const radius = (to - from) / 2;
+      ctx.save();
+      ctx.setLineDash([2, 3]);
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(from + radius, y, radius, Math.PI, 0);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      for (const x of [from, to]) {
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
 
   ctx.strokeStyle = 'rgba(148, 163, 184, 0.2)';
   ctx.beginPath();
@@ -84,10 +272,23 @@ function drawPati(
   ctx.stroke();
   ctx.restore();
 
-  // Label Shirorekha line
-  ctx.fillStyle = 'rgba(251, 191, 36, 0.55)';
-  ctx.font = '10px sans-serif';
-  ctx.fillText('शिरोरेखा (Shirorekha — Draw Last)', 30, dataset.viewBox.shirorekhaY - 8);
+  if (hasHeadline) {
+    // Label sits over the bar itself (short bars like थ/भ live on the right, so align there)
+    const spans = getShirorekhaSegments(dataset);
+    const first = spans[0]!;
+    const last = spans[spans.length - 1]!;
+    ctx.save();
+    ctx.fillStyle = 'rgba(251, 191, 36, 0.55)';
+    ctx.font = '10px sans-serif';
+    const onRight = first.startX > LOGICAL_SIZE / 2;
+    ctx.textAlign = onRight ? 'right' : 'left';
+    ctx.fillText(
+      'शिरोरेखा (Shirorekha — Draw Last)',
+      onRight ? last.endX : first.startX,
+      dataset.viewBox.shirorekhaY - 8
+    );
+    ctx.restore();
+  }
 
   // 3. Ghost guides for all remaining strokes
   if (showGhostGuide) {
@@ -129,24 +330,50 @@ function drawPati(
     ctx.restore();
   });
 
-  // 5. Active learner chalk trail
+  // 4b. Full-letter Stroke Order Guide (toggle): colours, arrows, numbered start badges
+  if (showStrokeGuide) drawStrokeGuide(ctx, dataset, progress.completedStrokeIds.length);
+
+  // 5. Active learner chalk trail — width follows stylus pressure & tilt, segment by segment
   const { trail } = scene;
   if (trail.length > 1) {
+    const color = lastEval?.topologicalViolation
+      ? '#f87171'
+      : lastEval?.isOffTrack ||
+          lastEval?.cornerCut ||
+          lastEval?.wrongDirection ||
+          lastEval?.gapBridged
+        ? '#fb923c'
+        : '#fef08a';
     ctx.save();
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    // Soft chalk glow: one translucent pass under the whole trail (shadows per segment are slow)
     ctx.beginPath();
     ctx.moveTo(trail[0].x, trail[0].y);
     for (let i = 1; i < trail.length; i++) ctx.lineTo(trail[i].x, trail[i].y);
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.lineWidth = 14;
-    ctx.strokeStyle = lastEval?.topologicalViolation
-      ? '#f87171'
-      : lastEval?.isOffTrack || lastEval?.cornerCut
-        ? '#fb923c'
-        : '#fef08a';
-    ctx.shadowColor = 'rgba(254, 240, 138, 0.45)';
-    ctx.shadowBlur = 6;
+    ctx.lineWidth = chalkWidthFor(trail[trail.length - 1]) + 6;
+    ctx.strokeStyle = 'rgba(254, 240, 138, 0.18)';
     ctx.stroke();
+    // Body: consecutive segments of (nearly) equal width are batched into one path
+    ctx.strokeStyle = color;
+    let runStart = 0;
+    let runWidth = Math.round(chalkWidthFor(trail[0]));
+    const flush = (end: number) => {
+      ctx.beginPath();
+      ctx.moveTo(trail[runStart].x, trail[runStart].y);
+      for (let i = runStart + 1; i <= end; i++) ctx.lineTo(trail[i].x, trail[i].y);
+      ctx.lineWidth = runWidth;
+      ctx.stroke();
+    };
+    for (let i = 1; i < trail.length; i++) {
+      const w = Math.round(chalkWidthFor(trail[i]));
+      if (w !== runWidth) {
+        flush(i);
+        runStart = i;
+        runWidth = w;
+      }
+    }
+    flush(trail.length - 1);
     ctx.restore();
   }
 
@@ -205,6 +432,10 @@ function drawPati(
       ctx.restore();
     });
   }
+
+  // 8. "Show me" replay — the teacher's chalk, above everything the learner sees
+  const frame = demoFrame?.current;
+  if (frame) drawDemo(ctx, frame, dataset);
 }
 
 const requestFrame: (cb: (now: number) => void) => number =
@@ -265,9 +496,16 @@ export function usePatiRenderer(session: TracingSession, options: PatiRenderOpti
   const { subscribe } = session;
   useEffect(() => subscribe(schedule), [subscribe, schedule]);
 
+  // Cancel any pending frame on unmount — and forget it. Leaving the cancelled id in
+  // `frameRef` would make `schedule()` think a frame is still pending and never paint again
+  // (React StrictMode's mount → unmount → remount in development triggers exactly that).
   useEffect(
     () => () => {
-      if (frameRef.current !== null) cancelFrame(frameRef.current);
+      if (frameRef.current !== null) {
+        cancelFrame(frameRef.current);
+        frameRef.current = null;
+      }
+      lastTickRef.current = 0;
     },
     []
   );
@@ -317,14 +555,11 @@ export function usePatiRenderer(session: TracingSession, options: PatiRenderOpti
     };
   }, [paint]);
 
-  const toLogicalPoint = useCallback((clientX: number, clientY: number): Point2D => {
-    const rect = canvasRef.current!.getBoundingClientRect();
-    return {
-      x: Math.max(0, Math.min(LOGICAL_SIZE, ((clientX - rect.left) * LOGICAL_SIZE) / rect.width)),
-      y: Math.max(0, Math.min(LOGICAL_SIZE, ((clientY - rect.top) * LOGICAL_SIZE) / rect.height)),
-      timestamp: performance.now(),
-    };
-  }, []);
+  const toLogicalPoint = useCallback(
+    (e: PointerSampleSource): Point2D =>
+      pointerEventToLogical(e, canvasRef.current!.getBoundingClientRect(), performance.now()),
+    []
+  );
 
   return { canvasRef, toLogicalPoint };
 }

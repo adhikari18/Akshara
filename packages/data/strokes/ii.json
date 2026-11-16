@@ -50,7 +50,7 @@
       "nepaliInstruction": "तल्लो भागमा गाँठो बनाएर दायाँतिर तल पुच्छर झार्नुहोस्।",
       "englishInstruction": "Form the small counter-clockwise bottom knot and sweep the tail down-right.",
       "svgPath": "M 135 202 C 98 202, 96 174, 128 178 C 152 182, 168 214, 188 242",
-      "directionHint": "counter-clockwise-loop",
+      "directionHint": "clockwise-loop",
       "toleranceRadius": 28,
       "waypoints": [
         { "index": 0, "x": 135, "y": 202, "label": "Knot Entry" },

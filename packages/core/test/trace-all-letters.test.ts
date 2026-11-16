@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { STROKE_LIST, type StrokeDefinition } from '@akshara/data';
+import { NUMERAL_LIST, STROKE_LIST, type StrokeDefinition } from '@akshara/data';
 import {
   TracingEvaluator,
   buildStrokeReferencePath,
   pointToSegmentDistance,
   sampleStrokePath,
+  sampleStrokeSubpaths,
   type LearnerToleranceMode,
 } from '../src/index.js';
 
@@ -15,26 +16,45 @@ const MODES: LearnerToleranceMode[] = ['child', 'standard', 'strict'];
  * complete every bundled letter — in every difficulty mode and at any pointer sample density —
  * without tripping the Shirorekha detector, going off-corridor, or being flagged for a shortcut.
  */
-describe('every bundled letter is traceable end-to-end along its curve', () => {
-  it.each(STROKE_LIST.map((d) => [`${d.id} (${d.character})`, d] as const))(
+/** All 49 letters plus the 10 Devanagari numerals (० – ९). */
+const ALL_GLYPHS = [...STROKE_LIST, ...NUMERAL_LIST];
+
+describe('every bundled letter and numeral is traceable end-to-end along its curve', () => {
+  it.each(ALL_GLYPHS.map((d) => [`${d.id} (${d.character})`, d] as const))(
     '%s',
     (_name, dataset) => {
       for (const mode of MODES) {
         for (const spacing of [2, 6, 12]) {
           const evaluator = new TracingEvaluator(dataset, { mode, smoothingAlpha: 1.0 });
           for (const stroke of dataset.strokes) {
-            for (const point of sampleStrokePath(stroke, spacing)) {
-              const step = evaluator.evaluatePointerSample(point);
-              const where = `${mode} @${spacing}px ${stroke.id}`;
-              expect(step.topologicalViolation, where).toBeNull();
-              expect(step.isOffTrack, where).toBe(false);
-              expect(step.cornerCut, where).toBe(false);
+            // A hand lifts between the subpaths of a split Shirorekha (ध) — never draws across
+            let done = false;
+            for (const gesture of sampleStrokeSubpaths(stroke, spacing)) {
+              for (const point of gesture) {
+                const step = evaluator.evaluatePointerSample(point);
+                const where = `${mode} @${spacing}px ${stroke.id}`;
+                expect(step.topologicalViolation, where).toBeNull();
+                expect(step.isOffTrack, where).toBe(false);
+                expect(step.cornerCut, where).toBe(false);
+                expect(step.wrongDirection, where).toBe(false);
+                expect(step.gapBridged, where).toBe(false);
+                if (step.strokeCompleted) {
+                  // A faithful trace must grade as faithful: no Fréchet excess beyond tolerance
+                  expect(step.strokeFidelity?.strokeId, where).toBe(stroke.id);
+                  expect(step.strokeFidelity?.excess, where).toBe(0);
+                  done = true;
+                  break; // the pen lifts when a stroke completes (as the UI does)
+                }
+              }
+              evaluator.endGesture();
+              if (done) break;
             }
-            evaluator.endGesture();
           }
           const progress = evaluator.getProgress();
           expect(progress.isLetterComplete, `${mode} @${spacing}px`).toBe(true);
           expect(progress.mistakeCount).toBe(0);
+          expect(progress.strokeFidelities).toHaveLength(dataset.strokes.length);
+          expect(progress.accuracyScore).toBe(100);
           expect(progress.stars).toBe(3);
         }
       }
@@ -75,13 +95,15 @@ function traceStraightChords(evaluator: TracingEvaluator, stroke: StrokeDefiniti
 describe('straight dot-to-dot shortcuts across curves', () => {
   it.each(MODES)('are rejected exactly when they leave the curve (%s mode)', (mode) => {
     let caught = 0;
-    for (const dataset of STROKE_LIST) {
+    for (const dataset of ALL_GLYPHS) {
       dataset.strokes.forEach((stroke, strokeIdx) => {
         // Fresh evaluator positioned at this stroke by faithfully tracing the earlier ones
         const evaluator = new TracingEvaluator(dataset, { mode, smoothingAlpha: 1.0 });
         for (const earlier of dataset.strokes.slice(0, strokeIdx)) {
-          sampleStrokePath(earlier).forEach((p) => evaluator.evaluatePointerSample(p));
-          evaluator.endGesture();
+          for (const gesture of sampleStrokeSubpaths(earlier)) {
+            gesture.forEach((p) => evaluator.evaluatePointerSample(p));
+            evaluator.endGesture();
+          }
         }
         const sagitta = maxChordSagitta(stroke);
         const tolerance = evaluator.getPathTolerance(stroke);
@@ -99,5 +121,24 @@ describe('straight dot-to-dot shortcuts across curves', () => {
     }
     // Sanity: the dataset really contains curves where a shortcut is detectable in every mode
     expect(caught).toBeGreaterThan(0);
+  });
+});
+
+describe('numerals (headline-free glyphs)', () => {
+  it('never raise a premature-Shirorekha warning, even across the headline band', () => {
+    for (const numeral of NUMERAL_LIST) {
+      const evaluator = new TracingEvaluator(numeral, { mode: 'child', smoothingAlpha: 1 });
+      for (let x = 40; x <= 260; x += 5) {
+        expect(evaluator.evaluatePointerSample({ x, y: 75 }).topologicalViolation).toBeNull();
+      }
+    }
+  });
+
+  it('complete after a single stroke when the digit has only one', () => {
+    const zero = NUMERAL_LIST[0]!;
+    const evaluator = new TracingEvaluator(zero, { mode: 'standard', smoothingAlpha: 1 });
+    sampleStrokePath(zero.strokes[0]!).forEach((p) => evaluator.evaluatePointerSample(p));
+    expect(evaluator.getProgress().isLetterComplete).toBe(true);
+    expect(evaluator.getProgress().completedStrokeIds).toEqual(['num-0-stroke-1']);
   });
 });

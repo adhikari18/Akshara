@@ -1,0 +1,508 @@
+[
+  {
+    "value": 0,
+    "devanagari": "०",
+    "nepaliName": "शून्य",
+    "alsoCalled": "सुन्ना"
+  },
+  {
+    "value": 1,
+    "devanagari": "१",
+    "nepaliName": "एक"
+  },
+  {
+    "value": 2,
+    "devanagari": "२",
+    "nepaliName": "दुई"
+  },
+  {
+    "value": 3,
+    "devanagari": "३",
+    "nepaliName": "तीन"
+  },
+  {
+    "value": 4,
+    "devanagari": "४",
+    "nepaliName": "चार"
+  },
+  {
+    "value": 5,
+    "devanagari": "५",
+    "nepaliName": "पाँच"
+  },
+  {
+    "value": 6,
+    "devanagari": "६",
+    "nepaliName": "छ"
+  },
+  {
+    "value": 7,
+    "devanagari": "७",
+    "nepaliName": "सात"
+  },
+  {
+    "value": 8,
+    "devanagari": "८",
+    "nepaliName": "आठ"
+  },
+  {
+    "value": 9,
+    "devanagari": "९",
+    "nepaliName": "नौ"
+  },
+  {
+    "value": 10,
+    "devanagari": "१०",
+    "nepaliName": "दश"
+  },
+  {
+    "value": 11,
+    "devanagari": "११",
+    "nepaliName": "एघार"
+  },
+  {
+    "value": 12,
+    "devanagari": "१२",
+    "nepaliName": "बाह्र"
+  },
+  {
+    "value": 13,
+    "devanagari": "१३",
+    "nepaliName": "तेह्र"
+  },
+  {
+    "value": 14,
+    "devanagari": "१४",
+    "nepaliName": "चौध"
+  },
+  {
+    "value": 15,
+    "devanagari": "१५",
+    "nepaliName": "पन्ध्र"
+  },
+  {
+    "value": 16,
+    "devanagari": "१६",
+    "nepaliName": "सोह्र"
+  },
+  {
+    "value": 17,
+    "devanagari": "१७",
+    "nepaliName": "सत्र"
+  },
+  {
+    "value": 18,
+    "devanagari": "१८",
+    "nepaliName": "अठार"
+  },
+  {
+    "value": 19,
+    "devanagari": "१९",
+    "nepaliName": "उन्नाइस"
+  },
+  {
+    "value": 20,
+    "devanagari": "२०",
+    "nepaliName": "बीस"
+  },
+  {
+    "value": 21,
+    "devanagari": "२१",
+    "nepaliName": "एक्काइस"
+  },
+  {
+    "value": 22,
+    "devanagari": "२२",
+    "nepaliName": "बाइस"
+  },
+  {
+    "value": 23,
+    "devanagari": "२३",
+    "nepaliName": "तेइस"
+  },
+  {
+    "value": 24,
+    "devanagari": "२४",
+    "nepaliName": "चौबीस"
+  },
+  {
+    "value": 25,
+    "devanagari": "२५",
+    "nepaliName": "पच्चीस"
+  },
+  {
+    "value": 26,
+    "devanagari": "२६",
+    "nepaliName": "छब्बीस"
+  },
+  {
+    "value": 27,
+    "devanagari": "२७",
+    "nepaliName": "सत्ताइस"
+  },
+  {
+    "value": 28,
+    "devanagari": "२८",
+    "nepaliName": "अट्ठाइस"
+  },
+  {
+    "value": 29,
+    "devanagari": "२९",
+    "nepaliName": "उनन्तीस"
+  },
+  {
+    "value": 30,
+    "devanagari": "३०",
+    "nepaliName": "तीस"
+  },
+  {
+    "value": 31,
+    "devanagari": "३१",
+    "nepaliName": "एकतीस"
+  },
+  {
+    "value": 32,
+    "devanagari": "३२",
+    "nepaliName": "बत्तीस"
+  },
+  {
+    "value": 33,
+    "devanagari": "३३",
+    "nepaliName": "तेत्तीस"
+  },
+  {
+    "value": 34,
+    "devanagari": "३४",
+    "nepaliName": "चौँतीस"
+  },
+  {
+    "value": 35,
+    "devanagari": "३५",
+    "nepaliName": "पैँतीस"
+  },
+  {
+    "value": 36,
+    "devanagari": "३६",
+    "nepaliName": "छत्तीस"
+  },
+  {
+    "value": 37,
+    "devanagari": "३७",
+    "nepaliName": "सैँतीस"
+  },
+  {
+    "value": 38,
+    "devanagari": "३८",
+    "nepaliName": "अठतीस"
+  },
+  {
+    "value": 39,
+    "devanagari": "३९",
+    "nepaliName": "उनन्चालीस"
+  },
+  {
+    "value": 40,
+    "devanagari": "४०",
+    "nepaliName": "चालीस"
+  },
+  {
+    "value": 41,
+    "devanagari": "४१",
+    "nepaliName": "एकचालीस"
+  },
+  {
+    "value": 42,
+    "devanagari": "४२",
+    "nepaliName": "बयालीस"
+  },
+  {
+    "value": 43,
+    "devanagari": "४३",
+    "nepaliName": "त्रिचालीस"
+  },
+  {
+    "value": 44,
+    "devanagari": "४४",
+    "nepaliName": "चवालीस"
+  },
+  {
+    "value": 45,
+    "devanagari": "४५",
+    "nepaliName": "पैँतालीस"
+  },
+  {
+    "value": 46,
+    "devanagari": "४६",
+    "nepaliName": "छयालीस"
+  },
+  {
+    "value": 47,
+    "devanagari": "४७",
+    "nepaliName": "सतचालीस"
+  },
+  {
+    "value": 48,
+    "devanagari": "४८",
+    "nepaliName": "अठचालीस"
+  },
+  {
+    "value": 49,
+    "devanagari": "४९",
+    "nepaliName": "उनन्चास"
+  },
+  {
+    "value": 50,
+    "devanagari": "५०",
+    "nepaliName": "पचास"
+  },
+  {
+    "value": 51,
+    "devanagari": "५१",
+    "nepaliName": "एकाउन्न"
+  },
+  {
+    "value": 52,
+    "devanagari": "५२",
+    "nepaliName": "बाउन्न"
+  },
+  {
+    "value": 53,
+    "devanagari": "५३",
+    "nepaliName": "त्रिपन्न"
+  },
+  {
+    "value": 54,
+    "devanagari": "५४",
+    "nepaliName": "चवन्न"
+  },
+  {
+    "value": 55,
+    "devanagari": "५५",
+    "nepaliName": "पचपन्न"
+  },
+  {
+    "value": 56,
+    "devanagari": "५६",
+    "nepaliName": "छपन्न"
+  },
+  {
+    "value": 57,
+    "devanagari": "५७",
+    "nepaliName": "सन्ताउन्न"
+  },
+  {
+    "value": 58,
+    "devanagari": "५८",
+    "nepaliName": "अन्ठाउन्न"
+  },
+  {
+    "value": 59,
+    "devanagari": "५९",
+    "nepaliName": "उनन्साठी"
+  },
+  {
+    "value": 60,
+    "devanagari": "६०",
+    "nepaliName": "साठी"
+  },
+  {
+    "value": 61,
+    "devanagari": "६१",
+    "nepaliName": "एकसट्ठी"
+  },
+  {
+    "value": 62,
+    "devanagari": "६२",
+    "nepaliName": "बयसट्ठी"
+  },
+  {
+    "value": 63,
+    "devanagari": "६३",
+    "nepaliName": "त्रिसट्ठी"
+  },
+  {
+    "value": 64,
+    "devanagari": "६४",
+    "nepaliName": "चौसट्ठी"
+  },
+  {
+    "value": 65,
+    "devanagari": "६५",
+    "nepaliName": "पैँसट्ठी"
+  },
+  {
+    "value": 66,
+    "devanagari": "६६",
+    "nepaliName": "छयसट्ठी"
+  },
+  {
+    "value": 67,
+    "devanagari": "६७",
+    "nepaliName": "सतसट्ठी"
+  },
+  {
+    "value": 68,
+    "devanagari": "६८",
+    "nepaliName": "अठसट्ठी"
+  },
+  {
+    "value": 69,
+    "devanagari": "६९",
+    "nepaliName": "उनन्सत्तरी"
+  },
+  {
+    "value": 70,
+    "devanagari": "७०",
+    "nepaliName": "सत्तरी"
+  },
+  {
+    "value": 71,
+    "devanagari": "७१",
+    "nepaliName": "एकहत्तर"
+  },
+  {
+    "value": 72,
+    "devanagari": "७२",
+    "nepaliName": "बहत्तर"
+  },
+  {
+    "value": 73,
+    "devanagari": "७३",
+    "nepaliName": "त्रिहत्तर"
+  },
+  {
+    "value": 74,
+    "devanagari": "७४",
+    "nepaliName": "चौहत्तर"
+  },
+  {
+    "value": 75,
+    "devanagari": "७५",
+    "nepaliName": "पचहत्तर"
+  },
+  {
+    "value": 76,
+    "devanagari": "७६",
+    "nepaliName": "छयहत्तर"
+  },
+  {
+    "value": 77,
+    "devanagari": "७७",
+    "nepaliName": "सतहत्तर"
+  },
+  {
+    "value": 78,
+    "devanagari": "७८",
+    "nepaliName": "अठहत्तर"
+  },
+  {
+    "value": 79,
+    "devanagari": "७९",
+    "nepaliName": "उनासी"
+  },
+  {
+    "value": 80,
+    "devanagari": "८०",
+    "nepaliName": "असी"
+  },
+  {
+    "value": 81,
+    "devanagari": "८१",
+    "nepaliName": "एकासी"
+  },
+  {
+    "value": 82,
+    "devanagari": "८२",
+    "nepaliName": "बयासी"
+  },
+  {
+    "value": 83,
+    "devanagari": "८३",
+    "nepaliName": "त्रियासी"
+  },
+  {
+    "value": 84,
+    "devanagari": "८४",
+    "nepaliName": "चौरासी"
+  },
+  {
+    "value": 85,
+    "devanagari": "८५",
+    "nepaliName": "पचासी"
+  },
+  {
+    "value": 86,
+    "devanagari": "८६",
+    "nepaliName": "छयासी"
+  },
+  {
+    "value": 87,
+    "devanagari": "८७",
+    "nepaliName": "सतासी"
+  },
+  {
+    "value": 88,
+    "devanagari": "८८",
+    "nepaliName": "अठासी"
+  },
+  {
+    "value": 89,
+    "devanagari": "८९",
+    "nepaliName": "उनान्नब्बे"
+  },
+  {
+    "value": 90,
+    "devanagari": "९०",
+    "nepaliName": "नब्बे"
+  },
+  {
+    "value": 91,
+    "devanagari": "९१",
+    "nepaliName": "एकान्नब्बे"
+  },
+  {
+    "value": 92,
+    "devanagari": "९२",
+    "nepaliName": "बयानब्बे"
+  },
+  {
+    "value": 93,
+    "devanagari": "९३",
+    "nepaliName": "त्रियानब्बे"
+  },
+  {
+    "value": 94,
+    "devanagari": "९४",
+    "nepaliName": "चौरानब्बे"
+  },
+  {
+    "value": 95,
+    "devanagari": "९५",
+    "nepaliName": "पन्चानब्बे"
+  },
+  {
+    "value": 96,
+    "devanagari": "९६",
+    "nepaliName": "छयानब्बे"
+  },
+  {
+    "value": 97,
+    "devanagari": "९७",
+    "nepaliName": "सन्तानब्बे"
+  },
+  {
+    "value": 98,
+    "devanagari": "९८",
+    "nepaliName": "अन्ठानब्बे"
+  },
+  {
+    "value": 99,
+    "devanagari": "९९",
+    "nepaliName": "उनान्सय"
+  },
+  {
+    "value": 100,
+    "devanagari": "१००",
+    "nepaliName": "सय"
+  }
+]

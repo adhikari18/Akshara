@@ -1,0 +1,127 @@
+{
+  "id": "num-6",
+  "character": "६",
+  "unicode": "U+096C",
+  "category": "numeral",
+  "phonetics": {
+    "romanized": "chha",
+    "ipa": "/tsʰʌ/",
+    "nepaliName": "छ",
+    "audioPrompt": "छ",
+    "articulationTip": "Say 'tsha' with a puff of breath, ending in a short 'uh' (as in 'cup')."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "strokes": [
+    {
+      "id": "num-6-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Top Curve & Middle Line (माथिको घुमाउरो र बीचको धर्को)",
+      "nepaliInstruction": "माथि दायाँबाट बायाँतिर घुमाउँदै बीचमा आएर दायाँतिर छोटो धर्को तान्नुहोस्।",
+      "englishInstruction": "Curve from the top right over to the left, come to the middle and draw a short line to the right.",
+      "svgPath": "M 184 84 C 170 66, 120 62, 104 92 C 94 112, 104 132, 124 138 L 164 138",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 184,
+          "y": 84,
+          "label": "Curve Start"
+        },
+        {
+          "index": 1,
+          "x": 140.4,
+          "y": 70.3,
+          "label": "Upper Arc"
+        },
+        {
+          "index": 2,
+          "x": 102.7,
+          "y": 94.8,
+          "label": "Upper Left Arc"
+        },
+        {
+          "index": 3,
+          "x": 117.2,
+          "y": 135.2,
+          "label": "Lower Left Arc"
+        },
+        {
+          "index": 4,
+          "x": 164,
+          "y": 138,
+          "label": "Curve Tip"
+        }
+      ]
+    },
+    {
+      "id": "num-6-stroke-2",
+      "order": 2,
+      "type": "curve",
+      "label": "Bottom Curve, Small Loop & Tail (तलको घुमाउरो, सानो घेरा र पुच्छर)",
+      "nepaliInstruction": "बीचबाट बायाँतिर घुमाउँदै तल आउनुहोस्, सानो घेरा बनाएर पुच्छर दायाँ तल तान्नुहोस्।",
+      "englishInstruction": "From the middle, curve down on the left, make a small loop, then pull the tail down to the right.",
+      "svgPath": "M 124 140 C 100 150, 92 182, 108 198 C 120 210, 140 210, 152 200 C 150 186, 160 174, 175 175 C 190 176, 198 190, 190 200 C 182 210, 165 212, 155 210 C 172 228, 190 248, 205 263",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 124,
+          "y": 140,
+          "label": "Curve Start"
+        },
+        {
+          "index": 1,
+          "x": 99.9,
+          "y": 180.9,
+          "label": "Upper Left Arc"
+        },
+        {
+          "index": 2,
+          "x": 137,
+          "y": 206.8,
+          "label": "Left Arc"
+        },
+        {
+          "index": 3,
+          "x": 169.8,
+          "y": 175.2,
+          "label": "Upper Right Arc"
+        },
+        {
+          "index": 4,
+          "x": 182.9,
+          "y": 205.9,
+          "label": "Right Arc"
+        },
+        {
+          "index": 5,
+          "x": 170.1,
+          "y": 226.1,
+          "label": "Lower Right Arc"
+        },
+        {
+          "index": 6,
+          "x": 205,
+          "y": 263,
+          "label": "Curve Tip"
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "छ",
+      "romanized": "chha",
+      "meaning": "six",
+      "emoji": "🍎🍎🍎🍎🍎🍎"
+    }
+  ]
+}

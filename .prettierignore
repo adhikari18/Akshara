@@ -14,6 +14,9 @@ package-lock.json
 # Generated from stroke-manifest.json (byte-exact output is checked in CI)
 packages/data/src/strokes.generated.ts
 
+# Gesture fixtures: one point per line, written by e2e/support/fixture-format.mjs
+e2e/fixtures/
+
 # Canonical datasets — hand-tuned JSON layout, validated by schema instead
 packages/data/*.json
 packages/data/strokes/

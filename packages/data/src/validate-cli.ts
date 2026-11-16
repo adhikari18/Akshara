@@ -5,13 +5,17 @@ import {
   STROKE_LIST,
   VOWELS,
   WORDS,
+  NUMBERS,
+  NUMERAL_LIST,
   getAcceptableOrders,
   validateLetterDataset,
+  validateNumbers,
   validateSentenceEntry,
 } from './index.js';
 import { validateAgainstLetterSchema } from './schema-validator.js';
 
 let hasError = false;
+const toDigit = (d: number) => String.fromCodePoint(0x0966 + d);
 
 console.log('🔍 Validating @akshara/data schemas and Devanagari topological invariants...\n');
 
@@ -74,6 +78,39 @@ for (const strokeSet of STROKE_LIST) {
       `✅ Stroke dataset '${strokeSet.id}' (${strokeSet.character}): ${strokeSet.strokes.length} strokes verified (JSON Schema + Shirorekha strictly last).`
     );
   }
+}
+
+// Devanagari numerals ० – ९ (headline-free stroke datasets)
+if (NUMERAL_LIST.length !== 10) {
+  hasError = true;
+  console.error(`❌ Expected 10 Devanagari numerals (० – ९), found ${NUMERAL_LIST.length}`);
+}
+NUMERAL_LIST.forEach((numeral, digit) => {
+  const errors = [...validateLetterDataset(numeral).errors];
+  const schema = validateAgainstLetterSchema(numeral);
+  if (!schema.valid) errors.push(...schema.errors);
+  if (numeral.category !== 'numeral') errors.push(`category must be 'numeral'`);
+  if (numeral.character !== toDigit(digit)) {
+    errors.push(`position ${digit} holds '${numeral.character}', expected '${toDigit(digit)}'`);
+  }
+  if (errors.length > 0) {
+    hasError = true;
+    console.error(`❌ Numeral '${numeral.id}' (${numeral.character}) failed validation:`);
+    for (const err of errors) console.error(`   - ${err}`);
+  } else {
+    console.log(
+      `✅ Numeral '${numeral.id}' (${numeral.character}): ${numeral.strokes.length} stroke(s) verified (JSON Schema, no Shirorekha).`
+    );
+  }
+});
+
+const numberErrors = validateNumbers(NUMBERS);
+if (numberErrors.length > 0) {
+  hasError = true;
+  console.error('❌ numbers.json failed validation:');
+  for (const err of numberErrors) console.error(`   - ${err}`);
+} else {
+  console.log(`✅ Nepali numbers: ${NUMBERS.length} names verified (० – १००).`);
 }
 
 console.log(`✅ Word building blocks: ${WORDS.length} words verified.`);

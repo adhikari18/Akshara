@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import ka from '../packages/data/strokes/ka.json' with { type: 'json' };
+import num4 from '../packages/data/strokes/num-4.json' with { type: 'json' };
+import num2 from '../packages/data/strokes/num-2.json' with { type: 'json' };
 
 const LOGICAL_SIZE = 300;
 
@@ -122,4 +124,52 @@ test('auto theme follows the OS color scheme', async ({ page }) => {
   await expect(page.locator('html')).toHaveClass(/dark/);
   await page.emulateMedia({ colorScheme: 'light' });
   await expect(page.locator('html')).not.toHaveClass(/dark/);
+});
+
+/**
+ * Points every `spacing` units along a stroke's authored curve, sampled by the browser's own
+ * SVG engine — a faithful trace (straight dot-to-dot lines would be rejected as cut corners).
+ */
+async function curvePoints(page: Page, svgPath: string, spacing = 6): Promise<Waypoint[]> {
+  return page.evaluate(
+    ({ d, step }) => {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', d);
+      svg.appendChild(path);
+      document.body.appendChild(svg);
+      const total = path.getTotalLength();
+      const pts: { x: number; y: number }[] = [];
+      for (let s = 0; s < total; s += step) {
+        const p = path.getPointAtLength(s);
+        pts.push({ x: p.x, y: p.y });
+      }
+      const end = path.getPointAtLength(total);
+      pts.push({ x: end.x, y: end.y });
+      svg.remove();
+      return pts;
+    },
+    { d: svgPath, step: spacing }
+  );
+}
+
+test('numbers: a learner traces ४२ digit by digit and hears its name', async ({ page }) => {
+  await page.getByRole('tab', { name: /अङ्क/ }).click();
+  await page.getByRole('button', { name: /^४२ \(42\)/ }).click();
+  await expect(page.getByRole('heading', { name: 'बयालीस' })).toBeVisible();
+  await expect(page.getByRole('img', { name: 'Pati slate for tracing ४' })).toBeVisible();
+
+  // Digits are traced along their curves: straight dot-to-dot lines would be cut corners.
+  for (const stroke of num4.strokes)
+    await traceStroke(page, await curvePoints(page, stroke.svgPath));
+  // The "now write २" banner only shows for a short pause; assert where the flow lands instead.
+  await expect(page.getByRole('listitem', { name: 'Digit ४: done' })).toBeVisible();
+  await expect(page.getByRole('img', { name: 'Pati slate for tracing २' })).toBeVisible();
+
+  for (const stroke of num2.strokes)
+    await traceStroke(page, await curvePoints(page, stroke.svgPath));
+  await expect(
+    page.getByRole('heading', { name: 'स्याबास! तपाईंले ४२ (बयालीस) लेख्नुभयो!' })
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: /^४२ \(42\), \d stars/ })).toBeVisible();
 });

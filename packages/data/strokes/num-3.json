@@ -1,0 +1,108 @@
+{
+  "id": "num-3",
+  "character": "३",
+  "unicode": "U+0969",
+  "category": "numeral",
+  "phonetics": {
+    "romanized": "tin",
+    "ipa": "/tin/",
+    "nepaliName": "तीन",
+    "audioPrompt": "तीन",
+    "articulationTip": "Say 'teen' with a soft, dental 't' (tongue touching the teeth)."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "strokes": [
+    {
+      "id": "num-3-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Two Bowls, Small Loop & Tail (दुई घुमाउरो, सानो घेरा र पुच्छर)",
+      "nepaliInstruction": "माथिको घुमाउरो बनाएर बीचमा बायाँतिर छोटो धर्को तान्नुहोस्, फर्केर तलको घुमाउरो, सानो घेरा र पुच्छर बनाउनुहोस्।",
+      "englishInstruction": "Draw the top curve and a short line to the left in the middle, come back, then make the bottom curve, a small loop and the tail.",
+      "svgPath": "M 97 86 C 117 66, 164 64, 172 98 C 178 122, 162 136, 142 137 L 117 137 L 147 139 C 184 146, 198 182, 167 200 C 147 186, 108 182, 102 200 C 98 218, 126 226, 152 215 C 170 228, 188 250, 206 263",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 97,
+          "y": 86,
+          "label": "Curve Start"
+        },
+        {
+          "index": 1,
+          "x": 143.1,
+          "y": 72.3,
+          "label": "Upper Arc 1"
+        },
+        {
+          "index": 2,
+          "x": 173.3,
+          "y": 106.5,
+          "label": "Upper Right Arc"
+        },
+        {
+          "index": 3,
+          "x": 141.1,
+          "y": 137,
+          "label": "Upper Arc 2"
+        },
+        {
+          "index": 4,
+          "x": 142.7,
+          "y": 138.7,
+          "label": "Upper Arc 3"
+        },
+        {
+          "index": 5,
+          "x": 182.2,
+          "y": 164.7,
+          "label": "Right Arc"
+        },
+        {
+          "index": 6,
+          "x": 160.4,
+          "y": 196.1,
+          "label": "Lower Arc"
+        },
+        {
+          "index": 7,
+          "x": 112.2,
+          "y": 190.3,
+          "label": "Lower Left Arc 1"
+        },
+        {
+          "index": 8,
+          "x": 125.3,
+          "y": 219.9,
+          "label": "Lower Left Arc 2"
+        },
+        {
+          "index": 9,
+          "x": 169.1,
+          "y": 229.5,
+          "label": "Lower Right Arc"
+        },
+        {
+          "index": 10,
+          "x": 206,
+          "y": 263,
+          "label": "Curve Tip"
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "तीन",
+      "romanized": "tin",
+      "meaning": "three",
+      "emoji": "🍎🍎🍎"
+    }
+  ]
+}

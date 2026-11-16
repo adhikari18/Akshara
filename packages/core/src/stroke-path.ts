@@ -107,6 +107,38 @@ export function distanceToReferencePath(p: Point2D, ref: StrokeReferencePath): n
  * Points along the authored curve from the first to the last waypoint, about `spacing` px
  * apart. Intended for demos ("Show me") and tests that need a faithful trace of the stroke.
  */
+/**
+ * Like `sampleStrokePath`, but one point list per subpath, so a caller can lift the pen between
+ * them — required for a split Shirorekha (ध), where drawing across the gap is a mistake.
+ */
+export function sampleStrokeSubpaths(
+  stroke: Pick<StrokeDefinition, 'svgPath' | 'waypoints'>,
+  spacing = 4
+): Point2D[][] {
+  const ref = buildStrokeReferencePath(stroke);
+  const first = ref.waypointSampleIndex[0]!;
+  const last = ref.waypointSampleIndex[ref.waypointSampleIndex.length - 1]!;
+  const every = Math.max(1, Math.round(spacing / REFERENCE_SAMPLE_STEP));
+  const groups: Point2D[][] = [];
+  let current: Point2D[] = [];
+  let currentSub = ref.subpathOf[first]!;
+  for (let i = first; i <= last; i++) {
+    if (ref.subpathOf[i] !== currentSub) {
+      current.push({ ...ref.samples[i - 1]! });
+      groups.push(current);
+      current = [];
+      currentSub = ref.subpathOf[i]!;
+    }
+    if ((i - first) % every === 0 || current.length === 0) current.push({ ...ref.samples[i]! });
+  }
+  current.push({ ...ref.samples[last]! });
+  groups.push(current);
+  const wps = stroke.waypoints;
+  groups[0]!.unshift({ x: wps[0]!.x, y: wps[0]!.y });
+  groups[groups.length - 1]!.push({ x: wps[wps.length - 1]!.x, y: wps[wps.length - 1]!.y });
+  return groups;
+}
+
 export function sampleStrokePath(
   stroke: Pick<StrokeDefinition, 'svgPath' | 'waypoints'>,
   spacing = 4

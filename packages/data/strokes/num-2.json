@@ -1,0 +1,108 @@
+{
+  "id": "num-2",
+  "character": "२",
+  "unicode": "U+0968",
+  "category": "numeral",
+  "phonetics": {
+    "romanized": "dui",
+    "ipa": "/dui/",
+    "nepaliName": "दुई",
+    "audioPrompt": "दुई",
+    "articulationTip": "Say 'du-ee': two quick vowels, 'doo' then 'ee'."
+  },
+  "viewBox": {
+    "width": 300,
+    "height": 300,
+    "shirorekhaY": 75,
+    "baselineY": 240
+  },
+  "strokes": [
+    {
+      "id": "num-2-stroke-1",
+      "order": 1,
+      "type": "curve",
+      "label": "Top Curve, Small Loop & Tail (माथिको घुमाउरो, सानो घेरा र पुच्छर)",
+      "nepaliInstruction": "माथि बायाँबाट दायाँतिर घुमाउँदै तल झर्नुहोस्, सानो घेरा बनाएर दायाँतिर पुच्छर तान्नुहोस्।",
+      "englishInstruction": "Curve over the top to the right, come down into a small loop, then pull the tail down to the right.",
+      "svgPath": "M 82 88 C 107 66, 162 60, 184 100 C 198 126, 182 152, 160 170 C 142 152, 106 150, 102 172 C 99 192, 127 202, 152 192 C 172 206, 194 240, 217 262",
+      "directionHint": "down-and-right-curve",
+      "toleranceRadius": 28,
+      "waypoints": [
+        {
+          "index": 0,
+          "x": 82,
+          "y": 88,
+          "label": "Curve Start"
+        },
+        {
+          "index": 1,
+          "x": 120.7,
+          "y": 71.4,
+          "label": "Upper Left Arc"
+        },
+        {
+          "index": 2,
+          "x": 162.1,
+          "y": 78.1,
+          "label": "Upper Arc"
+        },
+        {
+          "index": 3,
+          "x": 188.1,
+          "y": 110.5,
+          "label": "Upper Right Arc"
+        },
+        {
+          "index": 4,
+          "x": 178.4,
+          "y": 150.6,
+          "label": "Right Arc"
+        },
+        {
+          "index": 5,
+          "x": 147,
+          "y": 161,
+          "label": "Center Point"
+        },
+        {
+          "index": 6,
+          "x": 106.7,
+          "y": 162.6,
+          "label": "Left Arc"
+        },
+        {
+          "index": 7,
+          "x": 120.3,
+          "y": 194.5,
+          "label": "Lower Left Arc"
+        },
+        {
+          "index": 8,
+          "x": 160,
+          "y": 198.5,
+          "label": "Lower Arc"
+        },
+        {
+          "index": 9,
+          "x": 188.6,
+          "y": 230.2,
+          "label": "Lower Right Arc"
+        },
+        {
+          "index": 10,
+          "x": 217,
+          "y": 262,
+          "label": "Curve Tip"
+        }
+      ]
+    }
+  ],
+  "vocabulary": [
+    {
+      "word": "दुई",
+      "romanized": "dui",
+      "meaning": "two",
+      "emoji": "🍎🍎"
+    }
+  ]
+}

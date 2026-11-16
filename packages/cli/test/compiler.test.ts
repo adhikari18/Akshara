@@ -94,6 +94,21 @@ describe('compiler guards', () => {
     expect(inferDirectionHint('loop', [...ccw].reverse())).toBe('clockwise-loop');
   });
 
+  it('infers loop winding from turning angle, so open loops are classified correctly', () => {
+    // ग: a stem that comes down, curls left, up and right — clockwise on screen, although the
+    // shoelace area of its open outline has the "counter-clockwise" sign.
+    const gaFoot = [
+      { x: 120, y: 75 },
+      { x: 120, y: 170 },
+      { x: 110, y: 197 },
+      { x: 88, y: 195 },
+      { x: 80, y: 175 },
+      { x: 92, y: 156 },
+      { x: 130, y: 165 },
+    ];
+    expect(inferDirectionHint('loop', gaFoot)).toBe('clockwise-loop');
+  });
+
   it('scales waypoint count with stroke length but never below 3', () => {
     expect(waypointCountFor(10, 45)).toBe(3);
     expect(waypointCountFor(165, 45)).toBe(5);
@@ -219,5 +234,51 @@ describe('direction inference for small loops', () => {
     expect(dot('M 210 138 C 196 138, 196 158, 210 158 C 224 158, 224 138, 210 138')).toBe(
       'counter-clockwise-loop'
     );
+  });
+});
+
+describe('numeral compilation (headline-free digits)', () => {
+  const numeralSpec = (strokes: GlyphSpec['strokes']): GlyphSpec => ({
+    id: 'num-0',
+    character: '०',
+    unicode: 'U+0966',
+    category: 'numeral',
+    phonetics: {
+      romanized: 'shunya',
+      ipa: '/sunjʌ/',
+      nepaliName: 'शून्य',
+      audioPrompt: 'शून्य',
+      articulationTip: 'Say shoon-ya.',
+    },
+    viewBox: { width: 300, height: 300, shirorekhaY: 75, baselineY: 240 },
+    strokes,
+    vocabulary: [{ word: 'शून्य', romanized: 'shunya', meaning: 'zero', emoji: '⭕' }],
+  });
+  const zeroLoop = {
+    type: 'loop' as const,
+    label: 'Round Zero',
+    nepaliInstruction: 'गोलो बनाउनुहोस्।',
+    englishInstruction: 'Draw a circle.',
+    svgPath:
+      'M 150 108 C 122 108, 102 128, 102 156 C 102 184, 122 204, 150 204 C 178 204, 198 184, 198 156 C 198 128, 178 108, 150 108',
+  };
+
+  it('compiles a single-stroke numeral with no shirorekha block', () => {
+    const out = compileGlyph(numeralSpec([zeroLoop])) as any;
+    expect(out.strokes).toHaveLength(1);
+    expect(out.shirorekha).toBeUndefined();
+    expect(out.strokes[0].waypoints.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('rejects a shirorekha stroke in a numeral', () => {
+    const bar = { ...zeroLoop, type: 'shirorekha' as const, svgPath: 'M 60 75 L 240 75' };
+    expect(() => compileGlyph(numeralSpec([zeroLoop, bar]))).toThrow(
+      /numerals are written without a shirorekha stroke/
+    );
+  });
+
+  it('still requires two strokes for a letter', () => {
+    const letter = { ...kaSpec(), strokes: kaSpec().strokes.slice(0, 1) };
+    expect(() => compileGlyph(letter)).toThrow(/needs at least 2 strokes/);
   });
 });
