@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@akshara/cli": "0.1.0",
     "@akshara/core": "0.1.0",
     "@akshara/data": "0.1.0",
     "lucide-react": "^0.468.0",

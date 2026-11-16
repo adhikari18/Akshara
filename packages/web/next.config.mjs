@@ -14,7 +14,7 @@ const nextConfig = {
   assetPrefix: basePath || undefined,
   trailingSlash: true,
   images: { unoptimized: true },
-  transpilePackages: ['@akshara/core', '@akshara/data'],
+  transpilePackages: ['@akshara/cli', '@akshara/core', '@akshara/data'],
 };
 
 export default nextConfig;

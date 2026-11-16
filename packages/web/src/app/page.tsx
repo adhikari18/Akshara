@@ -9,8 +9,9 @@ import { NumberStudio } from '@/components/NumberStudio';
 import { VoiceSelector } from '@/components/VoiceSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { TracingDemoGallery } from '@/components/demo/TracingDemoGallery';
+import { TraceTrainer } from '@/components/trainer/TraceTrainer';
 
-type StudioTab = 'tracing' | 'matra' | 'sentences' | 'varnamala' | 'numbers' | 'demo';
+type StudioTab = 'tracing' | 'matra' | 'sentences' | 'varnamala' | 'numbers' | 'demo' | 'trainer';
 
 interface PathStep {
   id: StudioTab;
@@ -94,6 +95,18 @@ const LEARNING_PATH: PathStep[] = [
         'border-teal-400 bg-teal-100 ring-teal-300/50 dark:bg-teal-400/15 dark:border-teal-400/70',
     },
   },
+  {
+    id: 'trainer',
+    emoji: '🧑‍🏫',
+    nepali: 'लेखाइ प्रशिक्षण',
+    english: 'Trace Trainer',
+    hint: 'Teach the correct strokes',
+    color: {
+      badge: 'bg-lime-600',
+      active:
+        'border-lime-500 bg-lime-100 ring-lime-300/50 dark:bg-lime-400/15 dark:border-lime-400/70',
+    },
+  },
 ];
 
 export default function AksharaStudioPage() {
@@ -138,7 +151,10 @@ export default function AksharaStudioPage() {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-5 space-y-5">
         {/* Learning path — big, colourful steps */}
         <nav aria-label="Learning activities">
-          <div role="tablist" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div
+            role="tablist"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3"
+          >
             {LEARNING_PATH.map((step, idx) => {
               const active = activeTab === step.id;
               return (
@@ -189,6 +205,7 @@ export default function AksharaStudioPage() {
           {activeTab === 'varnamala' && <VarnamalaGallery onTrace={handleOpenInPati} />}
           {activeTab === 'numbers' && <NumberStudio />}
           {activeTab === 'demo' && <TracingDemoGallery />}
+          {activeTab === 'trainer' && <TraceTrainer />}
         </section>
       </main>
 
