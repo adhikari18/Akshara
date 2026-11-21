@@ -134,7 +134,7 @@ Akshara/
 │       ├── package.json
 │       └── tsconfig.json
 ├── CONTRIBUTING.md                                       # Developer & non-coder micro-contribution guide
-├── ROADMAP.md                                            # 130+ hour multi-milestone engineering roadmap
+├── ROADMAP.md                                            # 486-hour learning-platform engineering roadmap
 ├── LICENSE                                               # MIT License
 ├── package.json                                          # Root npm workspace configuration
 └── tsconfig.base.json                                    # Shared strict TypeScript configuration
@@ -223,12 +223,13 @@ Over 30 million people speak Nepali worldwide, including a rapidly growing globa
 - **Devanagari Grapheme Cluster Segmentation:** Standard JavaScript `string.split('')` breaks Devanagari syllables apart (`"किताब"` splits into 5 raw code units `['क', 'ि', 'त', 'ा', 'ब']`). We implemented a Unicode codepoint cluster parser (`segmentDevanagariAksharas`) that binds combining matras (`U+093E..U+094C`), modifiers (`ं, ँ, ः`), and *Virama* conjuncts (`C + ् + C`) into intact orthographic *aksharas* (`['कि', 'ता', 'ब']`).
 
 ### What's Next
-Our **[130+ Hour Engineering Roadmap](./ROADMAP.md)** expands `Akshara` with:
-1. Full `300x300` vector stroke definitions for all 49 Nepali *Swor* and *Vyanjan* characters plus Nepali numerals (`०–९`).
-2. Discrete Fréchet Distance curve grading and 1€ filter stylus pressure support.
-3. Interactive *Samyukta Akshara* (conjunct consonant / *Halanta* `्`) ligature builder (`क्ष, त्र, ज्ञ, प्र, द्य`).
-4. Client-side Web Audio microphone Voice-Onset-Time (VOT) and formant analysis for grading aspirated vs. unaspirated pronunciation aloud.
-5. An offline-first PWA and React Native tablet build for rural Nepali classrooms and diaspora weekend schools.
+Our **[486-Hour Learning Platform Roadmap](./ROADMAP.md)** expands `Akshara` with:
+1. Interactive *Samyukta Akshara* (conjunct consonant / *Halanta* `्`) typography, richer grammar, stories, worksheets, and pronunciation research.
+2. A versioned curriculum, multiple privacy-preserving learner profiles, mastery events, and deterministic adaptive review.
+3. IndexedDB-first progress with backup/restore and a localhost Node/SQLite synchronization service that simulates the future cloud boundary.
+4. Offline multi-device convergence, versioned curriculum packs, synthetic classrooms, assignments, and explainable teacher/parent insights.
+5. An installable, accessible phone/tablet PWA with fault-injection, migration, performance, and end-to-end regression suites.
+6. Post-session hosted storage and native mobile adapters built behind the same tested repository, object-storage, and synchronization contracts.
 
 ---
 
