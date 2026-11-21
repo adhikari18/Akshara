@@ -134,7 +134,7 @@ Akshara/
 │       ├── package.json
 │       └── tsconfig.json
 ├── CONTRIBUTING.md                                       # Developer & non-coder micro-contribution guide
-├── ROADMAP.md                                            # 486-hour learning-platform engineering roadmap
+├── ROADMAP.md                                            # 1,006-hour learning-platform engineering roadmap
 ├── LICENSE                                               # MIT License
 ├── package.json                                          # Root npm workspace configuration
 └── tsconfig.base.json                                    # Shared strict TypeScript configuration
@@ -223,13 +223,17 @@ Over 30 million people speak Nepali worldwide, including a rapidly growing globa
 - **Devanagari Grapheme Cluster Segmentation:** Standard JavaScript `string.split('')` breaks Devanagari syllables apart (`"किताब"` splits into 5 raw code units `['क', 'ि', 'त', 'ा', 'ब']`). We implemented a Unicode codepoint cluster parser (`segmentDevanagariAksharas`) that binds combining matras (`U+093E..U+094C`), modifiers (`ं, ँ, ः`), and *Virama* conjuncts (`C + ् + C`) into intact orthographic *aksharas* (`['कि', 'ता', 'ब']`).
 
 ### What's Next
-Our **[486-Hour Learning Platform Roadmap](./ROADMAP.md)** expands `Akshara` with:
+
+Our **[1,006-Hour Learning Platform Roadmap](./ROADMAP.md)** expands `Akshara` with:
+
 1. Interactive *Samyukta Akshara* (conjunct consonant / *Halanta* `्`) typography, richer grammar, stories, worksheets, and pronunciation research.
 2. A versioned curriculum, multiple privacy-preserving learner profiles, mastery events, and deterministic adaptive review.
 3. IndexedDB-first progress with backup/restore and a localhost Node/SQLite synchronization service that simulates the future cloud boundary.
 4. Offline multi-device convergence, versioned curriculum packs, synthetic classrooms, assignments, and explainable teacher/parent insights.
 5. An installable, accessible phone/tablet PWA with fault-injection, migration, performance, and end-to-end regression suites.
-6. Post-session hosted storage and native mobile adapters built behind the same tested repository, object-storage, and synchronization contracts.
+6. A convergent collaborative curriculum editor, deterministic geometric handwriting recognition, and an explainable Devanagari shaping engine.
+7. A Nepali lesson compiler, distributed content delivery, seeded classroom simulation, and validated educational publishing pipeline.
+8. Post-session hosted storage and native mobile adapters built behind the same tested repository, object-storage, and synchronization contracts.
 
 ---
 

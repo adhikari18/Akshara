@@ -1,8 +1,8 @@
-# `Akshara` (अक्षर) Learning Platform Engineering Roadmap (~486 Hours Planned)
+# `Akshara` (अक्षर) Learning Platform Engineering Roadmap (~1,006 Hours Planned)
 
 This document outlines the multi-milestone roadmap for growing `Akshara` beyond the `v0.1.0` literacy studio into a local-first Nepali learning platform. The end state combines computational linguistics, adaptive instruction, durable learner progress, classroom tools, offline operation, and cloud-ready synchronization while preserving the existing tracing engine and reusable data packages.
 
-The estimates are planning ranges, not promises. They include integration, tests, accessibility, documentation, debugging, and roughly 30–40% contingency because the difficult work is usually at the boundaries between storage, synchronization, curriculum, and UI. Completed milestones retain their original estimates; new work uses broader 8–14 hour slices.
+The estimates are planning ranges, not promises. They include integration, tests, accessibility, documentation, debugging, and roughly 30–40% contingency because the difficult work is usually at the boundaries between storage, synchronization, curriculum, and UI. Completed milestones retain their original estimates; new work uses broader 8–18 hour slices.
 
 ## Execution Constraints and Architecture Boundary
 
@@ -29,8 +29,19 @@ All core milestones must be buildable and verifiable on a disconnected developme
 | 7 | Local-First Storage, Backup & Cloud-Ready Sync | ~72 | 0 | 0% |
 | 8 | Classroom, Parent/Teacher Insights & Content Packs | ~52 | 0 | 0% |
 | 9 | Offline PWA, Reliability, Accessibility & Scale | ~44 | 0 | 0% |
-| 10 | Production Cloud & Native Mobile (post-session) | ~60 | 0 | 0% |
-| **Total** | | **~486** | **60** | **~12%** |
+| 10 | Collaborative Curriculum CRDT & Partition Simulator | ~88 | 0 | 0% |
+| 11 | Explainable Geometric Handwriting Recognition | ~80 | 0 | 0% |
+| 12 | Nepali Curriculum Compiler & Lesson DSL | ~68 | 0 | 0% |
+| 13 | Educational Devanagari Shaping & Layout Engine | ~96 | 0 | 0% |
+| 14 | Distributed Offline Content Delivery | ~76 | 0 | 0% |
+| 15 | Learning-Path Planner & Classroom Simulator | ~60 | 0 | 0% |
+| 16 | Worksheet & Educational Publishing Engine | ~52 | 0 | 0% |
+| 17 | Production Cloud & Native Mobile (post-session) | ~60 | 0 | 0% |
+| **Total** | | **~1,006** | **60** | **~6%** |
+
+## Scope and Sequencing
+
+The total is a multi-year product horizon, not a claim that every milestone belongs in one coding engagement. Milestones 6–9 establish the learning-platform foundation. Milestones 10–16 are ambitious, independently demonstrable extensions that should begin only after their named dependencies are stable; Milestone 17 is production follow-through outside the disconnected session. For a realistic first session series, select one vertical slice with a checkable acceptance bar—for example Milestones 6–7 plus the recognition work in Milestone 11—while retaining the rest as the product roadmap.
 
 ---
 
@@ -211,21 +222,156 @@ All core milestones must be buildable and verifiable on a disconnected developme
 
 ---
 
-## Milestone 10: Production Cloud & Native Mobile (Post-Session) (~60 hrs)
+## Milestone 10: Collaborative Curriculum CRDT & Partition Simulator (~88 hrs)
+
+- [ ] **10.1 Curriculum CRDT Data Model and Formal Invariants (~14 hrs):**
+  - Design stable identities and conflict-free operations for lesson text, ordered activities, prerequisites, metadata, and deletions. Document convergence, commutativity, idempotence, and causal-order assumptions.
+- [ ] **10.2 Operation Log, Causal Metadata and Compaction (~14 hrs):**
+  - Implement operation encoding, version vectors, tombstones, snapshots, and safe log compaction without requiring synchronized clocks or a permanently available leader.
+- [ ] **10.3 Offline Collaborative Lesson Editor (~14 hrs):**
+  - Add local edits, undo/redo, version history, collaborator presence, and clear merge visualization. Preserve a teacher's unsynchronized changes across reloads and schema upgrades.
+- [ ] **10.4 Multi-Node WebSocket Relay and Reconnection Protocol (~14 hrs):**
+  - Run three localhost relay nodes, allow clients to reconnect through any node, exchange missing operations efficiently, and recover after relay restarts.
+- [ ] **10.5 Network Partition and Deterministic Replay Lab (~16 hrs):**
+  - Build a browser dashboard that delays, duplicates, drops, reorders, and partitions messages, then replays a seeded failure schedule step by step with replica hashes and causal histories.
+- [ ] **10.6 CRDT Model Checking and Convergence Campaign (~16 hrs):**
+  - Generate concurrent edit histories, minimize failing histories, and verify all replicas converge after partitions heal. Compare incremental materialization against replaying the canonical operation set.
+
+**Milestone acceptance:** 20 simulated clients perform 10,000 delayed, duplicated, reordered, and concurrently generated operations across three partitioned nodes; after healing, every replica has the same curriculum checksum and no acknowledged edit is lost.
+
+---
+
+## Milestone 11: Explainable Geometric Handwriting Recognition (~80 hrs)
+
+This recognizer is deterministic computational geometry, not a trained or hosted AI model.
+
+- [ ] **11.1 Freehand Normalization and Stroke Segmentation (~12 hrs):**
+  - Normalize translation, scale, slant, sampling rate, and writing speed while preserving stroke boundaries, direction, pressure, and topology. Detect accidental taps and pen-lift gaps.
+- [ ] **11.2 Geometric Feature Extraction (~14 hrs):**
+  - Extract resampled contours, curvature profiles, loops, intersections, stems, endpoints, winding, headline spans, and relative stroke placement into an explainable feature representation.
+- [ ] **11.3 Candidate Retrieval and Elastic Stroke Matching (~16 hrs):**
+  - Retrieve plausible characters from the vector corpus, align freehand strokes to authored strokes, tolerate limited stroke merging/splitting, and combine Fréchet, direction, topology, and proportion costs.
+- [ ] **11.4 Confusion-Aware Ranking and Explanations (~12 hrs):**
+  - Rank letters, numerals, and syllable components; explain mismatches such as a missing stem, reversed loop, premature *Shirorekha*, or incorrect proportion; explicitly model common pairs such as `ध/घ`, `भ/म`, and `ब/व`.
+- [ ] **11.5 Recognition Playground and Correction Loop (~10 hrs):**
+  - Provide a free-writing canvas showing top candidates, aligned reference overlays, per-stroke scores, and a learner-controlled correction that becomes a local evaluation fixture rather than training data.
+- [ ] **11.6 Transform, Noise and Adversarial Evaluation Corpus (~16 hrs):**
+  - Generate seeded variations and curate imperfect handwriting fixtures. Report top-1/top-3 accuracy, confusion matrices, latency, and robustness by transformation without using real children's data.
+
+**Milestone acceptance:** the recognizer reaches at least 95% top-1 accuracy on generated held-out transformations, places the intended character in the top three for the curated imperfect fixture set, explains every score, and evaluates a sample within the documented browser latency budget.
+
+---
+
+## Milestone 12: Nepali Curriculum Compiler & Lesson DSL (~68 hrs)
+
+- [ ] **12.1 Human-Readable Lesson Language and Parser (~12 hrs):**
+  - Define a compact DSL for courses, prerequisites, vocabulary, stories, tracing, assembly, reading, grammar, review, and assessment. Build a parser with source spans, recovery, and actionable diagnostics.
+- [ ] **12.2 Unicode and Linguistic Semantic Analysis (~12 hrs):**
+  - Validate Devanagari normalization, grapheme clusters, matras, viramas, conjuncts, vocabulary references, translations, and declared decompositions against `@akshara/data`.
+- [ ] **12.3 Curriculum Graph Resolution and Static Checks (~10 hrs):**
+  - Resolve symbols across files, reject missing or circular prerequisites, check difficulty progression, detect unreachable lessons, and report duplicate or contradictory learning objectives.
+- [ ] **12.4 Multi-Target Generation (~14 hrs):**
+  - Compile one source into versioned web lessons, review metadata, content-pack manifests, printable worksheet inputs, teacher answer keys, and searchable documentation.
+- [ ] **12.5 Incremental Builds, Formatting and Editor Services (~10 hrs):**
+  - Cache dependency-aware builds, format sources canonically, expose completion/hover/diagnostic data, and rebuild only affected outputs while preserving deterministic hashes.
+- [ ] **12.6 Golden Corpus and Reproducible-Build Suite (~10 hrs):**
+  - Compile at least 100 representative lesson files, snapshot diagnostics for invalid programs, fuzz the parser, and prove clean and incremental builds produce byte-identical artifacts.
+
+**Milestone acceptance:** 100 curriculum sources compile deterministically into validated browser lessons, offline packs, and worksheet inputs; invalid linguistic or curricular constructs report exact source locations and suggested corrections.
+
+---
+
+## Milestone 13: Educational Devanagari Shaping & Layout Engine (~96 hrs)
+
+- [ ] **13.1 Unicode Cluster Parser and Canonical Reordering (~14 hrs):**
+  - Parse Devanagari syllable boundaries, normalize equivalent sequences, reorder pre-base matras, and retain a reversible mapping between source code points and educational components.
+- [ ] **13.2 Half-Forms, Ligatures, *Repha*, *Rakar* and Matra Rules (~18 hrs):**
+  - Implement an explicit subset of Nepali shaping rules with traceable transformations and font-independent intermediate glyph roles rather than hiding the process behind browser text rendering.
+- [ ] **13.3 Font Table Reader and Glyph Positioning Subset (~18 hrs):**
+  - Read the required OpenType tables from supplied fonts, apply the supported substitution/positioning features, and expose unsupported rules instead of silently producing incorrect output.
+- [ ] **13.4 Educational Shaping Inspector (~12 hrs):**
+  - Visualize each transformation from Unicode input through clusters, half-forms, reordered marks, substitutions, positioned glyphs, and the final rendered syllable. Map every visible glyph back to the learning concept it represents.
+- [ ] **13.5 Reference Differential Harness (~18 hrs):**
+  - Generate thousands of legal and adversarial sequences, compare cluster boundaries, glyph IDs, advances, and offsets with an installed trusted shaper, and minimize mismatches into regression cases.
+- [ ] **13.6 Line Layout, Hit Testing and Accessible Selection (~16 hrs):**
+  - Add line breaking, measurement, caret movement, selection, hit testing, and source-to-glyph mapping for the story reader and compiler preview while preserving correct cluster behavior.
+
+**Milestone acceptance:** the supported Nepali shaping subset matches the trusted reference for glyph ordering and positioning across the declared conformance corpus, and the inspector explains every transformation in the browser.
+
+---
+
+## Milestone 14: Distributed Offline Content Delivery (~76 hrs)
+
+- [ ] **14.1 Content-Addressed Blocks and Merkle Manifests (~12 hrs):**
+  - Split content packs into deduplicated blocks, address them by digest, construct Merkle manifests, stream verification, and reject substitution, truncation, and manifest inconsistencies.
+- [ ] **14.2 Dependency Solver and Compatibility Policy (~12 hrs):**
+  - Resolve pack versions and dependencies against application/data-schema compatibility, explain conflicts, pin reproducible solutions, and prevent partially compatible installations.
+- [ ] **14.3 Delta Transfer, Resume and Atomic Activation (~12 hrs):**
+  - Transfer only missing blocks, resume interrupted downloads, stage and validate updates, then activate atomically with rollback to the previous known-good pack set.
+- [ ] **14.4 Peer-to-Peer School-LAN Distribution Simulator (~14 hrs):**
+  - Let local simulated school devices discover peers, exchange verified blocks, choose sources, enforce bandwidth limits, and continue distributing content when the central localhost registry is unavailable.
+- [ ] **14.5 Quotas, Garbage Collection and Corruption Repair (~12 hrs):**
+  - Protect referenced blocks, reclaim unreachable versions under quotas, detect bit corruption, fetch healthy replicas, and rebuild indexes after an unclean shutdown.
+- [ ] **14.6 Large-Library Reliability and Efficiency Campaign (~14 hrs):**
+  - Exercise a 500 MB generated curriculum library under interruption, peer loss, corrupted blocks, low disk space, concurrent updates, and rollback; report transferred bytes, reuse ratio, and repair time.
+
+**Milestone acceptance:** several local nodes update a 500 MB synthetic library using only missing blocks, survive interrupted and corrupted transfers, and finish with identical verified root hashes while any previous complete version remains runnable.
+
+---
+
+## Milestone 15: Learning-Path Planner & Classroom Simulator (~60 hrs)
+
+- [ ] **15.1 Seeded Synthetic Learner Population Model (~10 hrs):**
+  - Generate learners with configurable prior knowledge, attendance, motor accuracy, memory decay, confusion patterns, accessibility needs, and response noise without representing or ingesting real children.
+- [ ] **15.2 Deterministic Practice and Mastery Dynamics (~10 hrs):**
+  - Simulate attempts, hints, fatigue, spaced review, prerequisite acquisition, forgetting, and recovery with an injected clock and reproducible random streams.
+- [ ] **15.3 Constraint-Based Learning-Path Planner (~12 hrs):**
+  - Select lessons and reviews under prerequisite, time, assignment, accessibility, and variety constraints; explain each choice and guarantee weak skills are not starved indefinitely.
+- [ ] **15.4 Scheduling Strategy Comparison Lab (~10 hrs):**
+  - Compare fixed sequences, mastery thresholds, FSRS-inspired review, and constrained planning using the same seeded populations and report learning, workload, fairness, and dropout-risk proxies.
+- [ ] **15.5 Classroom Simulation Dashboard (~8 hrs):**
+  - Step through a day, term, or school year; inspect individuals and cohorts; visualize bottlenecks; and replay any surprising outcome from its seed and event history.
+- [ ] **15.6 Scale, Invariant and Sensitivity Tests (~10 hrs):**
+  - Simulate 10,000 learners, assert impossible states never occur, detect starvation and unstable recommendations, and measure how outcomes change across plausible parameter ranges.
+
+**Milestone acceptance:** 10,000 seeded learners complete a reproducible simulated school year; all curriculum and scheduling invariants hold, every recommendation is explainable, and repeated runs produce identical event and summary checksums.
+
+---
+
+## Milestone 16: Worksheet & Educational Publishing Engine (~52 hrs)
+
+- [ ] **16.1 Constraint-Based Page Layout Core (~10 hrs):**
+  - Lay out instructions, stroke diagrams, tracing rows, free-practice grids, stories, exercises, and answer areas across A4 and US Letter without clipping or orphaned instructional elements.
+- [ ] **16.2 Vector Stroke, Font and Bilingual Typesetting (~10 hrs):**
+  - Render authored strokes as scalable dotted guides with numbered direction arrows, embed licensed Devanagari fonts, and handle Nepali/English baseline, wrapping, and fallback behavior.
+- [ ] **16.3 Adaptive Worksheet Generator (~8 hrs):**
+  - Turn curriculum objectives or synthetic mastery summaries into reproducible worksheet variants with controlled difficulty, spaced review, teacher keys, and machine-readable provenance.
+- [ ] **16.4 Booklets, Imposition and Print Controls (~8 hrs):**
+  - Generate covers, contents, duplex-safe margins, page numbering, booklet imposition, ink-saving mode, and crop/registration marks where requested.
+- [ ] **16.5 Accessible PDF Structure and Export Validation (~8 hrs):**
+  - Add document language, headings, reading order, alternative descriptions, searchable text, embedded fonts, and automated `qpdf`/font/render checks.
+- [ ] **16.6 Visual Regression and Cross-Format Corpus (~8 hrs):**
+  - Generate hundreds of worksheets from edge-case curriculum fixtures, render every page to images, detect overflow and missing glyphs, and verify deterministic PDF/SVG output.
+
+**Milestone acceptance:** hundreds of generated A4 and US Letter worksheets pass structural validation, embed required fonts, contain no clipped or missing glyphs, render deterministically, and provide matching teacher keys and accessible reading order.
+
+---
+
+## Milestone 17: Production Cloud & Native Mobile (Post-Session) (~60 hrs)
 
 This milestone records the intended production path but is not required to demonstrate the project in a disconnected coding session.
 
-- [ ] **10.1 Hosted Database and Object-Storage Adapters (~12 hrs):**
+- [ ] **17.1 Hosted Database and Object-Storage Adapters (~12 hrs):**
   - Implement hosted adapters behind the repository and object-store contracts, with migrations, lifecycle policies, checksums, and integration tests against local stand-ins before any real deployment.
-- [ ] **10.2 Authentication, Guardianship and Privacy Review (~12 hrs):**
+- [ ] **17.2 Authentication, Guardianship and Privacy Review (~12 hrs):**
   - Design adult-managed accounts, child profiles, consent, retention, account export/deletion, rate limits, and abuse controls. Do not migrate real learner data until this design has been reviewed independently.
-- [ ] **10.3 Deployment, Backups and Restore Drills (~10 hrs):**
+- [ ] **17.3 Deployment, Backups and Restore Drills (~10 hrs):**
   - Add reproducible infrastructure configuration, staged releases, database backups, asset-version rollback, secret handling, and regularly tested restore procedures.
-- [ ] **10.4 React Native / Expo Workspace and Shared Domain Layer (~10 hrs):**
+- [ ] **17.4 React Native / Expo Workspace and Shared Domain Layer (~10 hrs):**
   - Create `packages/mobile/` only after the PWA and sync contracts stabilize. Reuse `@akshara/core`, `@akshara/data`, curriculum, mastery, and sync logic while keeping platform UI adapters separate.
-- [ ] **10.5 Native Tracing and Offline Storage Parity (~10 hrs):**
+- [ ] **17.5 Native Tracing and Offline Storage Parity (~10 hrs):**
   - Port the tracing surface with low-latency gestures and stylus input, then run shared evaluator fixtures and sync scenarios against both web and native storage adapters.
-- [ ] **10.6 Production Readiness and Cross-Platform Release Gates (~6 hrs):**
+- [ ] **17.6 Production Readiness and Cross-Platform Release Gates (~6 hrs):**
   - Require migration rehearsal, restore proof, privacy checks, dependency review, crash-free smoke tests, and behavioral parity for critical learner journeys before a staged release.
 
 ---
@@ -239,4 +385,8 @@ The learning-platform phase is successful when all of the following can be demon
 3. A teacher assigns work, reviews evidence-backed progress, and exports reports without accessing another classroom's data.
 4. Curriculum packs and learner backups validate, import, upgrade, and roll back safely.
 5. The PWA completes the core journey offline at phone, tablet, and desktop viewports with keyboard-accessible alternatives.
-6. Unit, property, migration, fault-injection, and Playwright suites pass from a clean checkout without live cloud services, real accounts, sound hardware, Docker, or internet access.
+6. Concurrent curriculum edits converge after deterministic network partitions, and distributed content packs recover from interruption or corruption.
+7. Freehand Devanagari input is recognized and explained by deterministic geometry, while the shaping inspector exposes how supported Unicode sequences become positioned glyphs.
+8. Lesson sources compile reproducibly into web activities, offline packs, documentation, and validated worksheets with precise diagnostics.
+9. Seeded classroom simulations reproduce learning paths and verify that scheduling constraints do not starve difficult skills.
+10. Unit, property, migration, differential, model-checking, fault-injection, PDF-validation, and Playwright suites pass from a clean checkout without live cloud services, real accounts, sound hardware, Docker, or internet access.
